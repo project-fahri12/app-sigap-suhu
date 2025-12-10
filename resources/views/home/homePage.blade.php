@@ -16,9 +16,8 @@
 @include('home.component.navbar')
    
 {{-- content --}}
-<div class="container">
+
     @yield('content')
-</div>
  {{-- Footer --}}
 @include('home.component.footer')
     <script src="{{ asset('js/main.js') }}"></script>
