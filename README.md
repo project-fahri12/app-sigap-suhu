@@ -1,7 +1,7 @@
 # 🚀 SIGAP: Sistem Informasi Gerbang Pendaftaran
 **(Aplikasi PPDB Online - Proyek Praktik Kerja Lapangan)**
 
-![Logo Aplikasi SIGAP](assets/sigap_logo-sigap.svg)
+![Logo Aplikasi SIGAP](assets/logo-sigap.svg)
 
 Aplikasi **SIGAP** (Sistem Informasi Gerbang Pendaftaran) adalah platform berbasis web yang dikembangkan untuk mengotomatisasi proses Penerimaan Peserta Didik Baru (PPDB). Proyek ini merupakan tugas akhir **Praktik Kerja Lapangan (PKL)**, bertujuan menyediakan solusi pendaftaran sekolah yang cepat, transparan, dan efisien.
 
