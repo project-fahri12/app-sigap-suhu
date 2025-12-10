@@ -1,59 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 SIGAP: Sistem Informasi Gerbang Pendaftaran
+**(Aplikasi PPDB Online - Proyek Praktik Kerja Lapangan)**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![SIGAP Logo Placeholder - Gunakan logo SIGAP yang sudah Anda buat di sini]
 
-## About Laravel
+Aplikasi **SIGAP** (Sistem Informasi Gerbang Pendaftaran) adalah platform berbasis web yang dikembangkan untuk mengotomatisasi proses Penerimaan Peserta Didik Baru (PPDB). Proyek ini merupakan tugas akhir **Praktik Kerja Lapangan (PKL)**, bertujuan menyediakan solusi pendaftaran sekolah yang cepat, transparan, dan efisien.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🌟 Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Aplikasi SIGAP dirancang dengan dua peran utama: **Pendaftar** dan **Administrator**.
 
-## Learning Laravel
+### Untuk Pendaftar/Orang Tua
+* **Pendaftaran Akun:** Proses registrasi cepat dan verifikasi.
+* **Pengisian Formulir:** Input data diri, data orang tua, dan pemilihan jalur pendaftaran.
+* **Upload Dokumen:** Unggah dokumen persyaratan dalam berbagai format (PDF, JPG).
+* **Cek Status:** Pelacakan status pendaftaran secara *real-time*.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Untuk Administrator/Panitia
+* **Verifikasi Digital:** Sistem untuk memverifikasi kelengkapan dan keabsahan dokumen pendaftar.
+* **Manajemen Kuota:** Pengaturan kuota penerimaan berdasarkan jalur (Zonasi, Prestasi, Afirmasi).
+* **Pelaporan Data:** Fitur *export* data pendaftar dalam format CSV/Excel.
+* **Pengaturan Sistem:** Mengelola tanggal penting dan pengumuman.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🛠️ Tumpukan Teknologi (Technology Stack)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Proyek ini dikembangkan menggunakan tumpukan teknologi populer berikut:
 
-### Premium Partners
+* **Framework:** **Laravel v12**
+* **Database:** **MySQL**
+* **Frontend:** HTML5, CSS3, JavaScript, dan **Bootstrap 5** (untuk desain responsif).
+* **Lingkungan Pengembangan:** PHP, Composer.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## ⚙️ Panduan Instalasi Lokal
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Ikuti langkah-langkah berikut untuk menjalankan aplikasi SIGAP di lingkungan lokal Anda.
 
-## Code of Conduct
+### Persyaratan
+* PHP versi 8.2 atau lebih tinggi.
+* Composer (untuk manajemen dependensi PHP).
+* Web Server (Apache/Nginx) atau *tool* seperti XAMPP/Laragon.
+* MySQL Database.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Langkah-langkah
+1.  **Clone Repositori:**
+    ```bash
+    git clone [https://github.com/mrfahridwihermawan/nama-repo-sigap.git](https://github.com/mrfahridwihermawan/nama-repo-sigap.git)
+    cd nama-repo-sigap
+    ```
 
-## Security Vulnerabilities
+2.  **Instal Dependensi:**
+    ```bash
+    composer install
+    npm install 
+    npm run dev # Atau npm run build
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3.  **Konfigurasi Lingkungan:**
+    * Buat salinan file `.env.example` menjadi `.env`.
+    * Buat *database* baru di MySQL, lalu atur kredensial koneksi di file `.env`:
+        ```
+        DB_DATABASE=nama_database_anda
+        DB_USERNAME=user_db
+        DB_PASSWORD=password_db
+        ```
+    * Buat kunci aplikasi:
+        ```bash
+        php artisan key:generate
+        ```
 
-## License
+4.  **Migrasi Database dan Seed Data (Opsional):**
+    ```bash
+    php artisan migrate --seed 
+    ```
+    *(Gunakan `--seed` jika Anda memiliki data awal (misalnya, akun admin default).)*
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5.  **Jalankan Aplikasi:**
+    ```bash
+    php artisan serve 
+    ```
+    Aplikasi akan berjalan di `http://127.0.0.1:8000` (atau sesuaikan dengan konfigurasi Anda).
+
+---
+
+## 🤝 Kontribusi
+
+Proyek ini adalah hasil dari Praktik Kerja Lapangan. Saran, *issue*, atau *pull request* yang membangun sangat diterima untuk pengembangan lebih lanjut.
+
+---
+
+## 📞 Kontak dan Informasi Proyek
+
+| Kunci | Detail |
+| :--- | :--- |
+| **Pengembang:** | **Fahri Dwi** |
+| **Email:** | mrfahridwihermawan@gmail.com |
+| **Kelas/Jurusan:** | XII Rekayasa Perangkat Lunak (RPL) |
+| **Institusi:** | SMK SUBULUL HDUA |
+| **Tahun Proyek:** | 2025 |
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah **MIT License**.
