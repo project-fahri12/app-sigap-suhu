@@ -7,10 +7,6 @@ use App\Http\Controllers\Home\PengumumanController;
 use App\Http\Controllers\Home\ValidasiController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // Public
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('validasi', [ValidasiController::class, 'index'])->name('validasi');
