@@ -1109,8 +1109,8 @@
             </nav>
         </div>
     </header>
-
-
+{{-- import components --}}
+    @yield('contnet ')
    <!-- Hero Section -->
 <section class="hero" id="home">
     <!-- Background Pattern -->
