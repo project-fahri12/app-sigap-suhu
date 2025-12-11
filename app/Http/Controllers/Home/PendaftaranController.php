@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class PendaftaranController extends Controller
 {
     public function index() {
-        return view('home.pages.pendaftaran');
+        return view('home.pendaftaran');
     }
 }

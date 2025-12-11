@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\KontakController;
 use App\Http\Controllers\Home\PendaftaranController;
@@ -15,3 +16,4 @@ Route::get('pendaftaran', [PendaftaranController::class, 'index'])->name('pendaf
 Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
 
 //Auth
+Route::get('login', [LoginController::class,'index'])->name('login');
