@@ -18,18 +18,47 @@
 
                     <div class="card-body p-4">
 
-                        <form>
+                        {{-- Alert Error Validasi --}}
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('userLoginProses') }}" method="POST">
+                            @csrf
+                            
                             {{-- Kode Pendaftaran --}}
                             <div class="mb-4 floating-label-group">
                                 <label class="form-label text-dark-navy fw-semibold">Kode Pendaftaran</label>
-                                <input type="text" name="kode" class="form-control form-control-sm" 
-                                    placeholder="Contoh: P20251234" required>
+                                <input 
+                                    type="text" 
+                                    name="kode" 
+                                    class="form-control form-control-sm @error('kode') is-invalid @enderror"
+                                    placeholder="Contoh: P20251234"
+                                    value="{{ old('kode') }}"
+                                    required>
+                                @error('kode')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             {{-- Tanggal Lahir --}}
                             <div class="mb-4 floating-label-group">
                                 <label class="form-label text-dark-navy fw-semibold">Tanggal Lahir</label>
-                                <input type="date" name="tanggal_lahir" class="form-control form-control-sm" required>
+                                <input 
+                                    type="date" 
+                                    name="tanggal_lahir" 
+                                    class="form-control form-control-sm @error('tanggal_lahir') is-invalid @enderror"
+                                    value="{{ old('tanggal_lahir') }}"
+                                    required>
+                                @error('tanggal_lahir')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
 
                             <button type="submit" 

@@ -52,7 +52,7 @@
                             <textarea class="form-control" id="pesan" rows="4" placeholder="Pesan Anda"></textarea>
                             <label for="pesan">Pesan Anda</label>
                         </div>
-                        <button type="submit" class="btn btn-primary-custom btn-lg w-100 shadow-sm">
+                        <button type="submit" class="btn btn-primary-custom btn-lg w-100 shadow-sm text-white">
                             <i class="fas fa-paper-plane me-2"></i> Kirim Pesan
                         </button>
                     </form>

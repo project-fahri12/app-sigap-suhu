@@ -269,8 +269,6 @@ body {
     }
 }
 
-/* Lanjutan dari sigap.css sebelumnya */
-
 /* ------------------------------------------- */
 /* 5. Navbar Styling */
 /* ------------------------------------------- */
@@ -300,8 +298,8 @@ body {
     transition: all var(--transition-duration) ease;
 }
 .btn-light-aqua:hover {
-    background-color: #00d6e0;
-    border-color: #00d6e0;
+    background-color: #fff;
+    border-color: #ffff;
     color: var(--color-dark);
     transform: translateY(-2px);
 }
@@ -355,7 +353,7 @@ body {
 
 .form-control:focus, .form-select:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.25rem rgba(0, 91, 143, 0.25); /* Primary Blue dengan transparansi */
+    box-shadow: 0 0 0 0.25rem rgba(0, 91, 143, 0.25); 
 }
 
 /* Radio Button Kustom */

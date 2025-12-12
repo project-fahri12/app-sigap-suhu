@@ -10,7 +10,7 @@
                 </p>
                 
                 <div class="d-flex gap-3 mb-5 animate-fade-in-slide-right delay-2">
-                    <a href="#pendaftaran" class="btn btn-primary-custom btn-lg shadow-lg">
+                    <a href="#pendaftaran" class="btn btn-primary-custom btn-lg shadow-lg text-white">
                         <i class="fas fa-user-plus me-2"></i> Daftar Sekarang
                     </a>
                     <a href="#persyaratan" class="btn btn-outline-light-custom btn-lg">

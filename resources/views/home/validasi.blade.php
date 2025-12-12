@@ -37,7 +37,6 @@
                                         <th class="text-center">Pembayaran</th>
                                         <th class="text-center">Upload Berkas</th>
                                         <th class="text-center">Validasi Akhir</th>
-                                        <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
 
@@ -48,7 +47,6 @@
                                         <td class="text-center text-success fw-bold">Sudah</td>
                                         <td class="text-center text-danger fw-bold">Belum</td>
                                         <td class="text-center text-danger fw-bold">Belum</td>
-                                        <td class="text-center"><button class="btn btn-sm btn-outline-primary">Detail</button></td>
                                     </tr>
 
                                     <tr>
@@ -57,7 +55,6 @@
                                         <td class="text-center text-danger fw-bold">Belum</td>
                                         <td class="text-center text-danger fw-bold">Belum</td>
                                         <td class="text-center text-danger fw-bold">Belum</td>
-                                        <td class="text-center"><button class="btn btn-sm btn-outline-primary">Detail</button></td>
                                     </tr>
 
                                     <tr>
@@ -66,7 +63,6 @@
                                         <td class="text-center text-success fw-bold">Sudah</td>
                                         <td class="text-center text-danger fw-bold">Belum</td>
                                         <td class="text-center text-danger fw-bold">Belum</td>
-                                        <td class="text-center"><button class="btn btn-sm btn-outline-primary">Detail</button></td>
                                     </tr>
 
                                     <tr>
@@ -75,7 +71,6 @@
                                         <td class="text-center text-success fw-bold">Sudah</td>
                                         <td class="text-center text-success fw-bold">Sudah</td>
                                         <td class="text-center text-success fw-bold">Valid</td>
-                                        <td class="text-center"><button class="btn btn-sm btn-success">Download Kartu Tes</button></td>
                                     </tr>
 
                                     <tr>
@@ -84,7 +79,6 @@
                                         <td class="text-center text-success fw-bold">Sudah</td>
                                         <td class="text-center text-success fw-bold">Sudah</td>
                                         <td class="text-center text-success fw-bold">Valid</td>
-                                        <td class="text-center"><button class="btn btn-sm btn-success">Download Kartu Tes</button></td>
                                     </tr>
                                 </tbody>
 

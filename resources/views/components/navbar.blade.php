@@ -36,8 +36,8 @@
                 </li>
             </ul>
 
-            <a href="{{ url('/login') }}" class="text-white btn btn-light-aqua ms-lg-3 shadow-lg hover-grow">
-                Login Pendaftar
+            <a href="{{ url('/userLogin') }}" class="text-white btn btn-light-aqua ms-lg-3 shadow-lg ">
+                Login
             </a>
 
         </div>
