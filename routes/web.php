@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\KontakController;
@@ -17,3 +18,8 @@ Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumum
 
 //Auth
 Route::get('login', [LoginController::class,'index'])->name('login');
+
+//admin
+Route::prefix('admin')->group(function() {
+    Route::resource('dashboard', DashboardController::class);
+});
