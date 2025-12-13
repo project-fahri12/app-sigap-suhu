@@ -80,15 +80,15 @@
                                     <label class="form-label fw-bold text-dark-navy mb-2">Jenis Kelamin <span class="text-danger">*</span></label>
                                     <div class="d-flex gap-4">
                                         <div class="form-check @error('jenis_kelamin') is-invalid-radio @enderror">
-                                            <input class="form-check-input" type="radio" name="jenis_kelamin" id="laki_laki" value="Laki-laki" required {{ old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="jenis_kelamin" id="laki_laki" value="L" required {{ old('jenis_kelamin') == 'Laki-laki' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="laki_laki">Laki-laki</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jenis_kelamin" id="perempuan" value="Perempuan" required {{ old('jenis_kelamin') == 'Perempuan' ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="jenis_kelamin" id="perempuan" value="L" required {{ old('jenis_kelamin') == 'Perempuan' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="perempuan">Perempuan</label>
                                         </div>
                                     </div>
-                                     @error('jenis_kelamin')
+                                   @error('jenis_kelamin')
                                         <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -111,26 +111,32 @@
 
                             <div class="row g-4 mb-4">
                                 
-                                {{-- Pilih Gelombang Pendaftaran (Dinamis) --}}
+                                {{-- Pilih Gelombang Pendaftaran (Readonly) --}}
                                 <div class="col-md-6">
+                                    {{-- Asumsi Controller telah memfilter dan memberikan objek Gelombang aktif tunggal, misal: $gelombang_aktif --}}
+                                    @php
+                                        // Asumsi: jika $gelombang_options adalah array/koleksi, ambil elemen pertama
+                                        $gelombang_aktif = is_iterable($gelombang_options) && count($gelombang_options) > 0 ? $gelombang_options[0] : null;
+                                    @endphp
                                     <div class="form-floating floating-label-group">
-                                        <select class="form-select @error('gelombang_id') is-invalid @enderror" id="gelombang_id" name="gelombang_id" required>
-                                            <option selected disabled value="">Pilih Gelombang...</option>
-                                            @foreach ($gelombang_options as $gelombang)
-                                                {{-- Menggunakan properti 'nama' dan 'keterangan' (asumsi model Eloquent) --}}
-                                                <option value="{{ $gelombang->id }}" {{ old('gelombang_id') == $gelombang->id ? 'selected' : '' }}>
-                                                    {{ $gelombang->nama_gelombang }} 
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <label for="gelombang_id">Pilih Gelombang Pendaftaran <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="gelombang_display" placeholder="Gelombang Pendaftaran" value="{{ $gelombang_aktif ? $gelombang_aktif->nama_gelombang : 'Tidak Ada Gelombang Aktif' }}" readonly>
+                                        <label for="gelombang_display">Gelombang Pendaftaran <span class="text-danger">*</span></label>
+                                        
+                                        {{-- Input hidden untuk mengirimkan ID ke controller --}}
+                                        @if($gelombang_aktif)
+                                            <input type="hidden" name="gelombang_id" value="{{ $gelombang_aktif->id }}">
+                                        @endif
+
+                                        {{-- Tampilkan error jika ada validation error atau gelombang aktif tidak ada --}}
                                         @error('gelombang_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="text-danger small mt-1">{{ $message }}</div>
+                                        @elseif(!$gelombang_aktif)
+                                            <div class="text-danger small mt-1">Harap hubungi administrator, tidak ada gelombang pendaftaran yang aktif.</div>
                                         @enderror
                                     </div>
                                 </div>
                                 
-                                {{-- Pilih Unit Pendidikan (Dinamis) --}}
+                                {{-- Pilih Unit Pendidikan (Tetap Select Dinamis) --}}
                                 <div class="col-md-6">
                                     <div class="form-floating floating-label-group">
                                         <select class="form-select @error('unit_id') is-invalid @enderror" id="unit_id" name="unit_id" required>
@@ -149,7 +155,7 @@
                                     </div>
                                 </div>
                                 
-                                {{-- Pilihan Sekolah/Jurusan (Dinamis) --}}
+                                {{-- Pilihan Sekolah/Jurusan (Tetap Select Dinamis) --}}
                                 <div class="col-md-6">
                                     <div class="form-floating floating-label-group">
                                         <select class="form-select @error('sekolah_pilihan_id') is-invalid @enderror" id="sekolah_pilihan_id" name="sekolah_pilihan_id" required>
@@ -168,21 +174,27 @@
                                     </div>
                                 </div>
 
-                                {{-- Tahun Ajaran (Dinamis) --}}
+                                {{-- Tahun Ajaran (Readonly) --}}
                                 <div class="col-md-6">
+                                    {{-- Asumsi Controller telah memfilter dan memberikan objek Tahun Ajaran aktif tunggal, misal: $tahun_ajaran_aktif --}}
+                                    @php
+                                        // Asumsi: jika $tahun_ajaran_options adalah array/koleksi, ambil elemen pertama
+                                        $tahun_ajaran_aktif = is_iterable($tahun_ajaran_options) && count($tahun_ajaran_options) > 0 ? $tahun_ajaran_options[0] : null;
+                                    @endphp
                                     <div class="form-floating floating-label-group">
-                                        <select class="form-select @error('tahun_ajaran_id') is-invalid @enderror" id="tahun_ajaran_id" name="tahun_ajaran_id" required>
-                                            <option selected disabled value="">Pilih Tahun Ajaran...</option>
-                                            @foreach ($tahun_ajaran_options as $tahun)
-                                                {{-- Menggunakan properti 'nama' (asumsi model Eloquent) --}}
-                                                <option value="{{ $tahun->id }}" {{ old('tahun_ajaran_id') == $tahun->id ? 'selected' : '' }}>
-                                                    {{ $tahun->tahun }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <label for="tahun_ajaran_id">Tahun Ajaran <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="tahun_ajaran_display" placeholder="Tahun Ajaran" value="{{ $tahun_ajaran_aktif ? $tahun_ajaran_aktif->tahun : 'Tidak Ada Tahun Ajaran Aktif' }}" readonly>
+                                        <label for="tahun_ajaran_display">Tahun Ajaran <span class="text-danger">*</span></label>
+                                        
+                                        {{-- Input hidden untuk mengirimkan ID ke controller --}}
+                                        @if($tahun_ajaran_aktif)
+                                            <input type="hidden" name="tahun_ajaran_id" value="{{ $tahun_ajaran_aktif->id }}">
+                                        @endif
+                                        
+                                        {{-- Tampilkan error jika ada validation error atau Tahun Ajaran aktif tidak ada --}}
                                         @error('tahun_ajaran_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            <div class="text-danger small mt-1">{{ $message }}</div>
+                                        @elseif(!$tahun_ajaran_aktif)
+                                            <div class="text-danger small mt-1">Harap hubungi administrator, tidak ada tahun ajaran yang aktif.</div>
                                         @enderror
                                     </div>
                                 </div>
