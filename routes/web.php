@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Pendaftar\DashboardPendaftarController;
+use App\Http\Controllers\Pendaftar\PembayaranController;
 use App\Http\Controllers\Auth\PendaftarLoginController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\KontakController;
 use App\Http\Controllers\Home\PendaftaranController;
 use App\Http\Controllers\Home\PengumumanController;
 use App\Http\Controllers\Home\ValidasiController;
-use App\Http\Controllers\Pendaftar\PembayaranController;
 use Illuminate\Support\Facades\Route;
 
 // Public
@@ -37,5 +37,5 @@ Route::prefix('petugas')->name('petugas.')->group(function() {
 // Pendaftar
 Route::middleware(['auth', 'auth.pendaftar'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
         Route::get('/dashboard', [DashboardPendaftarController::class, 'index'])->name('dashboard');
-        Route::resource('/pembayaran', PembayaranController::class);
+        Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
     });
