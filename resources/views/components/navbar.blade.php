@@ -60,7 +60,7 @@
 
                                     {{-- User Footer --}}
                                     <li class="user-footer p-2 d-flex justify-content-between">
-                                        <a href="{{ route('profile') }}" class="btn btn-sm btn-light btn-flat">Profile</a>
+                                        <a href="" class="btn btn-sm btn-light btn-flat">Profile</a>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-light btn-flat">Logout</button>
