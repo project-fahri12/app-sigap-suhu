@@ -17,8 +17,8 @@
       {{-- JIKA PEMBAYARAN SUDAH VALID --}}
       @if($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
 
-        <li class="{{ request()->routeIs('pendaftar.identitas*') ? 'active' : '' }}">
-          <a href="">
+        <li class="{{ request()->routeIs('pendaftar.identitas.santri') ? 'active' : '' }}">
+          <a href="{{ route('pendaftar.identitas.santri') }}">
             <i class="fa fa-user"></i>
             <span>Identitas Santri</span>
           </a>

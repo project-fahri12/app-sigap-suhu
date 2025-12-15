@@ -12,7 +12,7 @@ class Berkas extends Model
     protected $table = 'berkas';
 
     protected $fillable = [
-        'pendaftar_id', 'file_path', 'keterangan'
+        'pendaftar_id', 'file_path', 'keterangan', 'foto_path'
     ];
 
     public function pendaftar()

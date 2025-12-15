@@ -52,29 +52,37 @@
                     
                     <h6 class="text-primary mb-3">Pilihan Pendaftaran</h6>
 
-                    {{-- 1. Tahun Ajaran (pendaftar.tahun_ajaran_id) --}}
-                    <div class="col-md-4 mb-3">
-                        <label for="tahun_ajaran_id" class="form-label">Tahun Ajaran <span class="text-danger">*</span></label>
-                        <select class="form-select @error('tahun_ajaran_id') is-invalid @enderror" id="tahun_ajaran_id" name="tahun_ajaran_id" required>
-                            <option value="">-- Pilih Tahun Ajaran --</option>
-                            @foreach($tahun_ajaran_options ?? [] as $ta)
-                                <option value="{{ $ta->id }}" {{ old('tahun_ajaran_id') == $ta->id ? 'selected' : '' }}>{{ $ta->tahun }}</option>
-                            @endforeach
-                        </select>
-                        @error('tahun_ajaran_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
+                    {{-- Tahun Ajaran --}}
+<div class="col-md-4 mb-3">
+    <label class="form-label">Tahun Ajaran</label>
+
+    <input type="text"
+           class="form-control"
+           value="{{ $tahun_ajaran->tahun }}"
+           readonly>
+
+    {{-- ID tetap dikirim --}}
+    <input type="hidden"
+           name="tahun_ajaran_id"
+           value="{{ $tahun_ajaran->id }}">
+</div>
+
                     
-                    {{-- 2. Gelombang (pendaftar.gelombang_id) --}}
-                    <div class="col-md-4 mb-3">
-                        <label for="gelombang_id" class="form-label">Gelombang <span class="text-danger">*</span></label>
-                        <select class="form-select @error('gelombang_id') is-invalid @enderror" id="gelombang_id" name="gelombang_id" required>
-                            <option value="">-- Pilih Gelombang --</option>
-                            @foreach($gelombang_options ?? [] as $gel)
-                                <option value="{{ $gel->id }}" {{ old('gelombang_id') == $gel->id ? 'selected' : '' }}>{{ $gel->nama_gelombang }}</option>
-                            @endforeach
-                        </select>
-                        @error('gelombang_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
+                    {{-- Gelombang --}}
+<div class="col-md-4 mb-3">
+    <label class="form-label">Gelombang</label>
+
+    <input type="text"
+           class="form-control"
+           value="{{ $gelombang->nama_gelombang }}"
+           readonly>
+
+    {{-- ID tetap dikirim --}}
+    <input type="hidden"
+           name="gelombang_id"
+           value="{{ $gelombang->id }}">
+</div>
+
                     
                     {{-- 3. Unit Tujuan (pendaftar.unit_id) --}}
                     <div class="col-md-4 mb-3">

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Pendaftar;
 
+use App\Models\SettingWeb;
 use App\Models\Pendaftar;
 use App\Models\Pembayaran;
 use App\Models\Berkas;
 use App\Models\Verifikasi;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -34,39 +36,72 @@ class UploadBerkas extends Controller
         ));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:pdf|max:5120',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'file' => 'required|file|mimes:pdf|max:5120',
+        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
+    $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
 
-        // Simpan file
-        $filename = 'berkas_' . $pendaftar->id . '_' . time() . '.pdf';
+    /* ================= PDF ================= */
+    $pdfName = 'berkas_' . $pendaftar->id . '_' . time() . '.pdf';
+    $pdfPath = $request->file('file')->storeAs(
+        'berkas_pendaftar',
+        $pdfName,
+        'public'
+    );
 
-        $path = $request->file('file')->storeAs(
-            'berkas_pendaftar',
-            $filename,
-            'public'
-        );
+    /* ================= FOTO ================= */
+    $fotoName = 'foto_' . $pendaftar->id . '_' . time() . '.' .
+                $request->foto->extension();
 
-        // Simpan berkas (DATA SAJA)
-        Berkas::create([
-            'id' => Str::uuid(),
-            'pendaftar_id' => $pendaftar->id,
-            'file_path' => $path,
-        ]);
+    $fotoPath = $request->foto->storeAs(
+        'foto_pendaftar',
+        $fotoName,
+        'public'
+    );
 
-        // Update / reset verifikasi
-        Verifikasi::updateOrCreate(
-            ['pendaftar_id' => $pendaftar->id],
-            [
-                'verifikasi_berkas' => 'pending',
-                'tanggal' => now(),
-            ]
-        );
+    /* ================= SIMPAN DB ================= */
+    Berkas::create([
+        'id' => Str::uuid(),
+        'pendaftar_id' => $pendaftar->id,
+        'file_path' => $pdfPath,
+        'foto_path' => $fotoPath,
+        'keterangan' => 'Upload awal',
+    ]);
 
-        return back()->with('success', 'Berkas berhasil diupload. Menunggu verifikasi panitia.');
-    }
+    /* ================= VERIFIKASI ================= */
+    Verifikasi::updateOrCreate(
+        ['pendaftar_id' => $pendaftar->id],
+        [
+            'verifikasi_berkas' => 'pending',
+            'tanggal' => now(),
+        ]
+    );
+
+    return back()->with(
+        'success',
+        'Berkas & pas foto berhasil diupload. Menunggu verifikasi panitia.'
+    );
+}
+
+public function cetakBuktiPdf()
+{
+    $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
+    $verifikasi = Verifikasi::where('pendaftar_id', $pendaftar->id)->firstOrFail();
+
+    $setting = SettingWeb::pluck('setting_value', 'setting_value')->toArray();
+
+    $pdf = Pdf::loadView(
+        'pendaftar.bukti-pendaftaran-pdf',
+        compact('pendaftar', 'verifikasi', 'setting')
+    )->setPaper('A4', 'portrait');
+
+    return $pdf->stream(
+        'BUKTI_PENDAFTARAN_'.$pendaftar->kode_pendaftaran.'.pdf'
+    );
+}
+
 }

@@ -50,6 +50,8 @@
 <link href="{{ asset('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}"
       rel="stylesheet" type="text/css" />
 
+      @stack('styles')
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -91,6 +93,8 @@
         <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
       </footer>
     </div><!-- ./wrapper -->
+
+    @stack('scripts')
 
     <!-- jQuery 2.1.3 -->
 <script src="{{ asset('assets/plugins/jQuery/jQuery-2.1.3.min.js') }}"></script>

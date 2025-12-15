@@ -77,10 +77,10 @@
 
                     {{-- JIKA VALID --}}
                     @if($verifikasi->verifikasi_berkas == 'valid')
-                        <a href=""
-                           class="btn btn-success">
-                            <i class="fa fa-print"></i> Cetak Bukti
-                        </a>
+                        <a href="{{ route('pendaftar.cetak-bukti-pdf') }}"
+       class="btn btn-danger">
+        <i class="fa fa-file-pdf-o"></i> Download Bukti (PDF)
+    </a>
                     @endif
 
                     {{-- JIKA INVALID --}}
@@ -96,32 +96,87 @@
             @if(
                 !$verifikasi ||
                 in_array($verifikasi->verifikasi_berkas, ['belum','invalid'])
-            ) route('pendaftar.upload-berkas.store') }}
-                <form action="{{"
-                      method="POST"
-                      enctype="multipart/form-data">
-                    @csrf
+            )
+                <form action="{{ route('pendaftar.upload-berkas.store') }}"
+      method="POST"
+      enctype="multipart/form-data">
+    @csrf
 
-                    <div class="box-body">
-                        <div class="form-group">
-                            <label>Upload PDF</label>
-                            <input type="file"
-                                   name="file"
-                                   class="form-control"
-                                   accept="application/pdf"
-                                   required>
-                        </div>
-                    </div>
+    <div class="box-body">
 
-                    <div class="box-footer text-right">
-                        <button class="btn btn-primary">
-                            <i class="fa fa-paper-plane"></i> Upload
-                        </button>
-                    </div>
-                </form>
+        {{-- PDF --}}
+        <div class="form-group">
+            <label>Upload Berkas (PDF)</label>
+            <input type="file"
+                   name="file"
+                   class="form-control"
+                   accept="application/pdf"
+                   required>
+            <small class="text-muted">
+                Gabungan KK, Akta, Ijazah, dll (Max 5MB)
+            </small>
+        </div>
+
+       {{-- PAS FOTO --}}
+<div class="form-group">
+    <label>Upload Pas Foto</label>
+    <input type="file"
+           name="foto"
+           class="form-control"
+           accept="image/jpeg,image/png"
+           onchange="previewFoto(this)"
+           required>
+
+    <small class="text-muted">
+        JPG / PNG, background bebas
+    </small>
+
+    {{-- PREVIEW --}}
+    <div class="mt-2">
+        <img id="preview-foto"
+             src=""
+             alt="Preview Pas Foto"
+             style="display:none; max-width:150px; border:1px solid #ddd; padding:4px;">
+    </div>
+</div>
+
+
+    </div>
+
+    <div class="box-footer text-right">
+        <button class="btn btn-primary">
+            <i class="fa fa-paper-plane"></i> Upload
+        </button>
+    </div>
+</form>
+
             @endif
 
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function previewFoto(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+        alert('Format foto harus JPG atau PNG');
+        input.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const img = document.getElementById('preview-foto');
+        img.src = e.target.result;
+        img.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+}
+</script>
+@endpush

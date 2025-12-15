@@ -22,26 +22,33 @@ class PendaftaranController extends Controller
      * Form pendaftaran
      */
     public function index()
-    {
+{
+    $tahun_ajaran = TahunAjaran::select('id', 'tahun')
+        ->where('status', 'aktif')
+        ->orderBy('tahun', 'desc')
+        ->first();
 
-        $gelombang_options = Gelombang::select('id', 'nama_gelombang')->where('status', 1)->orderBy('tanggal_mulai')->get();
-        $unit_options = Unit::select('id', 'nama_unit')->get();
-        $sekolah_options = SekolahPilihan::select('id', 'nama_sekolah')->get();
-        $tahun_ajaran_options = TahunAjaran::select('id', 'tahun')->where('status', 'aktif')->orderBy('tahun', 'desc')->get();
-        // dd($tahun_ajaran_options);
+    $gelombang = Gelombang::select('id', 'nama_gelombang')
+        ->where('status', 1)
+        ->orderBy('tanggal_mulai')
+        ->first();
 
-        // Cek jika ada masalah data tidak ditemukan
-        if ($gelombang_options->isEmpty() || $tahun_ajaran_options->isEmpty()) {
-            return view('home.pendaftaran_closed');
-        }
+    $unit_options = Unit::select('id', 'nama_unit')->get();
+    $sekolah_options = SekolahPilihan::select('id', 'nama_sekolah')->get();
 
-        return view('home.form_santri', [
-            'gelombang_options' => $gelombang_options,
-            'unit_options' => $unit_options,
-            'sekolah_options' => $sekolah_options,
-            'tahun_ajaran_options' => $tahun_ajaran_options,
-        ]);
+    // Jika pendaftaran ditutup
+    if (!$tahun_ajaran || !$gelombang) {
+        return view('home.pendaftaran_closed');
     }
+
+    return view('home.form_santri', compact(
+        'tahun_ajaran',
+        'gelombang',
+        'unit_options',
+        'sekolah_options'
+    ));
+}
+
 
 
     public function store(Request $request)

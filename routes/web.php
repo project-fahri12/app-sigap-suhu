@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Pendaftar\DashboardPendaftarController;
 use App\Http\Controllers\Pendaftar\PembayaranController;
+use App\Http\Controllers\Pendaftar\IdentitasSantriController;
 use App\Http\Controllers\Auth\PendaftarLoginController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\KontakController;
@@ -40,5 +41,7 @@ Route::middleware(['auth', 'auth.pendaftar'])->prefix('pendaftar')->name('pendaf
         Route::get('/dashboard', [DashboardPendaftarController::class, 'index'])->name('dashboard');
         Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
         Route::resource('upload-berkas', UploadBerkas::class)->only(['index', 'store']);
+        Route::get('/pendaftar/cetak-bukti-pdf',[UploadBerkas::class, 'cetakBuktiPdf'])->name('cetak-bukti-pdf');
+        Route::get('identitas-santri', [IdentitasSantriController::class, 'index'])->name('identitas.santri');
         
     });

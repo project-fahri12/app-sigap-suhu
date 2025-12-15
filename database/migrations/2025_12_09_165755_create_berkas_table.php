@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('pendaftar_id');
             $table->string('file_path');
+            $table->string('foto_path')->nullable(); 
             $table->string('keterangan')->nullable();
             $table->timestamps();
             $table->foreign('pendaftar_id')->references('id')->on('pendaftar')->onDelete('cascade');
