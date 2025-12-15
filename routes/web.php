@@ -33,7 +33,7 @@ Route::post('userLoginProses', [PendaftarLoginController::class,'userLoginProses
 
 // Admin
 Route::middleware(['auth', 'auth.admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 
 
