@@ -98,16 +98,16 @@
                                     @include('pendaftar.partials.form-pembayaran')
                                 @endif
 
-                                {{-- JIKA VALID --}}
-                                @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
-                                    <a href="{{ route('pendaftar.upload-berkas.index') }}" class="btn btn-success">
-                                        <i class="fa fa-upload"></i> Lanjut Upload Berkas
-                                    </a>
                                 @endif
-                            @endif
-
+                                
+                            </div>
                         </div>
-                    </div>
+                        {{-- JIKA VALID --}}
+                        @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
+                            <a href="{{ route('pendaftar.upload-berkas.index') }}" class="btn btn-success m-3">
+                                <i class="fa fa-upload"></i> Lanjut Upload Berkas
+                            </a>
+                        @endif
                 </div>
 
             </div>
