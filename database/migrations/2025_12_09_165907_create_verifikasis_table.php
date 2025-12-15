@@ -15,11 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('pendaftar_id');
 
-            $table->enum('verifikasi_berkas', ['pending', 'valid', 'invalid'])->default('pending');
+            $table->enum('verifikasi_berkas', ['pending', 'valid', 'invalid', 'belum'])->default('belum');
             $table->enum('verifikasi_pembayaran', ['pending', 'valid', 'invalid'])->default('pending');
 
             $table->text('catatan')->nullable();
-            $table->uuid('diverifikasi_oleh')->nullable(); // ID user admin/panitia
+            $table->uuid('diverifikasi_oleh')->nullable();
             $table->date('tanggal')->nullable();
 
             $table->timestamps();

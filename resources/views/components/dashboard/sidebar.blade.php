@@ -6,6 +6,7 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
 
+      {{-- DASHBOARD --}}
       <li class="{{ request()->routeIs('pendaftar.dashboard*') ? 'active' : '' }}">
         <a href="{{ route('pendaftar.dashboard') }}">
           <i class="fa fa-dashboard"></i>
@@ -13,10 +14,11 @@
         </a>
       </li>
 
-      {{-- Tampil hanya jika pembayaran diterima --}}
-      @if($pembayaran && $pembayaran->status === 'diterima')
-        <li>
-          <a href="#">
+      {{-- JIKA PEMBAYARAN SUDAH VALID --}}
+      @if($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
+
+        <li class="{{ request()->routeIs('pendaftar.identitas*') ? 'active' : '' }}">
+          <a href="">
             <i class="fa fa-user"></i>
             <span>Identitas Santri</span>
           </a>
@@ -28,6 +30,7 @@
             <span>Upload Berkas</span>
           </a>
         </li>
+
       @endif
 
     </ul>

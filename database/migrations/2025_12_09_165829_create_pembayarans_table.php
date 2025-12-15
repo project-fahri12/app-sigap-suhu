@@ -17,7 +17,6 @@ return new class extends Migration
 
         $table->integer('nominal');
         $table->string('bukti_transfer')->nullable();
-        $table->enum('status', ['pending', 'diterima', 'ditolak'])->default('pending');
         $table->text('keterangan')->nullable();
         $table->date('tanggal_bayar')->nullable();
 

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->uuid('pendaftar_id');
             $table->string('file_path');
             $table->string('keterangan')->nullable();
-            $table->enum('status', ['diterima', 'pending', 'ditolak'])->default('pending');
             $table->timestamps();
             $table->foreign('pendaftar_id')->references('id')->on('pendaftar')->onDelete('cascade');
         });
