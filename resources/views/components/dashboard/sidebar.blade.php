@@ -1,9 +1,12 @@
 @php
-  $pembayaran = Auth::user()->pendaftar?->pembayaran;
+<!-- Dapatkan data santri yang memiliki akun -->
+  $santri = \App\Models\Pendaftar::where('users_id', Auth::id())->first();
+  <!-- mencari pembayaran berdasarkan id santri -->
+   $pembayaran = \App\Models\Pembayaran::where('')
 @endphp
 
 @if(Auth::user()->role === 'pendaftar')
- {{  dd($pembayaran) }}
+ {{  dd($santri) }}
 <aside class="main-sidebar">
   <section class="sidebar">
 
