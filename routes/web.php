@@ -5,6 +5,7 @@ use App\Http\Controllers\Pendaftar\DashboardPendaftarController;
 use App\Http\Controllers\Pendaftar\PembayaranController;
 use App\Http\Controllers\Pendaftar\IdentitasSantriController;
 use App\Http\Controllers\Auth\PendaftarLoginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\KontakController;
 use App\Http\Controllers\Home\PendaftaranController;
@@ -22,14 +23,19 @@ Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumum
 Route::get('/pendaftaran/sukses', [PendaftaranController::class, 'success'])->name('pendaftaran.sukses')->middleware('pendaftaran.success');
 Route::post('/logout', [PendaftarLoginController::class,'logout'])->name('logout')->middleware('auth');
 
+// Login Admin
+Route::get('login=r1', [LoginController::class, 'show'])->name('show.login');
+Route::post('login=r1', [LoginController::class, 'login'])->name('admin.login');
+
 //AuthUser
 Route::get('userLogin', [PendaftarLoginController::class,'index'])->name('login');
 Route::post('userLoginProses', [PendaftarLoginController::class,'userLoginProses'])->name('userLoginProses');
 
-//Admin
-Route::middleware(['auth', 'auth.admin'])->prefix('admin')->group(function () {
-    // Route::get('dashboard', [AdminControllwer::class, 'index'])->name('dashboard');
-});
+// Admin
+Route::middleware(['auth', 'auth.admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
+    });
+
 
 //Petugas
 Route::prefix('petugas')->name('petugas.')->group(function() {
