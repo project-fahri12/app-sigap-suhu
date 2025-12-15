@@ -78,70 +78,92 @@
         </div>
       </div>
 
-      <!-- FORM PEMBAYARAN (KANAN) -->
-      <div class="col-md-8">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title">
-              <i class="fa fa-credit-card"></i> Pembayaran Pendaftaran
-            </h3>
+     <div class="col-md-8">
+  <div class="box box-primary">
+
+    <div class="box-header with-border">
+      <h3 class="box-title">
+        <i class="fa fa-credit-card"></i> Pembayaran Pendaftaran
+      </h3>
+    </div>
+
+    {{-- JIKA SUDAH ADA PEMBAYARAN --}}
+    @if($pembayaran)
+
+      <div class="box-body">
+
+        <table class="table table-bordered">
+          <tr>
+            <th>Nominal</th>
+            <td>Rp {{ number_format($pembayaran->nominal, 0, ',', '.') }}</td>
+          </tr>
+          <tr>
+            <th>Tanggal Bayar</th>
+            <td>{{ $pembayaran->tanggal_bayar }}</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>
+              @if($pembayaran->status == 'pending')
+                <span class="label label-warning">Menunggu Verifikasi</span>
+              @elseif($pembayaran->status == 'diterima')
+                <span class="label label-success">Pembayaran Diterima</span>
+              @else
+                <span class="label label-danger">Ditolak</span>
+              @endif
+            </td>
+          </tr>
+        </table>
+
+        {{-- JIKA STATUS SUKSES --}}
+        @if($pembayaran->status == 'diterima')
+          <a href=""
+             class="btn btn-success">
+            <i class="fa fa-print"></i> Cetak Bukti Pembayaran
+          </a>
+        @endif
+
+      </div>
+
+    {{-- JIKA BELUM ADA PEMBAYARAN --}}
+    @else
+
+      <form action="{{ route('pendaftar.pembayaran.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <div class="box-body">
+
+          <div class="form-group">
+            <label>Nominal Pembayaran</label>
+            <input type="number" name="nominal" class="form-control" required>
           </div>
 
-          <!-- FORM -->
-          <form action="{{ route('pendaftar.pembayaran.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+          <div class="form-group">
+            <label>Tanggal Pembayaran</label>
+            <input type="date" name="tanggal_bayar" class="form-control" required>
+          </div>
 
-            <div class="box-body">
-
-              <!-- NOMINAL -->
-              <div class="form-group">
-                <label>Nominal Pembayaran</label>
-                <input
-                  type="number"
-                  name="nominal"
-                  class="form-control"
-                  placeholder="Contoh: 500000"
-                  required
-                >
-              </div>
-
-              <!-- TANGGAL -->
-              <div class="form-group">
-                <label>Tanggal Pembayaran</label>
-                <input
-                  type="date"
-                  name="tanggal_bayar"
-                  class="form-control"
-                  required
-                >
-              </div>
-
-              <!-- BUKTI TRANSFER -->
-              <div class="form-group">
-                <label>Upload Bukti Transfer</label>
-                <input
-                  type="file"
-                  name="bukti_transfer"
-                  class="form-control"
-                  required
-                >
-                <small class="text-muted">
-                  JPG / PNG / PDF (maks 2MB)
-                </small>
-              </div>
-
-            </div>
-
-            <div class="box-footer">
-              <button type="submit" class="btn btn-primary">
-                <i class="fa fa-paper-plane"></i> Kirim Pembayaran
-              </button>
-            </div>
-          </form>
-          <!-- END FORM -->
+          <div class="form-group">
+            <label>Upload Bukti Transfer</label>
+            <input type="file" name="bukti_transfer" class="form-control" required>
+            <small class="text-muted">JPG / PNG / PDF (maks 2MB)</small>
+          </div>
 
         </div>
-      </div>
+
+        <div class="box-footer">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-paper-plane"></i> Kirim Pembayaran
+          </button>
+        </div>
+
+      </form>
+
+    @endif
+
+  </div>
+</div>
+
 
     </div>
 

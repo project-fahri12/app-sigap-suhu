@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Pendaftar;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pendaftar;
+use App\Models\Pembayaran;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class DashboardPendaftarController extends Controller
 {
@@ -18,6 +23,6 @@ if ($pendaftar) {
         ->first();
 }
 
-return view('pendaftar.pembayaran', compact('pembayaran'));
+return view('pendaftar.dashboard', compact('pembayaran'));
     }
 }
