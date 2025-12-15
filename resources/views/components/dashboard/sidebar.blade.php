@@ -1,44 +1,34 @@
-@php
-<!-- Dapatkan data santri yang memiliki akun -->
-  $santri = \App\Models\Pendaftar::where('users_id', Auth::id())->first();
-  <!-- mencari pembayaran berdasarkan id santri -->
-   $pembayaran = \App\Models\Pembayaran::where('')
-@endphp
-
 @if(Auth::user()->role === 'pendaftar')
- {{  dd($santri) }}
+
 <aside class="main-sidebar">
   <section class="sidebar">
 
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
 
-      <!-- Dashboard -->
-      <li class="active">
+      <li class="{{ request()->routeIs('pendaftar.dashboard*') ? 'active' : '' }}">
         <a href="{{ route('pendaftar.dashboard') }}">
           <i class="fa fa-dashboard"></i>
           <span>Dashboard</span>
         </a>
       </li>
 
-      {{-- IDENTITAS SANTRI
-           TAMPIL HANYA JIKA PEMBAYARAN SUKSES --}}
+      {{-- Tampil hanya jika pembayaran diterima --}}
       @if($pembayaran && $pembayaran->status === 'diterima')
         <li>
-          <a href="">
+          <a href="#">
             <i class="fa fa-user"></i>
             <span>Identitas Santri</span>
           </a>
         </li>
-        
-        <!-- Upload Berkas (boleh tampil kapan saja / sesuaikan) -->
-        <li>
-          <a href="">
+
+        <li class="{{ request()->routeIs('pendaftar.upload-berkas*') ? 'active' : '' }}">
+          <a href="{{ route('pendaftar.upload-berkas.index') }}">
             <i class="fa fa-upload"></i>
             <span>Upload Berkas</span>
           </a>
         </li>
-        @endif
+      @endif
 
     </ul>
 

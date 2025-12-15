@@ -9,6 +9,7 @@ use App\Http\Controllers\Home\KontakController;
 use App\Http\Controllers\Home\PendaftaranController;
 use App\Http\Controllers\Home\PengumumanController;
 use App\Http\Controllers\Home\ValidasiController;
+use App\Http\Controllers\Pendaftar\UploadBerkas;
 use Illuminate\Support\Facades\Route;
 
 // Public
@@ -38,4 +39,6 @@ Route::prefix('petugas')->name('petugas.')->group(function() {
 Route::middleware(['auth', 'auth.pendaftar'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
         Route::get('/dashboard', [DashboardPendaftarController::class, 'index'])->name('dashboard');
         Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+        Route::resource('upload-berkas', UploadBerkas::class)->only(['index', 'store']);
+        
     });

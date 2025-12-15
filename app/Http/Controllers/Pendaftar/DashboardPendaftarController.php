@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\Pendaftar;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pendaftar;
 use App\Models\Pembayaran;
+use App\Models\Pendaftar;
 use Illuminate\Support\Facades\Auth;
-
-
 
 class DashboardPendaftarController extends Controller
 {
     public function index()
     {
-$pendaftar = Pendaftar::where('users_id', Auth::id())->first();
+        $santri = Pendaftar::where('users_id', Auth::id())->firstOrFail();
 
-$pembayaran = null;
+        $pembayaran = Pembayaran::where('pendaftar_id', $santri->id)
+            ->latest()
+            ->first();
 
-if ($pendaftar) {
-    $pembayaran = Pembayaran::where('pendaftar_id', $pendaftar->id)
-        ->latest()
-        ->first();
-}
+        $verifikasi = \App\Models\Verifikasi::where('pendaftar_id', $santri->id)->first();
 
-return view('pendaftar.dashboard', compact('pembayaran'));
+        return view('pendaftar.dashboard', compact(
+            'santri',
+            'pembayaran',
+            'verifikasi'
+        ));
     }
 }

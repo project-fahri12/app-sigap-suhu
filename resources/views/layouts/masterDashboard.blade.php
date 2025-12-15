@@ -8,7 +8,6 @@
    <!-- Bootstrap 3.3.2 -->
 <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}"
       rel="stylesheet" type="text/css" />
-      <link rel="stylesheet" href="{{ asset('assets/css/custom-sidebar.css') }}">
 
 
 <!-- FontAwesome 4.3.0 -->
