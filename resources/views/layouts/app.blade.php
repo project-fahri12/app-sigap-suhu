@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi PPDB & SIGAP</title>
+    <title>
+        {{ setting('app_name', 'SIGAP') }}
+        @if (setting('system_name'))
+            | {{ setting('system_name') }}
+        @endif
+    </title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -29,7 +37,7 @@
         .ppdb-green-bg {
             background-color: var(--ppdb-green) !important;
         }
-        
+
         /* Mengubah warna teks dan ikon di navbar agar terlihat pada latar belakang hijau */
         .ppdb-green-bg .navbar-nav .nav-link,
         .ppdb-green-bg .navbar-toggler,
@@ -38,7 +46,7 @@
         }
 
         .ppdb-green-bg .navbar-toggler-icon {
-            filter: invert(1) grayscale(100%) brightness(200%); 
+            filter: invert(1) grayscale(100%) brightness(200%);
         }
 
         .ppdb-green-bg .navbar-nav .nav-link:hover {
@@ -47,10 +55,10 @@
 
         /* --- Header SIGAP (Navbar) --- */
         .sigap-navbar .navbar-brand .sigap-logo-img {
-            height: 40px; 
+            height: 40px;
             margin-top: -5px;
         }
-        
+
         .navbar-brand {
             padding-top: 5px;
             padding-bottom: 5px;
@@ -60,7 +68,7 @@
         .ppdb-container {
             max-width: 800px;
             /* Margin Top pada container utama dihapus karena sudah ada margin bawah di navbar */
-            margin: 0px auto 30px auto; 
+            margin: 0px auto 30px auto;
             padding: 20px;
             background-color: white;
             border-radius: 8px;
@@ -79,12 +87,12 @@
             font-weight: bold;
             line-height: 1.2;
         }
-        
+
         .subtitle {
             font-size: 1.1rem;
             margin-bottom: 5px;
         }
-        
+
         .year {
             font-size: 0.9rem;
             margin-bottom: 25px;
@@ -117,7 +125,7 @@
         }
 
         .ppdb-accordion .accordion-button:hover {
-            background-color: var(--sigap-blue); 
+            background-color: var(--sigap-blue);
             color: white;
         }
 
@@ -136,7 +144,7 @@
             border-top: none;
             border-radius: 0 0 5px 5px;
         }
-        
+
         /* --- Footer --- */
         .footer {
             padding: 20px;
@@ -162,7 +170,7 @@
             border-radius: 50%;
             margin-right: 5px;
         }
-        
+
         /* Styling untuk User Menu Dropdown Header */
         .user-menu .user-header {
             text-align: center;
@@ -195,7 +203,7 @@
             font-weight: bold;
             text-align: center;
             /* Meringkas bagian atas card */
-            margin: -30px -30px 30px -30px; 
+            margin: -30px -30px 30px -30px;
         }
 
         .btn-ppdb {
@@ -208,27 +216,29 @@
         }
 
         .btn-ppdb:hover {
-            background-color: #2c8c2c; 
+            background-color: #2c8c2c;
             color: white;
         }
-
-        
     </style>
 </head>
+
 <body>
 
- @include('components.navbar')
- 
- <main class="container">
-   <div class="ppdb-container">
-     @yield('content')
-    </div> 
-  </main>
-  
-  @include('components.footer')
-    
+    @include('components.navbar')
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <main class="container">
+        <div class="ppdb-container">
+            @yield('content')
+        </div>
+    </main>
+
+    @include('components.footer')
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
 
 </body>
+
 </html>

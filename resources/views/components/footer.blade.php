@@ -1,6 +1,18 @@
 <footer class="footer text-center">
-        <p class="copyright">Copyright © 2024 - 2025</p>
-        <p class="school-name">Madrasah Muallimin Muallimat 6 Tahun</p>
-        <p class="school-name">Bahrul 'Ulum Tambakberas Jombang</p>
-        <p class="address">Jl. Tanjung Dsn Gedang RT. 001 RW. 005 Tambakrejo Jombang</p>
-    </footer>
+    <p class="copyright">
+        Copyright ©
+        {{ setting('copyright_year', '2024 - '.date('Y')) }}
+    </p>
+
+    <p class="school-name">
+        {{ setting('school_name', 'SIGAP') }}
+    </p>
+
+    <p class="school-name">
+        {{ setting('pondok_name', 'XXXXX XXXXX XXXXX XXXXX') }}
+    </p>
+
+    <p class="address">
+        {{ setting('pondok_address', 'Jl. XXX Dsn XXXX RT. 000 RW. 00000 XXXXX XXXX') }}
+    </p>
+</footer>

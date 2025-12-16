@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->text('alamat');
+            $table->string('asal_sekolah', 50);
 
             // FK
             $table->uuid('gelombang_id');

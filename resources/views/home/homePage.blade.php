@@ -8,28 +8,31 @@
 <div class="header-logo text-center mb-3">
     <img
         src="{{ asset($settings['logo'] ?? 'assets/logo-sigap.svg') }}"
-        alt="Logo Madrasah"
+        alt="Logo PPDB"
         class="logo-ppdb"
         onerror="this.src='{{ asset('assets/logo-sigap.svg') }}'"
     >
 </div>
 
 <h1 class="main-title text-center">
-    {{ $settings['school_name'] ?? 'PPDB MADRASAH' }}
+    {{ $settings['app_name'] ?? 'SIGAP' }}
 </h1>
 
-@if(!empty($settings['school_subtitle']))
+@if(!empty($settings['system_name']))
     <h2 class="subtitle text-center">
-        {{ $settings['school_subtitle'] }}
+        {{ $settings['system_name'] }}
     </h2>
 @endif
 
-@if(!empty($settings['academic_year']))
+@if(!empty($settings['ppdb_academic_year']))
     <p class="year text-center">
-        TAHUN AJARAN {{ $settings['academic_year'] }}
+        TAHUN AJARAN {{ $settings['ppdb_academic_year'] }}
     </p>
 @endif
 
+{{-- ===========================
+| MENU PPDB
+=========================== --}}
 @if(!empty($menus) && is_array($menus))
 <div class="accordion ppdb-accordion mt-4" id="ppdbMenuAccordion">
 
