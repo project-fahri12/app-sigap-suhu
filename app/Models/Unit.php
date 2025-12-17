@@ -12,7 +12,8 @@ class Unit extends Model
     protected $table = 'unit';
 
     protected $fillable = [
-        'nama_unit'
+        'nama_unit',
+        'jenis_kelamin'
     ];
 
     public function pendaftar()

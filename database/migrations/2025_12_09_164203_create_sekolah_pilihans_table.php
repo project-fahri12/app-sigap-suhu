@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sekolah_pilihan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama_sekolah');
-            $table->enum('jenjang', ['SLTA', 'SLTP', 'PERGURUAN TINGGI', 'SALAF']);
+            $table->enum('jenjang', ['RA/TK', 'SD/MI', 'SLTA', 'SLTP', 'PERGURUAN TINGGI', 'SALAF']);
             $table->timestamps();
         });
     }

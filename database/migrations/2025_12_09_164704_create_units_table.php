@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('unit', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama_unit');
+            $table->enum('jenis_kelamin', ['putra', 'putri', 'campur'])->default('campur');
             $table->timestamps();
         });
     }
