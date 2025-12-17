@@ -13,8 +13,8 @@ class Pendaftar extends Model
 
     protected $fillable = [
         'users_id', 'kode_pendaftaran', 'nik', 'nama_lengkap',
-        'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat',
-        'gelombang_id', 'tahun_ajaran_id', 'sekolah_pilihan_id', 'unit_id'
+        'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'status_santri', 'asal_sekolah',
+        'gelombang_id', 'tahun_ajaran_id', 'sekolah_pilihan_id', 'unit_id', 
     ];
 
     public function user()

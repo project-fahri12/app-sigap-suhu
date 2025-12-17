@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tempat_lahir', 100);
             $table->date('tanggal_lahir');
             $table->enum('jenis_kelamin', ['L', 'P']);
+            $table->enum('status_santri', ['mukim', 'non_mukim']);
             $table->text('alamat');
             $table->string('asal_sekolah', 50);
 

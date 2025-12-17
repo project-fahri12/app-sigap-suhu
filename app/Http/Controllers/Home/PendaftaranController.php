@@ -63,7 +63,9 @@ class PendaftaranController extends Controller
             'tempat_lahir' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
-            'alamat' => 'required|string|max:500', // Alamat Santri
+            'status_santri' => 'required|in:mukim,non_mukim',
+            'asal_sekolah'  => 'required|max:100',
+            'alamat' => 'required|string|max:500',
             'gelombang_id' => 'required|exists:gelombang,id',
             'unit_id' => 'required|exists:unit,id',
             'sekolah_pilihan_id' => 'required|exists:sekolah_pilihan,id',
@@ -78,7 +80,7 @@ class PendaftaranController extends Controller
             'pekerjaan_ibu' => 'nullable|string|max:255',
             'no_hp_ibu' => 'nullable|string|max:20',
             'status_ibu' => 'required|in:hidup,meninggal,tidak_diketahui',
-            'alamat_orang_tua' => 'nullable|string', // Alamat Orang Tua
+            'alamat_orang_tua' => 'nullable|string', 
 
             // Data Wali Santri (Opsional)
             'nama_wali' => 'nullable|string|max:255',
@@ -116,15 +118,17 @@ class PendaftaranController extends Controller
                 'users_id' => $user->id,
                 'kode_pendaftaran' => $kodePendaftaran,
                 'nik' => $validated['nik'],
-                'nama_lengkap' => $validated['nama_lengkap'],
-                'tempat_lahir' => $validated['tempat_lahir'],
+                'nama_lengkap'  => $validated['nama_lengkap'],
+                'tempat_lahir'  => $validated['tempat_lahir'],
                 'tanggal_lahir' => $validated['tanggal_lahir'],
                 'jenis_kelamin' => $validated['jenis_kelamin'],
-                'alamat' => $validated['alamat'], // Alamat Santri
-                'gelombang_id' => $validated['gelombang_id'],
-                'unit_id' => $validated['unit_id'],
+                'status_santri' => $validated['status_santri'],
+                'asal_sekolah'  => $validated['asal_sekolah'],
+                'alamat'        => $validated['alamat'], 
+                'gelombang_id'  => $validated['gelombang_id'],
+                'unit_id'       => $validated['unit_id'],
                 'sekolah_pilihan_id' => $validated['sekolah_pilihan_id'],
-                'tahun_ajaran_id' => $validated['tahun_ajaran_id'],
+                'tahun_ajaran_id'    => $validated['tahun_ajaran_id'],
             ];
 
             $pendaftar = Pendaftar::create($dataPendaftar);
@@ -144,7 +148,7 @@ class PendaftaranController extends Controller
                 'pekerjaan_ibu' => $validated['pekerjaan_ibu'],
                 'no_hp_ibu' => $validated['no_hp_ibu'],
                 'status_ibu' => $validated['status_ibu'],
-                'alamat_orang_tua' => $validated['alamat_orang_tua'] ?? $validated['alamat'], // Jika kosong, pakai alamat santri
+                'alamat_orang_tua' => $validated['alamat_orang_tua'] ?? $validated['alamat'],
             ];
             
             OrangTua::create($dataOrangTua);
