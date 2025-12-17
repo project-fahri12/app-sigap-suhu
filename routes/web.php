@@ -9,6 +9,7 @@ use App\Http\Controllers\Home\KontakController;
 use App\Http\Controllers\Pendaftar\UploadBerkas;
 use App\Http\Controllers\Home\ValidasiController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DataPendaftarController;
 use App\Http\Controllers\Admin\GelombangController;
 use App\Http\Controllers\Home\PengumumanController;
 use App\Http\Controllers\Admin\SettingWebController;
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('gelombang', GelombangController::class)->only(['index', 'store', 'destroy']);;
     Route::resource('unit', UnitController::class)->only(['index', 'store', 'destroy']);;
     Route::resource('sekolah-pilihan', SekolahPilihanController::class)->only(['index', 'store', 'destroy']);;
+    Route::resource('data-pendaftar', DataPendaftarController::class);
 });
 
 // Petugas

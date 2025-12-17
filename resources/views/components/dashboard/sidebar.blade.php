@@ -94,8 +94,8 @@
                     </li>
 
                     {{-- DATA PENDAFTAR --}}
-                    <li>
-                        <a href="#">
+                    <li class="{{ request()->routeIs('admin.data-pendaftar.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.data-pendaftar.index') }}">
                             <i class="fa fa-users"></i>
                             <span>Data Pendaftar</span>
                         </a>

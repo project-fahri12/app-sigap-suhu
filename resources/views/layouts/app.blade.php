@@ -184,7 +184,7 @@
     {{-- FOOTER --}}
     <footer class="text-center text-muted py-3 border-top">
         <small>
-            &copy; {{ date('Y') }} Pondok Pesantren
+            &copy; {{ date('Y') }} {{ setting('pondok_name') }}
         </small>
     </footer>
 

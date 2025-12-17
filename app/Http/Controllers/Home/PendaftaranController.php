@@ -37,7 +37,7 @@ class PendaftaranController extends Controller
         $sekolah_options = SekolahPilihan::select('id', 'nama_sekolah')->get();
 
         // Jika pendaftaran ditutup
-        if (! $tahun_ajaran || ! $gelombang) {
+        if ( setting('ppdb_status') == 'tutup') {
             return view('home.pendaftaran_closed');
         }
 

@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\SettingWeb;
 use App\Models\Gelombang;
+use App\Models\SettingWeb;
+use Illuminate\Http\Request;
 
 class SettingWebController extends Controller
 {
     public function index()
     {
-        return view('admin.settingWeb.settingWeb');
+        $tahunAjaranAktif = \App\Models\TahunAjaran::where('status', 'aktif')->first();
+        $gelombangAktif = \App\Models\Gelombang::where('status', 1)->first();
+
+return view('admin.settingWeb.settingWeb', compact(
+    'tahunAjaranAktif',
+    'gelombangAktif'
+));
     }
 
     public function update(Request $request)
@@ -20,13 +26,13 @@ class SettingWebController extends Controller
         if ($request->ppdb_status === 'buka') {
             $gelombangAktif = Gelombang::where('status', 'buka')->exists();
 
-            if (!$gelombangAktif) {
+            if (! $gelombangAktif) {
                 return back()->with('error',
                     'PPDB tidak bisa dibuka karena belum ada gelombang aktif.'
                 );
             }
         }
-        
+
         foreach ($request->except(['_token', '_method']) as $key => $value) {
             SettingWeb::updateOrCreate(
                 ['setting_key' => $key],

@@ -74,7 +74,7 @@ class Pendaftar extends Model
 
     public function berkas()
     {
-        return $this->hasMany(Berkas::class);
+        return $this->hasOne(Berkas::class);
     }
 
     public function pembayaran()
