@@ -3,242 +3,195 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {{ setting('app_name', 'SIGAP') }}
-        @if (setting('system_name'))
-            | {{ setting('system_name') }}
-        @endif
-    </title>
+    <title>@yield('judul', 'Homepage')</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    {{-- Bootstrap 5 --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- Custom CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
     <style>
-        /* Variabel Warna PPDB */
-        :root {
-            --ppdb-green: #38a538;
-            --ppdb-dark: #2c3e50;
-            --sigap-blue: #1c365c;
-            --sigap-orange: #ff6e1d;
-            --navbar-text-light: white;
-        }
-
-        /* --- Global Layout --- */
-        body {
-            background-color: #f0f0f0;
-            color: var(--ppdb-dark);
-        }
-
-        /* --- Custom Class untuk Warna Hijau Navbar --- */
+        /* ===============================
+   GLOBAL COLOR
+=============================== */
         .ppdb-green-bg {
-            background-color: var(--ppdb-green) !important;
+            background-color: #16a34a;
         }
 
-        /* Mengubah warna teks dan ikon di navbar agar terlihat pada latar belakang hijau */
-        .ppdb-green-bg .navbar-nav .nav-link,
-        .ppdb-green-bg .navbar-toggler,
-        .ppdb-green-bg .navbar-brand {
-            color: var(--navbar-text-light) !important;
+        /* ===============================
+   NAVBAR
+=============================== */
+        .navbar {
+            padding: 0.6rem 0;
         }
 
-        .ppdb-green-bg .navbar-toggler-icon {
-            filter: invert(1) grayscale(100%) brightness(200%);
+        .navbar-nav .nav-link {
+            font-weight: 500;
         }
 
-        .ppdb-green-bg .navbar-nav .nav-link:hover {
-            color: #d4e7d4 !important;
+        .navbar-nav .nav-link.active {
+            text-decoration: underline;
         }
 
-        /* --- Header SIGAP (Navbar) --- */
-        .sigap-navbar .navbar-brand .sigap-logo-img {
-            height: 40px;
-            margin-top: -5px;
+        /* Header PPDB */
+        .ppdb-header h5 {
+            line-height: 1.3;
         }
 
-        .navbar-brand {
-            padding-top: 5px;
-            padding-bottom: 5px;
+        .ppdb-header .tahun-ajaran {
+            font-weight: 600;
+            letter-spacing: .5px;
         }
 
-        /* --- Konten PPDB --- */
-        .ppdb-container {
-            max-width: 800px;
-            /* Margin Top pada container utama dihapus karena sudah ada margin bawah di navbar */
-            margin: 0px auto 30px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
+
+        /* ===============================
+   MENU CARD (GRID)
+=============================== */
+        .menu-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px 10px;
+            height: 135px;
+
+            text-decoration: none;
+            color: #333;
+
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+            transition: all .2s ease;
         }
 
-        .logo-ppdb {
-            width: 100px;
-            height: auto;
-            margin-bottom: 15px;
+        .menu-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+            color: #000;
         }
 
-        .main-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            line-height: 1.2;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        .year {
-            font-size: 0.9rem;
-            margin-bottom: 25px;
-            color: #666;
-        }
-
-        /* --- Accordion (Menu PPDB) --- */
-        .ppdb-accordion .accordion-item {
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        /* Tombol Header Accordion */
-        .ppdb-accordion .accordion-button {
-            background-color: var(--ppdb-green);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            text-align: left;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .ppdb-accordion .accordion-button:not(.collapsed) {
-            background-color: var(--ppdb-green);
-            color: white;
-            box-shadow: none;
-        }
-
-        .ppdb-accordion .accordion-button:hover {
-            background-color: var(--sigap-blue);
-            color: white;
-        }
-
-        /* Ikon di Menu */
-        .ppdb-accordion .accordion-button i {
-            margin-right: 15px;
-            width: 20px;
-        }
-
-        /* Konten di dalam Accordion */
-        .ppdb-accordion .accordion-body {
-            text-align: left;
-            padding: 15px 20px;
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            border-top: none;
-            border-radius: 0 0 5px 5px;
-        }
-
-        /* --- Footer --- */
-        .footer {
-            padding: 20px;
-            background-color: #f8f8f8;
-            font-size: 12px;
-            color: #666;
-            margin-top: 30px;
-        }
-
-        .footer p {
-            margin: 3px 0;
-        }
-
-        .school-name {
-            font-weight: bold;
-            color: var(--sigap-blue);
-        }
-
-        /* Responsive Navbar Bootstrap 5 (user menu) */
-        .user-image {
-            width: 28px;
-            height: 28px;
+        /* Icon bulat (lebih kecil & elegan) */
+        .menu-icon {
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            margin-right: 5px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #16a34a;
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 8px;
         }
 
-        /* Styling untuk User Menu Dropdown Header */
-        .user-menu .user-header {
+        .menu-title {
+            font-weight: 600;
+            font-size: 14px;
             text-align: center;
-            padding: 10px;
-            background-color: var(--sigap-blue);
-            color: white;
         }
 
-        .user-menu .user-header img {
-            height: 90px;
-            width: 90px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
+        /* ===============================
+   LIST MENU (MODEL TOMBOL PANJANG)
+=============================== */
+        .ppdb-menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .login-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        .ppdb-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #16a34a;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, .15);
+            transition: all .2s ease;
         }
 
-        .login-header {
-            background-color: var(--ppdb-green);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px 5px 0 0;
-            font-size: 1.2rem;
-            font-weight: bold;
+        .ppdb-menu-item i {
+            font-size: 18px;
+            width: 22px;
             text-align: center;
-            /* Meringkas bagian atas card */
-            margin: -30px -30px 30px -30px;
         }
 
-        .btn-ppdb {
-            background-color: var(--ppdb-green);
-            color: white;
-            border: none;
-            padding: 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
+        .ppdb-menu-item:hover {
+            background: #15803d;
+            transform: translateY(-1px);
+            color: #fff;
         }
 
-        .btn-ppdb:hover {
-            background-color: #2c8c2c;
-            color: white;
+        .nav-tabs .nav-link.active {
+            background-color: #15803d !important;
+            color: white !important;
+            border-color: #15803d !important;
+        }
+
+        @media (max-width: 575.98px) {
+            .nav-tabs .nav-link {
+                border-radius: 0.5rem !important;
+                margin-bottom: 5px;
+            }
+
+            .nav-tabs .nav-link.active {
+                background-color: #15803d !important;
+                color: white !important;
+                border-color: #15803d !important;
+            }
+        }
+
+        /* ===============================
+   MOBILE ADJUST
+=============================== */
+        @media (max-width: 576px) {
+            .menu-card {
+                height: 125px;
+            }
+
+            .menu-title {
+                font-size: 13px;
+            }
         }
     </style>
+
+    @stack('css')
 </head>
 
-<body>
+<body class="bg-light">
 
+    {{-- NAVBAR --}}
     @include('components.navbar')
 
-    <main class="container">
-        <div class="ppdb-container">
-            @yield('content')
-        </div>
+    {{-- CONTENT --}}
+    <main class="container my-4">
+        @yield('content')
     </main>
 
-    @include('components.footer')
+    {{-- FOOTER --}}
+    <footer class="text-center text-muted py-3 border-top">
+        <small>
+            &copy; {{ date('Y') }} Pondok Pesantren
+        </small>
+    </footer>
 
+    {{-- Bootstrap 5 JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
-
+    @stack('js')
 </body>
 
 </html>

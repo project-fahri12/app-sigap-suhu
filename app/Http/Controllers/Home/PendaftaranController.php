@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Http\Controllers\Controller;
+use App\Models\Gelombang;
+use App\Models\OrangTua;
+use App\Models\Pendaftar;
+use App\Models\SekolahPilihan;
+use App\Models\TahunAjaran;
 use App\Models\Unit;
 use App\Models\User;
-use App\Models\Gelombang;
-use App\Models\Pendaftar;
-use App\Models\TahunAjaran;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\SekolahPilihan;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Models\OrangTua; 
 use App\Models\WaliSantri;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class PendaftaranController extends Controller
 {
@@ -22,34 +22,32 @@ class PendaftaranController extends Controller
      * Form pendaftaran
      */
     public function index()
-{
-    $tahun_ajaran = TahunAjaran::select('id', 'tahun')
-        ->where('status', 'aktif')
-        ->orderBy('tahun', 'desc')
-        ->first();
+    {
+        $tahun_ajaran = TahunAjaran::select('id', 'tahun')
+            ->where('status', 'aktif')
+            ->orderBy('tahun', 'desc')
+            ->first();
 
-    $gelombang = Gelombang::select('id', 'nama_gelombang')
-        ->where('status', 1)
-        ->orderBy('tanggal_mulai')
-        ->first();
+        $gelombang = Gelombang::select('id', 'nama_gelombang')
+            ->where('status', 1)
+            ->orderBy('tanggal_mulai')
+            ->first();
 
-    $unit_options = Unit::select('id', 'nama_unit')->get();
-    $sekolah_options = SekolahPilihan::select('id', 'nama_sekolah')->get();
+        $unit_options = Unit::select('id', 'nama_unit')->get();
+        $sekolah_options = SekolahPilihan::select('id', 'nama_sekolah')->get();
 
-    // Jika pendaftaran ditutup
-    if (!$tahun_ajaran || !$gelombang) {
-        return view('home.pendaftaran_closed');
+        // Jika pendaftaran ditutup
+        if (! $tahun_ajaran || ! $gelombang) {
+            return view('home.pendaftaran_closed');
+        }
+
+        return view('home.form_santri', compact(
+            'tahun_ajaran',
+            'gelombang',
+            'unit_options',
+            'sekolah_options'
+        ));
     }
-
-    return view('home.form_santri', compact(
-        'tahun_ajaran',
-        'gelombang',
-        'unit_options',
-        'sekolah_options'
-    ));
-}
-
-
 
     public function store(Request $request)
     {
@@ -64,8 +62,12 @@ class PendaftaranController extends Controller
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
             'status_santri' => 'required|in:mukim,non_mukim',
-            'asal_sekolah'  => 'required|max:100',
-            'alamat' => 'required|string|max:500',
+            'asal_sekolah' => 'required|max:100',
+            'provinsi_id' => 'required|string',
+            'kabupaten_id' => 'required|string',
+            'kecamatan_id' => 'required|string',
+            'desa_id' => 'required|string',
+            'alamat_detail' => 'required|string|max:255',
             'gelombang_id' => 'required|exists:gelombang,id',
             'unit_id' => 'required|exists:unit,id',
             'sekolah_pilihan_id' => 'required|exists:sekolah_pilihan,id',
@@ -80,7 +82,7 @@ class PendaftaranController extends Controller
             'pekerjaan_ibu' => 'nullable|string|max:255',
             'no_hp_ibu' => 'nullable|string|max:20',
             'status_ibu' => 'required|in:hidup,meninggal,tidak_diketahui',
-            'alamat_orang_tua' => 'nullable|string', 
+            'alamat_orang_tua' => 'nullable|string',
 
             // Data Wali Santri (Opsional)
             'nama_wali' => 'nullable|string|max:255',
@@ -89,7 +91,7 @@ class PendaftaranController extends Controller
             'alamat_wali' => 'nullable|string',
             'no_hp_wali' => 'nullable|string|max:20',
         ]);
-        
+
         $kodePendaftaran = null;
 
         DB::transaction(function () use ($validated, &$kodePendaftaran) {
@@ -100,8 +102,8 @@ class PendaftaranController extends Controller
 
             // Generate kode pendaftaran
             // Mengubah format PSMB-Tahun-Random menjadi TAHUN_AKHIR_GELOMBANG+Random(4) agar lebih singkat
-            $gelombangYear = substr($validated['tahun_ajaran_id'], 0, 4); 
-            $kodePendaftaran = $gelombangYear . Str::random(4);
+            $gelombangYear = substr($validated['tahun_ajaran_id'], 0, 4);
+            $kodePendaftaran = $gelombangYear.Str::random(4);
 
             // Password awal dari tanggal lahir (YYYYMMDD)
             $passwordAwal = date('Ymd', strtotime($validated['tanggal_lahir']));
@@ -118,17 +120,21 @@ class PendaftaranController extends Controller
                 'users_id' => $user->id,
                 'kode_pendaftaran' => $kodePendaftaran,
                 'nik' => $validated['nik'],
-                'nama_lengkap'  => $validated['nama_lengkap'],
-                'tempat_lahir'  => $validated['tempat_lahir'],
+                'nama_lengkap' => $validated['nama_lengkap'],
+                'tempat_lahir' => $validated['tempat_lahir'],
                 'tanggal_lahir' => $validated['tanggal_lahir'],
                 'jenis_kelamin' => $validated['jenis_kelamin'],
                 'status_santri' => $validated['status_santri'],
-                'asal_sekolah'  => $validated['asal_sekolah'],
-                'alamat'        => $validated['alamat'], 
-                'gelombang_id'  => $validated['gelombang_id'],
-                'unit_id'       => $validated['unit_id'],
+                'asal_sekolah' => $validated['asal_sekolah'],
+                'provinsi_id' => $validated['provinsi_id'],
+                'kabupaten_id' => $validated['kabupaten_id'],
+                'kecamatan_id' => $validated['kecamatan_id'],
+                'desa_id' => $validated['desa_id'],
+                'alamat_detail' => $validated['alamat_detail'],
+                'gelombang_id' => $validated['gelombang_id'],
+                'unit_id' => $validated['unit_id'],
                 'sekolah_pilihan_id' => $validated['sekolah_pilihan_id'],
-                'tahun_ajaran_id'    => $validated['tahun_ajaran_id'],
+                'tahun_ajaran_id' => $validated['tahun_ajaran_id'],
             ];
 
             $pendaftar = Pendaftar::create($dataPendaftar);
@@ -148,15 +154,14 @@ class PendaftaranController extends Controller
                 'pekerjaan_ibu' => $validated['pekerjaan_ibu'],
                 'no_hp_ibu' => $validated['no_hp_ibu'],
                 'status_ibu' => $validated['status_ibu'],
-                'alamat_orang_tua' => $validated['alamat_orang_tua'] ?? $validated['alamat'],
+                'alamat_orang_tua' => $validated['alamat_orang_tua']
+                    ?? $validated['alamat_detail'],
             ];
-            
+
             OrangTua::create($dataOrangTua);
 
-            // =======================================================
-            // 4. PROSES WALI SANTRI (Hanya jika nama_wali diisi)
-            // =======================================================
-            if (!empty($validated['nama_wali'])) {
+
+            if (! empty($validated['nama_wali'])) {
                 $dataWaliSantri = [
                     'pendaftar_id' => $pendaftarId,
                     'nama_wali' => $validated['nama_wali'],

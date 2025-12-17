@@ -6,14 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('pendaftar', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('users_id');
+
             $table->string('kode_pendaftaran')->unique();
             $table->string('nik', 20)->unique();
             $table->string('nama_lengkap');
@@ -21,10 +19,15 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->enum('status_santri', ['mukim', 'non_mukim']);
-            $table->text('alamat');
-            $table->string('asal_sekolah', 50);
 
-            // FK
+            $table->string('provinsi_id', 10);
+            $table->string('kabupaten_id', 10);
+            $table->string('kecamatan_id', 10);
+            $table->string('desa_id', 10);
+            $table->text('alamat_detail');
+
+            $table->string('asal_sekolah', 50)->nullable();
+
             $table->uuid('gelombang_id');
             $table->uuid('tahun_ajaran_id');
             $table->uuid('sekolah_pilihan_id');
@@ -32,19 +35,23 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('gelombang_id')->references('id')->on('gelombang')->onDelete('cascade');
-            $table->foreign('tahun_ajaran_id')->references('id')->on('tahun_ajaran')->onDelete('cascade');
-            $table->foreign('sekolah_pilihan_id')->references('id')->on('sekolah_pilihan')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('unit')->onDelete('cascade');
+            $table->foreign('users_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('gelombang_id')->references('id')->on('gelombang')->cascadeOnDelete();
+            $table->foreign('tahun_ajaran_id')->references('id')->on('tahun_ajaran')->cascadeOnDelete();
+            $table->foreign('sekolah_pilihan_id')->references('id')->on('sekolah_pilihan')->cascadeOnDelete();
+            $table->foreign('unit_id')->references('id')->on('unit')->cascadeOnDelete();
+
+            $table->index([
+                'provinsi_id',
+                'kabupaten_id',
+                'kecamatan_id',
+                'desa_id'
+            ]);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('pendaftars');
+        Schema::dropIfExists('pendaftar');
     }
 };

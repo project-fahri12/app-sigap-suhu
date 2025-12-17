@@ -7,13 +7,26 @@ use App\Models\SekolahPilihan;
 use App\Models\SettingWeb;
 use App\Models\TahunAjaran;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+
+        User::create([
+            'id' => (string) Str::uuid(),
+            'username' => 'admin fahri',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('12121212'),
+            'role' => 'admin',
+            'status_aktif' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
         /*
         |--------------------------------------------------------------------------
         | Tahun Ajaran

@@ -12,10 +12,30 @@ class Pendaftar extends Model
     protected $table = 'pendaftar';
 
     protected $fillable = [
-        'users_id', 'kode_pendaftaran', 'nik', 'nama_lengkap',
-        'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'alamat', 'status_santri', 'asal_sekolah',
-        'gelombang_id', 'tahun_ajaran_id', 'sekolah_pilihan_id', 'unit_id', 
+        'users_id',
+        'kode_pendaftaran',
+        'nik',
+        'nama_lengkap',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'status_santri',
+
+        // ===== ALAMAT BERANTAI =====
+        'provinsi_id',
+        'kabupaten_id',
+        'kecamatan_id',
+        'desa_id',
+        'alamat_detail',
+
+        'asal_sekolah',
+        'gelombang_id',
+        'tahun_ajaran_id',
+        'sekolah_pilihan_id',
+        'unit_id',
     ];
+
+    /* ========== RELASI ========== */
 
     public function user()
     {

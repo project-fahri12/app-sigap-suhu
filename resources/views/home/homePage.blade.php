@@ -1,102 +1,85 @@
 @extends('layouts.app')
 
-@section('title', $settings['app_name'] ?? 'SIGAP')
-@section('page-title', 'Dashboard SIGAP')
+@section('judul', $settings['app_name'] ?? 'SIGAP PPDB')
 
 @section('content')
 
-<div class="header-logo text-center mb-3">
-    <img
-        src="{{ asset($settings['logo'] ?? 'assets/logo-sigap.svg') }}"
-        alt="Logo PPDB"
-        class="logo-ppdb"
-        onerror="this.src='{{ asset('assets/logo-sigap.svg') }}'"
-    >
-</div>
+    <div class="text-center mb-4">
 
-<h1 class="main-title text-center">
-    {{ $settings['app_name'] ?? 'SIGAP' }}
-</h1>
+        {{-- LOGO --}}
+        <img src="{{ asset($settings['logo_app'] ?? 'assets/logo-sigap.svg') }}" class="img-fluid mb-3" style="max-height:90px"
+            onerror="this.src='{{ asset('assets/logo-sigap.svg') }}'">
 
-@if(!empty($settings['system_name']))
-    <h2 class="subtitle text-center">
-        {{ $settings['system_name'] }}
-    </h2>
-@endif
+        {{-- JUDUL --}}
+        <h5 class="fw-bold mb-1">
+            {{ $settings['app_name'] ?? 'SIGAP PPDB' }}
+            @if (!empty($settings['pondok_name']))
+                <span class="text-muted fw-normal">
+                    | {{ $settings['pondok_name'] }}
+                </span>
+            @endif
+        </h5>
 
-@if(!empty($settings['ppdb_academic_year']))
-    <p class="year text-center">
-        TAHUN AJARAN {{ $settings['ppdb_academic_year'] }}
-    </p>
-@endif
+        {{-- SUB JUDUL --}}
+        <small class="text-muted d-block mb-1">
+            {{ $settings['system_name'] ?? 'Penerimaan Peserta Didik Baru' }}
+        </small>
 
-{{-- ===========================
-| MENU PPDB
-=========================== --}}
-@if(!empty($menus) && is_array($menus))
-<div class="accordion ppdb-accordion mt-4" id="ppdbMenuAccordion">
-
-    @foreach ($menus as $index => $menu)
-        @php
-            $headingId  = 'heading-'.$index;
-            $collapseId = 'collapse-'.$index;
-            $type       = $menu['type'] ?? 'accordion';
-        @endphp
-
-        {{-- MENU LINK --}}
-        @if ($type === 'link')
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="{{ $headingId }}">
-                    <a
-                        href="{{ url($menu['url'] ?? '#') }}"
-                        class="accordion-button collapsed text-decoration-none"
-                    >
-                        @if(!empty($menu['icon']))
-                            <i class="fa {{ $menu['icon'] }} me-2"></i>
-                        @endif
-                        {{ $menu['title'] ?? 'Menu' }}
-                    </a>
-                </h2>
-            </div>
-
-        {{-- MENU ACCORDION --}}
-        @else
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="{{ $headingId }}">
-                    <button
-                        class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#{{ $collapseId }}"
-                        aria-expanded="false"
-                        aria-controls="{{ $collapseId }}"
-                    >
-                        @if(!empty($menu['icon']))
-                            <i class="fa {{ $menu['icon'] }} me-2"></i>
-                        @endif
-                        {{ $menu['title'] ?? 'Menu' }}
-                    </button>
-                </h2>
-
-                <div
-                    id="{{ $collapseId }}"
-                    class="accordion-collapse collapse"
-                    aria-labelledby="{{ $headingId }}"
-                    data-bs-parent="#ppdbMenuAccordion"
-                >
-                    <div class="accordion-body">
-                        {!! $menu['content'] ?? '<p class="text-muted">Konten belum tersedia.</p>' !!}
-                    </div>
-                </div>
+        {{-- TAHUN AJARAN --}}
+        @if (!empty($settings['ppdb_academic_year']))
+            <div class="fw-semibold fs-6">
+                TAHUN AJARAN {{ $settings['ppdb_academic_year'] }}
             </div>
         @endif
-    @endforeach
 
-</div>
-@else
-    <p class="text-center text-muted mt-4">
-        Menu belum dikonfigurasi.
-    </p>
-@endif
+    </div>
+
+
+    @if (!empty($menus))
+        <div class="ppdb-menu-list">
+
+            @foreach ($menus as $i => $menu)
+                {{-- ========== LINK ========== --}}
+                @if (($menu['type'] ?? 'link') === 'link')
+                    <a href="{{ url($menu['url'] ?? '#') }}" class="ppdb-menu-item">
+                        <i class="fa {{ $menu['icon'] ?? 'fa-link' }}"></i>
+                        <span>{{ $menu['title'] ?? 'Menu' }}</span>
+                    </a>
+
+                    {{-- ========== MODAL ========== --}}
+                @else
+                    <a href="javascript:void(0)" class="ppdb-menu-item" data-bs-toggle="modal"
+                        data-bs-target="#menuModal{{ $i }}">
+                        <i class="fa {{ $menu['icon'] ?? 'fa-info-circle' }}"></i>
+                        <span>{{ $menu['title'] ?? 'Menu' }}</span>
+                    </a>
+
+                    {{-- MODAL --}}
+                    <div class="modal fade" id="menuModal{{ $i }}" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <i class="fa {{ $menu['icon'] ?? '' }}"></i>
+                                        {{ $menu['title'] ?? 'Informasi' }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    {!! $menu['content'] ?? '<p class="text-muted">Konten belum tersedia</p>' !!}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+
+        </div>
+    @else
+        <p class="text-center text-muted">Menu belum dikonfigurasi</p>
+    @endif
 
 @endsection
