@@ -26,6 +26,8 @@ class Pendaftar extends Model
         'kabupaten_id',
         'kecamatan_id',
         'desa_id',
+        'rt',
+        'rw',
         'alamat_detail',
 
         'asal_sekolah',

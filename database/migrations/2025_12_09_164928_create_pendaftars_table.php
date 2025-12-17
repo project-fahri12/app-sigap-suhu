@@ -24,7 +24,9 @@ return new class extends Migration
             $table->string('kabupaten_id', 10);
             $table->string('kecamatan_id', 10);
             $table->string('desa_id', 10);
-            $table->text('alamat_detail');
+            $table->string('rt', 3)->nullable();
+            $table->string('rw', 3)->nullable();
+            $table->string('alamat_detail');
 
             $table->string('asal_sekolah', 50)->nullable();
 
@@ -45,7 +47,7 @@ return new class extends Migration
                 'provinsi_id',
                 'kabupaten_id',
                 'kecamatan_id',
-                'desa_id'
+                'desa_id',
             ]);
         });
     }

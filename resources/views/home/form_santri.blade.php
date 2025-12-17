@@ -58,158 +58,145 @@
                     tabindex="0">
 
                     {{-- CARD 1: DATA PRIBADI --}}
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-success text-white d-flex align-items-center">
-                            <i class="fas fa-user-graduate me-2"></i>
-                            <h6 class="m-0 fw-bold">Data Pribadi Calon Peserta</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row g-3">
-                                {{-- Nama Lengkap --}}
-                                <div class="col-md-8">
-                                    <label for="nama_lengkap" class="form-label fw-semibold small">Nama Lengkap <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror"
-                                        id="nama_lengkap" name="nama_lengkap" placeholder="Sesuai Ijazah / Kartu Keluarga"
-                                        value="{{ old('nama_lengkap') }}" required>
-                                    @error('nama_lengkap')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-header bg-success text-white d-flex align-items-center py-3">
+        <i class="fas fa-user-graduate me-2"></i>
+        <h6 class="m-0 fw-bold">Data Pribadi Calon Peserta</h6>
+    </div>
+    
+    <div class="card-body p-4">
+        <div class="row g-3">
+            {{-- Nama Lengkap --}}
+            <div class="col-md-8">
+                <label for="nama_lengkap" class="form-label fw-bold small">Nama Lengkap <span class="text-danger">*</span></label>
+                <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror"
+                    id="nama_lengkap" name="nama_lengkap" placeholder="Sesuai Ijazah / Kartu Keluarga"
+                    value="{{ old('nama_lengkap') }}" required>
+                @error('nama_lengkap')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                {{-- NIK --}}
-                                <div class="col-md-4">
-                                    <label for="nik" class="form-label fw-semibold small">NIK (16 Digit) <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('nik') is-invalid @enderror"
-                                        id="nik" name="nik" placeholder="35xxxxxxxxxxxxxx"
-                                        value="{{ old('nik') }}" maxlength="16" minlength="16" required>
-                                    @error('nik')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+            {{-- NIK --}}
+            <div class="col-md-4">
+                <label for="nik" class="form-label fw-bold small">NIK (16 Digit) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control @error('nik') is-invalid @enderror"
+                    id="nik" name="nik" placeholder="35xxxxxxxxxxxxxx"
+                    value="{{ old('nik') }}" maxlength="16" minlength="16" 
+                    oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
+                @error('nik')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                {{-- Tempat Lahir --}}
-                                <div class="col-md-4">
-                                    <label for="tempat_lahir" class="form-label fw-semibold small">Tempat Lahir <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
-                                        id="tempat_lahir" name="tempat_lahir" placeholder="Kota/Kabupaten"
-                                        value="{{ old('tempat_lahir') }}" required>
-                                    @error('tempat_lahir')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+            {{-- Tempat Lahir --}}
+            <div class="col-md-4">
+                <label for="tempat_lahir" class="form-label fw-bold small">Tempat Lahir <span class="text-danger">*</span></label>
+                <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror"
+                    id="tempat_lahir" name="tempat_lahir" placeholder="Kota/Kabupaten"
+                    value="{{ old('tempat_lahir') }}" required>
+                @error('tempat_lahir')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                {{-- Tanggal Lahir --}}
-                                <div class="col-md-4">
-                                    <label for="tanggal_lahir" class="form-label fw-semibold small">Tanggal Lahir <span
-                                            class="text-danger">*</span></label>
-                                    <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
-                                        id="tanggal_lahir" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
-                                    @error('tanggal_lahir')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+            {{-- Tanggal Lahir --}}
+            <div class="col-md-4">
+                <label for="tanggal_lahir" class="form-label fw-bold small">Tanggal Lahir <span class="text-danger">*</span></label>
+                <input type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror"
+                    id="tanggal_lahir" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
+                @error('tanggal_lahir')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                                {{-- Jenis Kelamin --}}
-                                <div class="col-md-4">
-                                    <label for="jenis_kelamin" class="form-label fw-semibold small">Jenis Kelamin <span
-                                            class="text-danger">*</span></label>
-                                    <div class="d-flex gap-3 mt-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jenis_kelamin"
-                                                id="L" value="L"
-                                                {{ old('jenis_kelamin') == 'L' ? 'checked' : '' }} required>
-                                            <label class="form-check-label" for="L">Laki-laki</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jenis_kelamin"
-                                                id="P" value="P"
-                                                {{ old('jenis_kelamin') == 'P' ? 'checked' : '' }} required>
-                                            <label class="form-check-label" for="P">Perempuan</label>
-                                        </div>
-                                    </div>
-                                    @error('jenis_kelamin')
-                                        <div class="text-danger small mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                {{-- Asal Sekolah --}}
-                                <div class="col-12">
-                                    <label for="asal_sekolah" class="form-label fw-semibold small">Asal Sekolah Sebelumnya
-                                        <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('asal_sekolah') is-invalid @enderror"
-                                        id="asal_sekolah" name="asal_sekolah"
-                                        placeholder="Contoh: MI Bahrul Ulum Jombang" value="{{ old('asal_sekolah') }}"
-                                        required>
-                                    @error('asal_sekolah')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                {{-- ALAMAT BERANTAI --}}
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold small">Provinsi <span
-                                            class="text-danger">*</span></label>
-                                    <select id="provinsi" name="provinsi_id"
-                                        class="form-select @error('provinsi_id') is-invalid @enderror" required>
-                                        <option value="">Pilih Provinsi</option>
-                                    </select>
-                                    @error('provinsi_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold small">Kabupaten / Kota <span
-                                            class="text-danger">*</span></label>
-                                    <select id="kabupaten" name="kabupaten_id"
-                                        class="form-select @error('kabupaten_id') is-invalid @enderror" disabled required>
-                                        <option value="">Pilih Kabupaten / Kota</option>
-                                    </select>
-                                    @error('kabupaten_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold small">Kecamatan <span
-                                            class="text-danger">*</span></label>
-                                    <select id="kecamatan" name="kecamatan_id"
-                                        class="form-select @error('kecamatan_id') is-invalid @enderror" disabled required>
-                                        <option value="">Pilih Kecamatan</option>
-                                    </select>
-                                    @error('kecamatan_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold small">Desa / Kelurahan <span
-                                            class="text-danger">*</span></label>
-                                    <select id="desa" name="desa_id"
-                                        class="form-select @error('desa_id') is-invalid @enderror" disabled required>
-                                        <option value="">Pilih Desa / Kelurahan</option>
-                                    </select>
-                                    @error('desa_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold small">Alamat Detail <span
-                                            class="text-danger">*</span></label>
-                                    <textarea name="alamat_detail" class="form-control @error('alamat_detail') is-invalid @enderror" rows="2"
-                                        placeholder="Dusun, Jalan, RT/RW" required>{{ old('alamat_detail') }}</textarea>
-                                    @error('alamat_detail')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                            </div>
-                        </div>
+            {{-- Jenis Kelamin --}}
+            <div class="col-md-4">
+                <label class="form-label fw-bold small">Jenis Kelamin <span class="text-danger">*</span></label>
+                <div class="d-flex gap-4 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="jenis_kelamin" id="L" value="L"
+                            {{ old('jenis_kelamin') == 'L' ? 'checked' : '' }} required>
+                        <label class="form-check-label small" for="L">Laki-laki</label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="jenis_kelamin" id="P" value="P"
+                            {{ old('jenis_kelamin') == 'P' ? 'checked' : '' }} required>
+                        <label class="form-check-label small" for="P">Perempuan</label>
+                    </div>
+                </div>
+                @error('jenis_kelamin')
+                    <div class="text-danger" style="font-size: 0.875em;">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Asal Sekolah --}}
+            <div class="col-12">
+                <label for="asal_sekolah" class="form-label fw-bold small">Asal Sekolah Sebelumnya <span class="text-danger">*</span></label>
+                <input type="text" class="form-control @error('asal_sekolah') is-invalid @enderror"
+                    id="asal_sekolah" name="asal_sekolah"
+                    placeholder="Contoh: MI Bahrul Ulum Jombang" value="{{ old('asal_sekolah') }}" required>
+                @error('asal_sekolah')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="col-12"><hr class="my-2 opacity-25"></div>
+
+            {{-- ALAMAT BERANTAI --}}
+            <div class="col-md-6">
+                <label class="form-label fw-bold small text-muted">Provinsi <span class="text-danger">*</span></label>
+                <select id="provinsi" name="provinsi_id" class="form-select @error('provinsi_id') is-invalid @enderror" required>
+                    <option value="">Pilih Provinsi</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold small text-muted">Kabupaten / Kota <span class="text-danger">*</span></label>
+                <select id="kabupaten" name="kabupaten_id" class="form-select @error('kabupaten_id') is-invalid @enderror" disabled required>
+                    <option value="">Pilih Kabupaten / Kota</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold small text-muted">Kecamatan <span class="text-danger">*</span></label>
+                <select id="kecamatan" name="kecamatan_id" class="form-select @error('kecamatan_id') is-invalid @enderror" disabled required>
+                    <option value="">Pilih Kecamatan</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold small text-muted">Desa / Kelurahan <span class="text-danger">*</span></label>
+                <select id="desa" name="desa_id" class="form-select @error('desa_id') is-invalid @enderror" disabled required>
+                    <option value="">Pilih Desa / Kelurahan</option>
+                </select>
+            </div>
+
+            {{-- RT / RW --}}
+            <div class="col-md-4">
+                <label class="form-label fw-bold small text-muted">RT / RW <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light small">RT</span>
+                    <input type="text" name="rt" class="form-control" placeholder="000" maxlength="3" 
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'')" value="{{ old('rt') }}" required>
+                    <span class="input-group-text bg-light small">RW</span>
+                    <input type="text" name="rw" class="form-control" placeholder="000" maxlength="3" 
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'')" value="{{ old('rw') }}" required>
+                </div>
+            </div>
+
+            {{-- Alamat Detail --}}
+            <div class="col-md-8">
+                <label class="form-label fw-bold small text-muted">Alamat Detail (Dusun/Nama Jalan) <span class="text-danger">*</span></label>
+                <textarea name="alamat_detail" class="form-control @error('alamat_detail') is-invalid @enderror" 
+                    rows="1" placeholder="Nama Dusun, Lingkungan, atau Jalan" required>{{ old('alamat_detail') }}</textarea>
+                @error('alamat_detail')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+    </div>
+</div>
                     {{-- CARD 2 : INFORMASI PENDAFTARAN --}}
                     <div class="card shadow-sm border-0 mt-4">
                         <div class="card-header bg-primary text-white d-flex align-items-center">
@@ -308,7 +295,7 @@
                         <span class="text-muted small"><span class="text-danger">*</span> Wajib diisi</span>
                         <button type="button" class="btn btn-primary px-4 shadow-sm"
                             onclick="document.getElementById('ortu-tab').click()">
-                            Lanjut  <i class="fas fa-chevron-right ms-2"></i>
+                            Lanjut <i class="fas fa-chevron-right ms-2"></i>
                         </button>
                     </div>
                 </div>
