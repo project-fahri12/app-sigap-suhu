@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Pendaftar;
+use App\Models\OrangTua;
 use App\Models\Gelombang;
+use App\Models\Pendaftar;
+use App\Models\WaliSantri;
 use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class DataPendaftarController extends Controller
 {
@@ -159,39 +162,111 @@ class DataPendaftarController extends Controller
      * =================================================
      * Form edit data
      */
-    public function edit($id)
-    {
+   public function edit($id)
+{
+    $pendaftar = Pendaftar::with(['orangTua', 'waliSantri'])->findOrFail($id);
+
+    return view('admin.data.edit', compact('pendaftar'));
+}
+
+public function update(Request $request, $id)
+{
+    $validated = $request->validate([
+        // ================= PENDAFTAR =================
+        'nik' => 'required|string|min:16|max:20',
+        'nama_lengkap' => 'required|string|max:255',
+        'tempat_lahir' => 'required|string|max:100',
+        'tanggal_lahir' => 'required|date',
+        'jenis_kelamin' => 'required|in:L,P',
+        'status_santri' => 'required|in:mukim,non_mukim',
+        'asal_sekolah' => 'nullable|string|max:50',
+
+        'provinsi' => 'required|string|max:25',
+        'kabupaten' => 'required|string|max:25',
+        'kecamatan' => 'required|string|max:25',
+        'desa' => 'required|string|max:25',
+        'rt' => 'nullable|string|max:3',
+        'rw' => 'nullable|string|max:3',
+        'alamat_detail' => 'required|string|max:255',
+
+        // ================= ORANG TUA =================
+        'nama_ayah' => 'nullable|string|max:255',
+        'pekerjaan_ayah' => 'nullable|string|max:255',
+        'no_hp_ayah' => 'nullable|string|max:20',
+        'status_ayah' => 'nullable|in:hidup,meninggal,tidak_diketahui',
+
+        'nama_ibu' => 'nullable|string|max:255',
+        'pekerjaan_ibu' => 'nullable|string|max:255',
+        'no_hp_ibu' => 'nullable|string|max:20',
+        'status_ibu' => 'nullable|in:hidup,meninggal,tidak_diketahui',
+        'alamat_orang_tua' => 'nullable|string',
+
+        // ================= WALI =================
+        'nama_wali' => 'nullable|string|max:255',
+        'pekerjaan_wali' => 'nullable|string|max:255',
+        'hubungan_wali' => 'nullable|in:ayah,ibu,paman,bibi,kakek,nenek,lainnya',
+        'alamat_wali' => 'nullable|string',
+        'no_hp_wali' => 'nullable|string|max:20',
+    ]);
+
+    DB::transaction(function () use ($validated, $id) {
+
+        // ================= UPDATE PENDAFTAR =================
         $pendaftar = Pendaftar::findOrFail($id);
-
-        return view('admin.data.edit', compact('pendaftar'));
-    }
-
-    /**
-     * =================================================
-     * UPDATE
-     * =================================================
-     * Simpan perubahan
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'asal_sekolah' => 'required|string|max:255',
-            'status_santri' => 'required|in:mukim,non_mukim',
-        ]);
-
-        $pendaftar = Pendaftar::findOrFail($id);
-
         $pendaftar->update([
-            'nama_lengkap'  => $request->nama_lengkap,
-            'asal_sekolah'  => $request->asal_sekolah,
-            'status_santri' => $request->status_santri,
+            'nik' => $validated['nik'],
+            'nama_lengkap' => strtolower($validated['nama_lengkap']),
+            'tempat_lahir' => strtolower($validated['tempat_lahir']),
+            'tanggal_lahir' => $validated['tanggal_lahir'],
+            'jenis_kelamin' => $validated['jenis_kelamin'],
+            'status_santri' => $validated['status_santri'],
+            'asal_sekolah' => strtolower($validated['asal_sekolah'] ?? ''),
+
+            'provinsi' => strtolower($validated['provinsi']),
+            'kabupaten' => strtolower($validated['kabupaten']),
+            'kecamatan' => strtolower($validated['kecamatan']),
+            'desa' => strtolower($validated['desa']),
+            'rt' => $validated['rt'],
+            'rw' => $validated['rw'],
+            'alamat_detail' => strtolower($validated['alamat_detail']),
         ]);
 
-        return redirect()
-            ->route('admin.data-pendaftar.index')
-            ->with('success', 'Data pendaftar berhasil diperbarui');
-    }
+        // ================= UPDATE / CREATE ORANG TUA =================
+        OrangTua::updateOrCreate(
+            ['pendaftar_id' => $pendaftar->id],
+            [
+                'nama_ayah' => strtolower($validated['nama_ayah'] ?? ''),
+                'pekerjaan_ayah' => strtolower($validated['pekerjaan_ayah'] ?? ''),
+                'no_hp_ayah' => $validated['no_hp_ayah'],
+                'status_ayah' => $validated['status_ayah'],
+
+                'nama_ibu' => strtolower($validated['nama_ibu'] ?? ''),
+                'pekerjaan_ibu' => strtolower($validated['pekerjaan_ibu'] ?? ''),
+                'no_hp_ibu' => $validated['no_hp_ibu'],
+                'status_ibu' => $validated['status_ibu'],
+                'alamat_orang_tua' => strtolower($validated['alamat_orang_tua'] ?? ''),
+            ]
+        );
+
+        // ================= UPDATE / CREATE WALI =================
+        if (!empty($validated['nama_wali'])) {
+            WaliSantri::updateOrCreate(
+                ['pendaftar_id' => $pendaftar->id],
+                [
+                    'nama_wali' => strtolower($validated['nama_wali']),
+                    'pekerjaan_wali' => strtolower($validated['pekerjaan_wali'] ?? ''),
+                    'hubungan_wali' => $validated['hubungan_wali'] ?? 'lainnya',
+                    'alamat_wali' => strtolower($validated['alamat_wali'] ?? ''),
+                    'no_hp_wali' => $validated['no_hp_wali'],
+                ]
+            );
+        }
+    });
+
+    return redirect()
+        ->route('admin.data-pendaftar.index')
+        ->with('success', 'Data pendaftar berhasil diperbarui');
+}
 
     /**
      * =================================================

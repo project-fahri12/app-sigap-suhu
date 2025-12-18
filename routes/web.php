@@ -17,6 +17,7 @@ use App\Http\Controllers\Home\PendaftaranController;
 use App\Http\Controllers\Admin\TahunAjaranController;
 use App\Http\Controllers\Auth\PendaftarLoginController;
 use App\Http\Controllers\Admin\SekolahPilihanController;
+use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Pendaftar\PembayaranController;
 use App\Http\Controllers\Pendaftar\IdentitasSantriController;
 use App\Http\Controllers\Pendaftar\DashboardPendaftarController;
@@ -49,6 +50,8 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('unit', UnitController::class)->only(['index', 'store', 'destroy']);;
     Route::resource('sekolah-pilihan', SekolahPilihanController::class)->only(['index', 'store', 'destroy']);;
     Route::resource('data-pendaftar', DataPendaftarController::class);
+    Route::resource('verifikasi-pendaftar', VerifikasiController::class)->only(['index']);
+    Route::post('/admin/verifikasi/update', [VerifikasiController::class, 'update'])->name('verifikasi.update');
 });
 
 // Petugas

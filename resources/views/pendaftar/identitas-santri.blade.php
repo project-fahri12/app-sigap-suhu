@@ -15,7 +15,7 @@
             <div class="row mb-3">
                 <div class="col-md-3 d-flex flex-column align-items-center">
                     <div class="ratio ratio-3x4 w-100">
-                        <img src="{{ $berkas && $berkas->foto_path ? asset('storage/' . $berkas->foto_path) : asset('assets/default-user.png') }}"
+                        <img src="{{ $berkas && $berkas->foto_path ? asset('storage/' . $berkas->foto_path) : asset('assets/dist/img/avatar.png') }}"
                             class="img-fluid img-thumbnail object-fit-cover" alt="Pas Foto">
                     </div>
                     <small class="text-muted mt-2">PAS FOTO 3X4</small>
@@ -78,11 +78,11 @@
         {{ strtoupper($pendaftar->alamat_detail) }} <br>
         RT {{ $pendaftar->rt ?? '-' }} / RW {{ $pendaftar->rw ?? '-' }} <br>
 
-        DESA {{ strtoupper($pendaftar->desa_nama ?? '-') }},
-        KEC. {{ strtoupper($pendaftar->kecamatan_nama ?? '-') }} <br>
+        DESA {{ strtoupper($pendaftar->desa ?? '-') }},
+        KEC. {{ strtoupper($pendaftar->kecamatan ?? '-') }} <br>
 
-        KAB. {{ strtoupper($pendaftar->kabupaten_nama ?? '-') }},
-        PROV. {{ strtoupper($pendaftar->provinsi_nama ?? '-') }}
+        KAB. {{ strtoupper($pendaftar->kabupaten ?? '-') }},
+        PROV. {{ strtoupper($pendaftar->provinsi ?? '-') }}
     </td>
 </tr>
 
@@ -99,7 +99,7 @@
 
         <tr>
             <th>Tahun Ajaran</th>
-            <td>{{ $pendaftar->tahunAjaran->nama_tahun ?? '-' }}</td>
+            <td>{{ $pendaftar->tahunAjaran->tahun ?? '-' }}</td>
         </tr>
 
         <tr>

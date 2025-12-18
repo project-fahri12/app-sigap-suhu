@@ -16,7 +16,7 @@
                 </li>
 
                 {{-- JIKA PEMBAYARAN SUDAH VALID --}}
-                @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
+                @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid' || 'invalid')
                     <li class="{{ request()->routeIs('pendaftar.identitas.santri') ? 'active' : '' }}">
                         <a href="{{ route('pendaftar.identitas.santri') }}">
                             <i class="fa fa-user"></i>
@@ -94,7 +94,7 @@
                     </li>
 
                     {{-- DATA PENDAFTAR --}}
-                    <li class="{{ request()->routeIs('admin.data-pendaftar.index') ? 'active' : '' }}">
+                    <li class="{{ request()->routeIs('admin.data-pendaftar.*') ? 'active' : '' }}">
                         <a href="{{ route('admin.data-pendaftar.index') }}">
                             <i class="fa fa-users"></i>
                             <span>Data Pendaftar</span>
@@ -102,8 +102,8 @@
                     </li>
 
                     {{-- VERIFIKASI (GABUNG) --}}
-                    <li>
-                        <a href="#">
+                    <li class="{{ request()->routeIs('admin.verifikasi-pendaftar.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.verifikasi-pendaftar.index') }}">
                             <i class="fa fa-check-square-o"></i>
                             <span>Verifikasi</span>
                         </a>

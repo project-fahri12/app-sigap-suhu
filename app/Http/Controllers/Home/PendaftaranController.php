@@ -37,7 +37,7 @@ class PendaftaranController extends Controller
         $sekolah_options = SekolahPilihan::select('id', 'nama_sekolah')->get();
 
         // Jika pendaftaran ditutup
-        if ( setting('ppdb_status') == 'tutup') {
+        if (setting('ppdb_status') == 'tutup') {
             return view('home.pendaftaran_closed');
         }
 
@@ -75,7 +75,7 @@ class PendaftaranController extends Controller
             'sekolah_pilihan_id' => 'required|exists:sekolah_pilihan,id',
             'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id',
 
-            // Data Orang Tua (Nama & Status Wajib)
+            // Data Orang Tua
             'nama_ayah' => 'required|string|max:255',
             'pekerjaan_ayah' => 'nullable|string|max:255',
             'no_hp_ayah' => 'nullable|string|max:20',
@@ -86,7 +86,7 @@ class PendaftaranController extends Controller
             'status_ibu' => 'required|in:hidup,meninggal,tidak_diketahui',
             'alamat_orang_tua' => 'nullable|string',
 
-            // Data Wali Santri (Opsional)
+            // Data Wali
             'nama_wali' => 'nullable|string|max:255',
             'pekerjaan_wali' => 'nullable|string|max:255',
             'hubungan_wali' => 'nullable|in:ayah,ibu,paman,bibi,kakek,nenek,lainnya',
@@ -94,7 +94,38 @@ class PendaftaranController extends Controller
             'no_hp_wali' => 'nullable|string|max:20',
         ]);
 
-        dd($request->all());
+        // =======================================================
+        // 1.1 NORMALISASI DATA STRING → LOWERCASE (AMAN)
+        // =======================================================
+        $textFields = [
+            // pendaftar
+            'nama_lengkap',
+            'tempat_lahir',
+            'asal_sekolah',
+            'provinsi',
+            'kabupaten',
+            'kecamatan',
+            'desa',
+            'alamat_detail',
+
+            // orang tua
+            'nama_ayah',
+            'pekerjaan_ayah',
+            'nama_ibu',
+            'pekerjaan_ibu',
+            'alamat_orang_tua',
+
+            // wali
+            'nama_wali',
+            'pekerjaan_wali',
+            'alamat_wali',
+        ];
+
+        foreach ($textFields as $field) {
+            if (! empty($validated[$field])) {
+                $validated[$field] = mb_strtolower(trim($validated[$field]));
+            }
+        }
 
         $kodePendaftaran = null;
 
@@ -104,22 +135,17 @@ class PendaftaranController extends Controller
             // 2. PROSES AKUN USER & PENDAFTAR
             // =======================================================
 
-            // Generate kode pendaftaran
-            // Mengubah format PSMB-Tahun-Random menjadi TAHUN_AKHIR_GELOMBANG+Random(4) agar lebih singkat
             $gelombangYear = substr($validated['tahun_ajaran_id'], 0, 4);
             $kodePendaftaran = $gelombangYear.Str::random(4);
 
-            // Password awal dari tanggal lahir (YYYYMMDD)
             $passwordAwal = date('Ymd', strtotime($validated['tanggal_lahir']));
 
-            // Buat akun USER
             $user = User::create([
                 'username' => $kodePendaftaran,
                 'password' => Hash::make($passwordAwal),
                 'role' => 'pendaftar',
             ]);
 
-            // Filter data untuk tabel pendaftar
             $dataPendaftar = [
                 'users_id' => $user->id,
                 'kode_pendaftaran' => $kodePendaftaran,
@@ -134,8 +160,8 @@ class PendaftaranController extends Controller
                 'kabupaten' => $validated['kabupaten'],
                 'kecamatan' => $validated['kecamatan'],
                 'desa' => $validated['desa'],
-                'rt'    => $validated['rt'],
-                'rw'    => $validated['rw'],
+                'rt' => $validated['rt'],
+                'rw' => $validated['rw'],
                 'alamat_detail' => $validated['alamat_detail'],
                 'gelombang_id' => $validated['gelombang_id'],
                 'unit_id' => $validated['unit_id'],
@@ -144,14 +170,12 @@ class PendaftaranController extends Controller
             ];
 
             $pendaftar = Pendaftar::create($dataPendaftar);
-            $pendaftarId = $pendaftar->id;
 
             // =======================================================
             // 3. PROSES ORANG TUA
             // =======================================================
-
-            $dataOrangTua = [
-                'pendaftar_id' => $pendaftarId,
+            OrangTua::create([
+                'pendaftar_id' => $pendaftar->id,
                 'nama_ayah' => $validated['nama_ayah'],
                 'pekerjaan_ayah' => $validated['pekerjaan_ayah'],
                 'no_hp_ayah' => $validated['no_hp_ayah'],
@@ -162,21 +186,20 @@ class PendaftaranController extends Controller
                 'status_ibu' => $validated['status_ibu'],
                 'alamat_orang_tua' => $validated['alamat_orang_tua']
                     ?? $validated['alamat_detail'],
-            ];
+            ]);
 
-            OrangTua::create($dataOrangTua);
-
-
+            // =======================================================
+            // 4. PROSES WALI (JIKA ADA)
+            // =======================================================
             if (! empty($validated['nama_wali'])) {
-                $dataWaliSantri = [
-                    'pendaftar_id' => $pendaftarId,
+                WaliSantri::create([
+                    'pendaftar_id' => $pendaftar->id,
                     'nama_wali' => $validated['nama_wali'],
                     'pekerjaan_wali' => $validated['pekerjaan_wali'],
                     'hubungan_wali' => $validated['hubungan_wali'] ?? 'lainnya',
                     'alamat_wali' => $validated['alamat_wali'],
                     'no_hp_wali' => $validated['no_hp_wali'],
-                ];
-                WaliSantri::create($dataWaliSantri);
+                ]);
             }
         });
 

@@ -148,7 +148,7 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="text-transform: uppercase">
                             @forelse($pendaftarTerbaru as $row)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -157,17 +157,64 @@
                                     <td>{{ $row->unit->nama_unit ?? '-' }}</td>
                                     <td>
                                         @php
-                                            $status = $row->verifikasi->verifikasi_pembayaran ?? 'belum_bayar';
+                                            $verifikasi = $row->verifikasi;
+                                            $pembayaran = $verifikasi->verifikasi_pembayaran ?? null;
+                                            $berkas = $verifikasi->verifikasi_berkas ?? null;
                                         @endphp
 
-                                        @if ($status === 'valid')
-                                            <span class="label label-success">Terverifikasi</span>
-                                        @elseif($status === 'pending')
-                                            <span class="label label-warning">Menunggu</span>
+                                        @if (is_null($verifikasi))
+                                            <div style="display:flex; gap:6px;">
+                                                <span class="label label-default" style="flex:1; text-align:center;">
+                                                    Pembayaran: Belum
+                                                </span>
+                                                <span class="label label-default" style="flex:1; text-align:center;">
+                                                    Berkas: Belum
+                                                </span>
+                                            </div>
                                         @else
-                                            <span class="label label-danger">Belum Bayar</span>
+                                            <div style="display:flex; gap:6px;">
+                                                {{-- PEMBAYARAN --}}
+                                                @if ($pembayaran === 'valid')
+                                                    <span class="label label-success" style="flex:1; text-align:center;">
+                                                        Pembayaran: Valid
+                                                    </span>
+                                                @elseif ($pembayaran === 'pending')
+                                                    <span class="label label-warning" style="flex:1; text-align:center;">
+                                                        Pembayaran: Pending
+                                                    </span>
+                                                @elseif ($pembayaran === 'invalid')
+                                                    <span class="label label-danger" style="flex:1; text-align:center;">
+                                                        Pembayaran: Invalid
+                                                    </span>
+                                                @else
+                                                    <span class="label label-default" style="flex:1; text-align:center;">
+                                                        Pembayaran: Belum
+                                                    </span>
+                                                @endif
+
+                                                {{-- BERKAS --}}
+                                                @if ($berkas === 'valid')
+                                                    <span class="label label-success" style="flex:1; text-align:center;">
+                                                        Berkas: Valid
+                                                    </span>
+                                                @elseif ($berkas === 'pending')
+                                                    <span class="label label-warning" style="flex:1; text-align:center;">
+                                                        Berkas: Pending
+                                                    </span>
+                                                @elseif ($berkas === 'invalid')
+                                                    <span class="label label-danger" style="flex:1; text-align:center;">
+                                                        Berkas: Invalid
+                                                    </span>
+                                                @else
+                                                    <span class="label label-default" style="flex:1; text-align:center;">
+                                                        Berkas: Belum
+                                                    </span>
+                                                @endif
+                                            </div>
                                         @endif
                                     </td>
+
+
                                 </tr>
                             @empty
                                 <tr>
@@ -176,11 +223,9 @@
                                     </td>
                                 </tr>
                             @endforelse
-
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
