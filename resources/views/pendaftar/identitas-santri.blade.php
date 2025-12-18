@@ -32,37 +32,88 @@
 
             <div class="tab-content mt-3">
 
-                {{-- SANTRI --}}
-                <div class="tab-pane active" id="santri">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>Nama Lengkap</th>
-                            <td>{{ strtoupper($pendaftar->nama_lengkap) }}</td>
-                        </tr>
-                        <tr>
-                            <th>NIK</th>
-                            <td>{{ $pendaftar->nik }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tempat, Tanggal Lahir</th>
-                            <td>{{ strtoupper($pendaftar->tempat_lahir) }},
-                                {{ \Carbon\Carbon::parse($pendaftar->tanggal_lahir)->format('d F Y') }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Jenis Kelamin</th>
-                            <td>{{ $pendaftar->jenis_kelamin == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Alamat</th>
-                            <td>{{ strtoupper($pendaftar->alamat) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Asal Sekolah</th>
-                            <td>{{ strtoupper($pendaftar->asal_sekolah) }}</td>
-                        </tr>
-                    </table>
-                </div>
+{{-- SANTRI --}}
+<div class="tab-pane active" id="santri">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th width="30%">Kode Pendaftaran</th>
+            <td>{{ $pendaftar->kode_pendaftaran }}</td>
+        </tr>
+
+        <tr>
+            <th>Nama Lengkap</th>
+            <td>{{ strtoupper($pendaftar->nama_lengkap) }}</td>
+        </tr>
+
+        <tr>
+            <th>NIK</th>
+            <td>{{ $pendaftar->nik }}</td>
+        </tr>
+
+        <tr>
+            <th>Tempat, Tanggal Lahir</th>
+            <td>
+                {{ strtoupper($pendaftar->tempat_lahir) }},
+                {{ \Carbon\Carbon::parse($pendaftar->tanggal_lahir)->format('d F Y') }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Jenis Kelamin</th>
+            <td>
+                {{ $pendaftar->jenis_kelamin == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN' }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>Status Santri</th>
+            <td>
+                {{ $pendaftar->status_santri == 'mukim' ? 'MUKIM' : 'NON MUKIM' }}
+            </td>
+        </tr>
+
+        <tr>
+    <th>Alamat Lengkap</th>
+    <td>
+        {{ strtoupper($pendaftar->alamat_detail) }} <br>
+        RT {{ $pendaftar->rt ?? '-' }} / RW {{ $pendaftar->rw ?? '-' }} <br>
+
+        DESA {{ strtoupper($pendaftar->desa_nama ?? '-') }},
+        KEC. {{ strtoupper($pendaftar->kecamatan_nama ?? '-') }} <br>
+
+        KAB. {{ strtoupper($pendaftar->kabupaten_nama ?? '-') }},
+        PROV. {{ strtoupper($pendaftar->provinsi_nama ?? '-') }}
+    </td>
+</tr>
+
+
+        <tr>
+            <th>Asal Sekolah</th>
+            <td>{{ strtoupper($pendaftar->asal_sekolah ?? '-') }}</td>
+        </tr>
+
+        <tr>
+            <th>Gelombang</th>
+            <td>{{ strtoupper($pendaftar->gelombang->nama_gelombang ?? '-') }}</td>
+        </tr>
+
+        <tr>
+            <th>Tahun Ajaran</th>
+            <td>{{ $pendaftar->tahunAjaran->nama_tahun ?? '-' }}</td>
+        </tr>
+
+        <tr>
+            <th>Sekolah / Unit Tujuan</th>
+            <td>
+                {{ strtoupper($pendaftar->sekolahPilihan->nama_sekolah ?? '-') }} <br>
+                <small class="text-muted">
+                    Unit: {{ strtoupper($pendaftar->unit->nama_unit ?? '-') }}
+                </small>
+            </td>
+        </tr>
+    </table>
+</div>
+
 
                 {{-- ORANG TUA --}}
                 <div class="tab-pane" id="ortu">

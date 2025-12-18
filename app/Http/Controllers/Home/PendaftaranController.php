@@ -63,10 +63,10 @@ class PendaftaranController extends Controller
             'jenis_kelamin' => 'required|in:L,P',
             'status_santri' => 'required|in:mukim,non_mukim',
             'asal_sekolah' => 'required|max:100',
-            'provinsi_id' => 'required|string',
-            'kabupaten_id' => 'required|string',
-            'kecamatan_id' => 'required|string',
-            'desa_id' => 'required|string',
+            'provinsi' => 'required|string',
+            'kabupaten' => 'required|string',
+            'kecamatan' => 'required|string',
+            'desa' => 'required|string',
             'rt' => 'required|string|max:3',
             'rw' => 'required|string|max:3',
             'alamat_detail' => 'required|string|max:255',
@@ -93,6 +93,8 @@ class PendaftaranController extends Controller
             'alamat_wali' => 'nullable|string',
             'no_hp_wali' => 'nullable|string|max:20',
         ]);
+
+        dd($request->all());
 
         $kodePendaftaran = null;
 
@@ -128,10 +130,10 @@ class PendaftaranController extends Controller
                 'jenis_kelamin' => $validated['jenis_kelamin'],
                 'status_santri' => $validated['status_santri'],
                 'asal_sekolah' => $validated['asal_sekolah'],
-                'provinsi_id' => $validated['provinsi_id'],
-                'kabupaten_id' => $validated['kabupaten_id'],
-                'kecamatan_id' => $validated['kecamatan_id'],
-                'desa_id' => $validated['desa_id'],
+                'provinsi' => $validated['provinsi'],
+                'kabupaten' => $validated['kabupaten'],
+                'kecamatan' => $validated['kecamatan'],
+                'desa' => $validated['desa'],
                 'rt'    => $validated['rt'],
                 'rw'    => $validated['rw'],
                 'alamat_detail' => $validated['alamat_detail'],

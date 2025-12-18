@@ -20,10 +20,10 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->enum('status_santri', ['mukim', 'non_mukim']);
 
-            $table->string('provinsi_id', 10);
-            $table->string('kabupaten_id', 10);
-            $table->string('kecamatan_id', 10);
-            $table->string('desa_id', 10);
+            $table->string('provinsi', 25);
+            $table->string('kabupaten', 25);
+            $table->string('kecamatan', 25);
+            $table->string('desa', 25);
             $table->string('rt', 3)->nullable();
             $table->string('rw', 3)->nullable();
             $table->string('alamat_detail');
@@ -42,13 +42,6 @@ return new class extends Migration
             $table->foreign('tahun_ajaran_id')->references('id')->on('tahun_ajaran')->cascadeOnDelete();
             $table->foreign('sekolah_pilihan_id')->references('id')->on('sekolah_pilihan')->cascadeOnDelete();
             $table->foreign('unit_id')->references('id')->on('unit')->cascadeOnDelete();
-
-            $table->index([
-                'provinsi_id',
-                'kabupaten_id',
-                'kecamatan_id',
-                'desa_id',
-            ]);
         });
     }
 

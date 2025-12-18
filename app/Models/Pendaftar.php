@@ -22,10 +22,10 @@ class Pendaftar extends Model
         'status_santri',
 
         // ===== ALAMAT BERANTAI =====
-        'provinsi_id',
-        'kabupaten_id',
-        'kecamatan_id',
-        'desa_id',
+        'provinsi',
+        'kabupaten',
+        'kecamatan',
+        'desa',
         'rt',
         'rw',
         'alamat_detail',
