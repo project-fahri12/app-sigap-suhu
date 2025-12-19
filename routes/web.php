@@ -1,23 +1,23 @@
 <?php
 
-use App\Models\Gelombang;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Home\KontakController;
 use App\Http\Controllers\Pendaftar\UploadBerkas;
+use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Home\ValidasiController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\DataPendaftarController;
 use App\Http\Controllers\Admin\GelombangController;
 use App\Http\Controllers\Home\PengumumanController;
 use App\Http\Controllers\Admin\SettingWebController;
+use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Home\PendaftaranController;
 use App\Http\Controllers\Admin\TahunAjaranController;
+use App\Http\Controllers\Admin\DataPendaftarController;
 use App\Http\Controllers\Auth\PendaftarLoginController;
 use App\Http\Controllers\Admin\SekolahPilihanController;
-use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Pendaftar\PembayaranController;
 use App\Http\Controllers\Pendaftar\IdentitasSantriController;
 use App\Http\Controllers\Pendaftar\DashboardPendaftarController;
@@ -40,18 +40,20 @@ Route::middleware('guest')->group(function () {
     Route::post('userLoginProses', [PendaftarLoginController::class, 'userLoginProses'])->name('userLoginProses');
 });
 
-
 // Admin
 Route::middleware(['auth', 'auth.admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('setting-web', SettingWebController::class)->only(['index', 'update']);
     Route::resource('tahun-ajaran', TahunAjaranController::class)->only(['index', 'store', 'destroy']);
-    Route::resource('gelombang', GelombangController::class)->only(['index', 'store', 'destroy']);;
-    Route::resource('unit', UnitController::class)->only(['index', 'store', 'destroy']);;
-    Route::resource('sekolah-pilihan', SekolahPilihanController::class)->only(['index', 'store', 'destroy']);;
+    Route::patch('tahun-ajaran/{id}/status',[TahunAjaranController::class, 'updateStatus'])->name('admin.tahun-ajaran.update-status');
+    Route::resource('gelombang', GelombangController::class)->only(['index', 'store', 'destroy', 'update']);
+    Route::patch('gelombang/{id}/status', [GelombangController::class, 'updateStatus'])->name('gelombang.status');
+    Route::resource('unit', UnitController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('sekolah-pilihan', SekolahPilihanController::class)->only(['index', 'store', 'destroy']);
     Route::resource('data-pendaftar', DataPendaftarController::class);
     Route::resource('verifikasi-pendaftar', VerifikasiController::class)->only(['index']);
     Route::post('/admin/verifikasi/update', [VerifikasiController::class, 'update'])->name('verifikasi.update');
+    Route::resource('laporan', LaporanController::class)->only(['index']);
 });
 
 // Petugas

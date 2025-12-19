@@ -11,6 +11,20 @@
                 </div>
             @endif
 
+            {{-- ALERT ERROR VALIDASI --}}
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul style="margin-top: 10px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
             <div class="row">
 
                 {{-- PANEL PETUNJUK --}} <div class="col-md-4">
@@ -97,17 +111,16 @@
 
                                     @include('pendaftar.partials.form-pembayaran')
                                 @endif
+                            @endif
 
-                                @endif
-                                
-                            </div>
                         </div>
-                        {{-- JIKA VALID --}}
-                        @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
-                            <a href="{{ route('pendaftar.upload-berkas.index') }}" class="btn btn-success m-3">
-                                <i class="fa fa-upload"></i> Lanjut Upload Berkas
-                            </a>
-                        @endif
+                    </div>
+                    {{-- JIKA VALID --}}
+                    @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid')
+                        <a href="{{ route('pendaftar.upload-berkas.index') }}" class="btn btn-success m-3">
+                            <i class="fa fa-upload"></i> Lanjut Upload Berkas
+                        </a>
+                    @endif
                 </div>
 
             </div>

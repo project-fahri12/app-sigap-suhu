@@ -12,6 +12,7 @@ class TahunAjaranController extends Controller
     public function index()
     {
         $tahunAjaran = TahunAjaran::orderByDesc('created_at')->get();
+
         return view('admin.dataMaster.tahunAjaran', compact('tahunAjaran'));
     }
 
@@ -21,12 +22,12 @@ class TahunAjaranController extends Controller
             'tahun' => 'required|string|max:255',
             'status' => 'required|in:aktif,nonaktif',
             'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after:tanggal_mulai'
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai',
         ]);
 
         if ($request->status === 'aktif') {
             TahunAjaran::where('status', 'aktif')->update([
-                'status' => 'nonaktif'
+                'status' => 'nonaktif',
             ]);
         }
 
@@ -35,7 +36,7 @@ class TahunAjaranController extends Controller
             'tahun' => $request->tahun,
             'status' => $request->status,
             'tanggal_mulai' => $request->tanggal_mulai,
-            'tanggal_selesai' => $request->tanggal_selesai
+            'tanggal_selesai' => $request->tanggal_selesai,
         ]);
 
         return redirect()->back()->with('success', 'Tahun ajaran berhasil ditambahkan');
@@ -43,7 +44,36 @@ class TahunAjaranController extends Controller
 
     public function destroy($id)
     {
-        TahunAjaran::findOrFail($id)->delete();
+        $tahun = TahunAjaran::withCount('pendaftar')->findOrFail($id);
+
+        if ($tahun->pendaftar_count > 0) {
+            return redirect()->back()
+                ->with('error', 'Tahun ajaran tidak dapat dihapus karena sudah digunakan pendaftar');
+        }
+
+        $tahun->delete();
+
         return redirect()->back()->with('success', 'Tahun ajaran berhasil dihapus');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $tahun = TahunAjaran::findOrFail($id);
+
+        // jika diaktifkan, nonaktifkan yang lain
+        if ($request->status === 'aktif') {
+            TahunAjaran::where('status', 'aktif')->update([
+                'status' => 'nonaktif',
+            ]);
+        }
+
+        $tahun->update([
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status tahun ajaran berhasil diubah',
+        ]);
     }
 }

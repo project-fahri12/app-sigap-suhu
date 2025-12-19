@@ -15,8 +15,8 @@
                     </a>
                 </li>
 
-                {{-- JIKA PEMBAYARAN SUDAH VALID --}}
-                @if ($verifikasi && $verifikasi->verifikasi_pembayaran === 'valid' || 'invalid')
+                {{-- JIKA PEMBAYARAN VALID ATAU INVALID --}}
+                @if ($verifikasi && in_array($verifikasi->verifikasi_pembayaran, ['valid', 'invalid']))
                     <li class="{{ request()->routeIs('pendaftar.identitas.santri') ? 'active' : '' }}">
                         <a href="{{ route('pendaftar.identitas.santri') }}">
                             <i class="fa fa-user"></i>
@@ -111,8 +111,8 @@
 
 
                     {{-- LAPORAN --}}
-                    <li>
-                        <a href="#">
+                    <li class="{{ request()->routeIs('admin.laporan.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.laporan.index') }}">
                             <i class="fa fa-file-pdf-o"></i>
                             <span>Laporan</span>
                         </a>

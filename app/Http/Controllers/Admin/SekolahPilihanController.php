@@ -11,6 +11,7 @@ class SekolahPilihanController extends Controller
     public function index()
     {
         $sekolah = SekolahPilihan::latest()->get();
+
         return view('admin.dataMaster.sekolahPilihan', compact('sekolah'));
     }
 
@@ -18,13 +19,12 @@ class SekolahPilihanController extends Controller
     {
         $request->validate([
             'nama_sekolah' => 'required|string|max:255|unique:sekolah_pilihan,nama_sekolah',
-            'jenjang' => 'required|in:RA/TK,SD/MI,SLTA,SLTP,PERGURUAN TINGGI,SALAF'
+            'jenjang' => 'required|in:RA/TK,SD/MI,SLTA,SLTP,PERGURUAN TINGGI,SALAF',
         ]);
-
 
         SekolahPilihan::create([
             'nama_sekolah' => $request->nama_sekolah,
-            'jenjang' => $request->jenjang
+            'jenjang' => $request->jenjang,
         ]);
 
         return redirect()->back()->with('success', 'Sekolah berhasil ditambahkan');
@@ -32,7 +32,14 @@ class SekolahPilihanController extends Controller
 
     public function destroy($id)
     {
-        SekolahPilihan::findOrFail($id)->delete();
+        $sekolah = SekolahPilihan::findOrFail($id);
+
+        if ($sekolah->pendaftar()->exists()) {
+            return redirect()->back()->with('error', 'Gagal menghapus! Sekolah ini masih digunakan oleh data pendaftar.');
+        }
+
+        $sekolah->delete();
+
         return redirect()->back()->with('success', 'Sekolah berhasil dihapus');
     }
 }

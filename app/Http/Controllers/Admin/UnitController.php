@@ -32,7 +32,13 @@ class UnitController extends Controller
 
     public function destroy($id)
     {
-        Unit::findOrFail($id)->delete();
+        $unit = Unit::findOrFail($id);
+        
+        if ($unit->pendaftar()->exists()) {
+            return redirect()->back()->with('error', 'Gagal menghapus! Unit ini masih digunakan oleh data pendaftar.');
+        }
+
+        $unit->delete();
 
         return redirect()->back()->with('success', 'Unit berhasil dihapus');
     }
