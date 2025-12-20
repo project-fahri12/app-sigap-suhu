@@ -26,9 +26,9 @@ return new class extends Migration
             $table->string('desa', 25);
             $table->string('rt', 3)->nullable();
             $table->string('rw', 3)->nullable();
-            $table->string('alamat_detail');
-
+            $table->string('alamat_detail');\
             $table->string('asal_sekolah', 50)->nullable();
+            $table->enum('status_santri', ['calon', 'lolos', 'l','santri_aktif', 'nonaktif',]);
 
             $table->uuid('gelombang_id');
             $table->uuid('tahun_ajaran_id');
