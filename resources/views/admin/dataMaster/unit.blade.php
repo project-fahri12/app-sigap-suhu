@@ -5,122 +5,70 @@
 
 @section('content')
 
-@if(session('error'))
-    <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4><i class="icon fa fa-ban"></i> Peringatan!</h4>
-        {{ session('error') }}
-    </div>
-@endif
-
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4><i class="icon fa fa-check"></i> Sukses!</h4>
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
 
+            {{-- HEADER --}}
             <div class="box-header with-border">
-                <button class="btn btn-success" data-toggle="modal" data-target="#modalTambahUnit">
+                <button class="btn btn-success" data-toggle="modal" data-target="#modalTambah">
                     <i class="fa fa-plus"></i> Tambah Unit
                 </button>
             </div>
 
-            <div class="box-body">
-
-                @if(session('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    {{ session('success') }}
-                </div>
-                @endif
-
-                @if($errors->any())
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <ul style="margin:0;padding-left:18px">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
-
+            {{-- TABLE --}}
+            <div class="box-body table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th width="50">No</th>
-                            <th>Nama Unit</th>
-                            <th>Jenis Santri</th>
-                            <th width="120">Aksi</th>
+                            <th width="50">NO</th>
+                            <th>NAMA UNIT</th>
+                            <th>JENIS SANTRI</th>
+                            <th width="100" class="text-center">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($unit as $row)
+
+                    @forelse($unit as $row)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $row->nama_unit }}</td>
+                            <td><b>{{ strtoupper($row->nama_unit) }}</b></td>
                             <td>
                                 @if($row->jenis_kelamin === 'putra')
-                                    <span class="label label-primary">Putra</span>
+                                    <span class="label label-primary">PUTRA</span>
                                 @elseif($row->jenis_kelamin === 'putri')
-                                    <span class="label label-danger">Putri</span>
+                                    <span class="label label-danger">PUTRI</span>
                                 @else
-                                    <span class="label label-success">Putra & Putri</span>
+                                    <span class="label label-success">PUTRA & PUTRI</span>
                                 @endif
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#hapus{{ $row->id }}">
+                                <button
+                                    class="btn btn-xs btn-danger btn-hapus"
+                                    data-id="{{ $row->id }}"
+                                    data-nama="{{ $row->nama_unit }}">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
-
-                        <div class="modal fade" id="hapus{{ $row->id }}">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-red">
-                                        <h4 class="modal-title">Hapus Unit</h4>
-                                    </div>
-                                    <div class="modal-body text-center">
-                                        Yakin ingin menghapus<br>
-                                        <strong>{{ $row->nama_unit }}</strong>?
-                                    </div>
-                                    <div class="modal-footer text-center">
-                                        <form method="POST" action="{{ route('admin.unit.destroy', $row->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-danger btn-loading" data-text="Menghapus...">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @empty
+                    @empty
                         <tr>
                             <td colspan="4" class="text-center text-muted">
-                                Data belum tersedia
+                                DATA BELUM TERSEDIA
                             </td>
                         </tr>
-                        @endforelse
+                    @endforelse
+
                     </tbody>
                 </table>
-
             </div>
+
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modalTambahUnit">
+{{-- MODAL TAMBAH --}}
+<div class="modal fade" id="modalTambah">
     <div class="modal-dialog">
         <form method="POST" action="{{ route('admin.unit.store') }}">
             @csrf
@@ -128,23 +76,31 @@
                 <div class="modal-header bg-green">
                     <h4 class="modal-title">Tambah Unit</h4>
                 </div>
-                <div class="modal-body">    
+
+                <div class="modal-body">
                     <div class="form-group">
                         <label>Nama Unit</label>
-                        <input type="text" name="nama_unit" class="form-control" placeholder="contoh : subulul huda induk" required>
+                        <input type="text"
+                               name="nama_unit"
+                               class="form-control"
+                               placeholder="Contoh: Subulul Huda Induk"
+                               required>
                     </div>
 
                     <div class="form-group">
                         <label>Jenis Santri</label>
                         <select name="jenis_kelamin" class="form-control" required>
-                            <option value="campur" selected>Putra & Putri</option>
+                            <option value="campur">Putra & Putri</option>
                             <option value="putra">Putra saja</option>
                             <option value="putri">Putri saja</option>
                         </select>
                     </div>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Batal
+                    </button>
                     <button type="submit" class="btn btn-success btn-loading" data-text="Menyimpan...">
                         Simpan
                     </button>
@@ -154,11 +110,73 @@
     </div>
 </div>
 
-@endsection
+{{-- FORM DELETE (HIDDEN) --}}
+<form id="form-delete" method="POST">
+    @csrf
+    @method('DELETE')
+</form>
 
-@push('scripts')
+{{-- SWEETALERT --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).on('submit', 'form', function () {
+/* ================= TOAST ================= */
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true
+});
+
+/* SUCCESS */
+@if(session('success'))
+Toast.fire({
+    icon: 'success',
+    title: "{{ session('success') }}"
+});
+@endif
+
+/* ERROR */
+@if(session('error'))
+Toast.fire({
+    icon: 'error',
+    title: "{{ session('error') }}"
+});
+@endif
+
+/* VALIDATION */
+@if($errors->any())
+Toast.fire({
+    icon: 'warning',
+    title: "{{ $errors->first() }}"
+});
+@endif
+
+/* ================= DELETE CONFIRM ================= */
+$('.btn-hapus').click(function () {
+    let id   = $(this).data('id');
+    let nama = $(this).data('nama');
+
+    Swal.fire({
+        title: 'Hapus Unit?',
+        text: nama,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonText: 'Batal',
+        confirmButtonText: 'Ya, hapus!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#form-delete')
+                .attr('action', '/admin/unit/' + id)
+                .submit();
+        }
+    });
+});
+
+/* ================= BUTTON LOADING ================= */
+$('form').on('submit', function () {
     let btn = $(this).find('.btn-loading');
     if (btn.length) {
         btn.prop('disabled', true);
@@ -166,4 +184,5 @@ $(document).on('submit', 'form', function () {
     }
 });
 </script>
-@endpush
+
+@endsection
