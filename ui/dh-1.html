@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Admin Dashboard Template</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    
+    <style>
+        /* ===== CSS VARIABLES & THEME SYSTEM ===== */
+        :root {
+            --bs-primary: #1f3c88;
+            --bs-secondary: #1abc9c;
+            --bs-accent: #6f42c1;
+            --bs-bg: #f8f9fa;
+            --bs-sidebar: #ffffff;
+            --bs-navbar: #ffffff;
+            --bs-card: #ffffff;
+            --bs-text: #212529;
+            --bs-text-muted: #6c757d;
+            --bs-border: #dee2e6;
+            --bs-success: #28a745;
+            --bs-warning: #ffc107;
+            --bs-danger: #dc3545;
+            --bs-info: #17a2b8;
+            --bs-primary-rgb: 31, 60, 136;
+            --bs-secondary-rgb: 26, 188, 156;
+            --bs-accent-rgb: 111, 66, 193;
+            --bs-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --bs-shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        /* Theme: Blue (default) */
+        .theme-blue {
+            --bs-primary: #1f3c88;
+            --bs-primary-rgb: 31, 60, 136;
+            --bs-gradient: linear-gradient(135deg, #1f3c88 0%, #4a6bc9 100%);
+        }
+
+        /* Theme: Green */
+        .theme-green {
+            --bs-primary: #1abc9c;
+            --bs-primary-rgb: 26, 188, 156;
+            --bs-gradient: linear-gradient(135deg, #1abc9c 0%, #2ecc71 100%);
+        }
+
+        /* Theme: Purple */
+        .theme-purple {
+            --bs-primary: #6f42c1;
+            --bs-primary-rgb: 111, 66, 193;
+            --bs-gradient: linear-gradient(135deg, #6f42c1 0%, #9b59b6 100%);
+        }
+
+        /* Theme: Dark */
+        .theme-dark {
+            --bs-primary: #6f42c1;
+            --bs-primary-rgb: 111, 66, 193;
+            --bs-gradient: linear-gradient(135deg, #6f42c1 0%, #3498db 100%);
+            --bs-bg: #121826;
+            --bs-sidebar: #1e2430;
+            --bs-navbar: #1e2430;
+            --bs-card: #242b38;
+            --bs-text: #e4e6eb;
+            --bs-text-muted: #a0a6b5;
+            --bs-border: #3a4250;
+            --bs-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            --bs-shadow-lg: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 14px;
+        }
+
+        @media (min-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+        }
+
+        body {
+            background-color: var(--bs-bg);
+            color: var(--bs-text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== LAYOUT CONTAINERS ===== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .app-content-wrapper {
+            display: flex;
+            flex: 1;
+            margin-top: 56px; /* Navbar height */
+        }
+
+        /* ===== NAVBAR ===== */
+        .app-navbar {
+            background-color: var(--bs-navbar);
+            border-bottom: 1px solid var(--bs-border);
+            box-shadow: var(--bs-shadow);
+            height: 56px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1035;
+            backdrop-filter: blur(10px);
+            background-color: rgba(var(--bs-primary-rgb), 0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--bs-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand small {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--bs-text-muted);
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-brand small {
+                display: inline;
+            }
+        }
+
+        /* ===== SIDEBAR ===== */
+        .app-sidebar {
+            width: 250px;
+            background-color: var(--bs-sidebar);
+            border-right: 1px solid var(--bs-border);
+            position: fixed;
+            top: 56px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 1030;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+        }
+
+        .theme-dark .app-sidebar {
+            box-shadow: 2px 0 12px rgba(0,0,0,0.3);
+        }
+
+        .app-sidebar.show {
+            transform: translateX(0);
+        }
+
+        @media (min-width: 992px) {
+            .app-sidebar {
+                transform: translateX(0);
+                position: sticky;
+                top: 56px;
+                height: calc(100vh - 56px);
+            }
+        }
+
+        .app-sidebar-header {
+            padding: 1.5rem 1rem 1rem;
+            border-bottom: 1px solid var(--bs-border);
+            margin-bottom: 0.5rem;
+        }
+
+        .app-sidebar-nav {
+            padding: 0.5rem;
+        }
+
+        .nav-link {
+            color: var(--bs-text);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.125rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.08);
+            color: var(--bs-primary);
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background-color: rgba(var(--bs-primary-rgb), 0.12);
+            color: var(--bs-primary);
+            font-weight: 600;
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--bs-primary);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-link i {
+            width: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            padding: 0.25em 0.6em;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .app-main {
+            flex: 1;
+            padding: 1.25rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 992px) {
+            .app-main {
+                margin-left: 250px;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .app-main {
+                padding: 2rem;
+            }
+        }
+
+        /* ===== CARDS ===== */
+        .app-card {
+            background-color: var(--bs-card);
+            border: 1px solid var(--bs-border);
+            border-radius: 0.75rem;
+            box-shadow: var(--bs-shadow);
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .app-card:hover {
+            box-shadow: var(--bs-shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .app-card-header {
+            padding: 1.25rem 1.25rem 0.75rem;
+            border-bottom: 1px solid var(--bs-border);
+            background-color: rgba(var(--bs-primary-rgb), 0.02);
+        }
+
+        .app-card-body {
+            padding: 1.25rem;
+        }
+
+        .app-card-footer {
+            padding: 0.75rem 1.25rem;
+            border-top: 1px solid var(--bs-border);
+            background-color: rgba(var(--bs-primary-rgb), 0.02);
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--bs-gradient);
+        }
+
+        .stat-card .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(var(--bs-primary-rgb), 0.1);
+            color: var(--bs-primary);
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.25rem;
+            color: var(--bs-text);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.875rem;
+            color: var(--bs-text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-card .stat-change.positive {
+            color: var(--bs-success);
+        }
+
+        .stat-card .stat-change.negative {
+            color: var(--bs-danger);
+        }
+
+        /* ===== TABLES ===== */
+        .app-table {
+            --bs-table-bg: transparent;
+            --bs-table-striped-bg: rgba(var(--bs-primary-rgb), 0.02);
+            --bs-table-hover-bg: rgba(var(--bs-primary-rgb), 0.04);
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 0;
+        }
+
+        .app-table thead th {
+            border-bottom: 2px solid var(--bs-border);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--bs-text-muted);
+            padding: 1rem 0.75rem;
+            background-color: rgba(var(--bs-primary-rgb), 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .app-table tbody td {
+            padding: 1rem 0.75rem;
+            border-top: 1px solid var(--bs-border);
+            vertical-align: middle;
+        }
+
+        .app-table tbody tr:first-child td {
+            border-top: none;
+        }
+
+        .app-table tbody tr:hover {
+            background-color: var(--bs-table-hover-bg);
+        }
+
+        .table-responsive {
+            border-radius: 0.75rem;
+            border: 1px solid var(--bs-border);
+            overflow: hidden;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            padding: 0.35em 0.65em;
+            font-weight: 500;
+            font-size: 0.75em;
+            border-radius: 0.375rem;
+        }
+
+        .badge-sm {
+            padding: 0.2em 0.5em;
+            font-size: 0.7em;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        .status-badge.active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--bs-success);
+        }
+
+        .status-badge.inactive {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--bs-danger);
+        }
+
+        .status-badge.pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--bs-warning);
+        }
+
+        /* ===== FORMS ===== */
+        .form-control, .form-select {
+            background-color: var(--bs-card);
+            border: 1px solid var(--bs-border);
+            color: var(--bs-text);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bs-card);
+            border-color: var(--bs-primary);
+            color: var(--bs-text);
+            box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--bs-text);
+            margin-bottom: 0.375rem;
+        }
+
+        .input-group-text {
+            background-color: rgba(var(--bs-primary-rgb), 0.05);
+            border: 1px solid var(--bs-border);
+            color: var(--bs-text-muted);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--bs-gradient);
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--bs-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+        }
+
+        .btn-outline-primary {
+            color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            background: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-group-sm > .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* ===== MODALS ===== */
+        .modal-content {
+            background-color: var(--bs-card);
+            border: 1px solid var(--bs-border);
+            border-radius: 0.75rem;
+            box-shadow: var(--bs-shadow-lg);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--bs-border);
+            padding: 1.25rem;
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--bs-border);
+            padding: 1rem 1.25rem;
+        }
+
+        /* ===== UTILITIES ===== */
+        .text-gradient {
+            background: var(--bs-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bs-gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-menu {
+            background-color: var(--bs-card);
+            border: 1px solid var(--bs-border);
+            box-shadow: var(--bs-shadow-lg);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .dropdown-item {
+            color: var(--bs-text);
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(var(--bs-primary-rgb), 0.08);
+            color: var(--bs-primary);
+        }
+
+        /* ===== SKELETON LOADER ===== */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(var(--bs-primary-rgb), 0.05) 25%,
+                rgba(var(--bs-primary-rgb), 0.1) 50%,
+                rgba(var(--bs-primary-rgb), 0.05) 75%
+            );
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 0.375rem;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(var(--bs-primary-rgb), 0.05);
+            border-radius: 50%;
+            color: var(--bs-primary);
+            font-size: 2rem;
+        }
+
+        /* ===== ALERTS ===== */
+        .alert {
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.875rem 1rem;
+            font-size: 0.875rem;
+            box-shadow: var(--bs-shadow);
+        }
+
+        .alert-dismissible .btn-close {
+            padding: 0.875rem 1rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .app-footer {
+            background-color: var(--bs-card);
+            border-top: 1px solid var(--bs-border);
+            padding: 1rem 0;
+            color: var(--bs-text-muted);
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 575.98px) {
+            .app-main {
+                padding: 1rem;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 0.375rem 0.75rem;
+            }
+            
+            .table-responsive {
+                font-size: 0.8125rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .app-sidebar-header {
+                padding: 1rem;
+            }
+            
+            .nav-link {
+                padding: 0.625rem 0.75rem;
+                font-size: 0.875rem;
+            }
+            
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+            
+            .modal-dialog {
+                margin: 0.5rem;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .app-navbar .navbar-collapse {
+                position: fixed;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background-color: var(--bs-navbar);
+                border-bottom: 1px solid var(--bs-border);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                padding: 1rem;
+                z-index: 1030;
+            }
+        }
+
+        /* ===== DARK MODE SPECIFIC ===== */
+        .theme-dark .form-control::placeholder {
+            color: var(--bs-text-muted);
+        }
+
+        .theme-dark .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            .app-navbar,
+            .app-sidebar,
+            .app-footer,
+            .btn,
+            .dropdown {
+                display: none !important;
+            }
+            
+            .app-main {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .app-card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+<body class="theme-blue">
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg app-navbar">
+            <div class="container-fluid">
+                <!-- Brand & Toggle -->
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-link text-decoration-none d-lg-none me-2" id="sidebarToggle">
+                        <i class="bi bi-list" style="font-size: 1.25rem;"></i>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <i class="bi bi-speedometer2"></i>
+                        Admin<span class="text-gradient">Panel</span>
+                        <small class="d-none d-md-inline">v1.0</small>
+                    </a>
+                </div>
+
+                <!-- Right Side Controls -->
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Theme Switcher -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button" id="themeDropdown" data-bs-toggle="dropdown">
+                            <i class="bi bi-palette"></i>
+                            <span class="d-none d-md-inline">Theme</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item theme-option" href="#" data-theme="blue">
+                                <i class="bi bi-circle-fill text-primary me-2"></i>Blue
+                            </a></li>
+                            <li><a class="dropdown-item theme-option" href="#" data-theme="green">
+                                <i class="bi bi-circle-fill text-success me-2"></i>Green
+                            </a></li>
+                            <li><a class="dropdown-item theme-option" href="#" data-theme="purple">
+                                <i class="bi bi-circle-fill" style="color: #6f42c1" class="me-2"></i>Purple
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item theme-option" href="#" data-theme="dark">
+                                <i class="bi bi-moon-stars me-2"></i>Dark Mode
+                            </a></li>
+                        </ul>
+                    </div>
+
+                    <!-- User Menu -->
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
+                            <div class="avatar avatar-sm">AD</div>
+                            <div class="ms-2 d-none d-md-block text-start">
+                                <div class="fw-semibold" style="font-size: 0.875rem;">Admin User</div>
+                                <small class="text-muted" style="font-size: 0.75rem;">Administrator</small>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                                <i class="bi bi-gear me-2"></i>Settings
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="bi bi-bell me-2"></i>Notifications
+                                <span class="badge bg-primary rounded-pill float-end">3</span>
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Wrapper -->
+        <div class="app-content-wrapper">
+            <!-- Sidebar -->
+            <aside class="app-sidebar" id="sidebar">
+                <div class="app-sidebar-header">
+                    <h6 class="text-uppercase text-muted mb-0" style="font-size: 0.75rem; letter-spacing: 1px;">Navigation</h6>
+                </div>
+                <nav class="app-sidebar-nav">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="data">
+                        <i class="bi bi-database"></i>
+                        <span>Data Management</span>
+                        <span class="nav-badge badge bg-primary rounded-pill">12</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="reports">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="users">
+                        <i class="bi bi-people"></i>
+                        <span>Users</span>
+                        <span class="nav-badge badge bg-success rounded-pill">42</span>
+                    </a>
+                    <a href="#" class="nav-link" data-page="settings">
+                        <i class="bi bi-gear"></i>
+                        <span>Settings</span>
+                    </a>
+                    
+                    <div class="mt-4 pt-3 border-top">
+                        <small class="text-muted px-3 d-block mb-2" style="font-size: 0.75rem;">QUICK LINKS</small>
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Help Center</span>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-file-text"></i>
+                            <span>Documentation</span>
+                        </a>
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-chat"></i>
+                            <span>Support</span>
+                        </a>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="app-main" id="mainContent">
+                <!-- Dashboard Page -->
+                <div class="page-content active" id="dashboardPage">
+                    <!-- Page Header -->
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+                        <div>
+                            <h1 class="h3 mb-1">Dashboard Overview</h1>
+                            <p class="text-muted mb-0">Welcome back, Admin! Here's what's happening with your system today.</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary" id="exportBtn">
+                                <i class="bi bi-download"></i> Export
+                            </button>
+                            <button class="btn btn-primary" id="refreshBtn">
+                                <i class="bi bi-arrow-clockwise"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards Grid -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="app-card stat-card">
+                                <div class="app-card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="stat-label">Total Revenue</div>
+                                            <div class="stat-value">$24,580</div>
+                                            <div class="stat-change positive">
+                                                <i class="bi bi-arrow-up"></i> 12.5% from last month
+                                            </div>
+                                        </div>
+                                        <div class="icon-wrapper">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="app-card stat-card">
+                                <div class="app-card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="stat-label">Active Users</div>
+                                            <div class="stat-value">1,248</div>
+                                            <div class="stat-change positive">
+                                                <i class="bi bi-arrow-up"></i> 8.2% from last week
+                                            </div>
+                                        </div>
+                                        <div class="icon-wrapper">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="app-card stat-card">
+                                <div class="app-card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="stat-label">New Orders</div>
+                                            <div class="stat-value">342</div>
+                                            <div class="stat-change negative">
+                                                <i class="bi bi-arrow-down"></i> 3.1% from yesterday
+                                            </div>
+                                        </div>
+                                        <div class="icon-wrapper">
+                                            <i class="bi bi-cart"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="app-card stat-card">
+                                <div class="app-card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="stat-label">Conversion Rate</div>
+                                            <div class="stat-value">4.7%</div>
+                                            <div class="stat-change positive">
+                                                <i class="bi bi-arrow-up"></i> 1.2% from last month
+                                            </div>
+                                        </div>
+                                        <div class="icon-wrapper">
+                                            <i class="bi bi-graph-up"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Table Section -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="app-card">
+                                <div class="app-card-header">
+                                    <h5 class="mb-0">Recent Activities</h5>
+                                </div>
+                                <div class="app-card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <p class="text-muted mb-0">Latest user activities and system logs</p>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                                            <i class="bi bi-plus"></i> Add New
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table app-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Activity</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th class="text-end">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                <!-- Data will be populated by JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <!-- Empty State -->
+                                    <div class="empty-state d-none" id="emptyState">
+                                        <div class="empty-state-icon">
+                                            <i class="bi bi-inbox"></i>
+                                        </div>
+                                        <h5 class="mb-2">No Data Available</h5>
+                                        <p class="text-muted mb-4">Start by adding your first record</p>
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                                            <i class="bi bi-plus"></i> Add Record
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Skeleton Loader -->
+                                    <div class="d-none" id="skeletonLoader">
+                                        <div class="mb-3">
+                                            <div class="skeleton" style="height: 20px; width: 100%; margin-bottom: 10px;"></div>
+                                            <div class="skeleton" style="height: 60px; margin-bottom: 5px;"></div>
+                                            <div class="skeleton" style="height: 60px; margin-bottom: 5px;"></div>
+                                            <div class="skeleton" style="height: 60px; margin-bottom: 5px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="app-card-footer">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="text-muted" style="font-size: 0.875rem;">
+                                            Showing <span id="currentCount">8</span> of <span id="totalCount">124</span> entries
+                                        </div>
+                                        <nav>
+                                            <ul class="pagination pagination-sm mb-0">
+                                                <li class="page-item disabled">
+                                                    <a class="page-link" href="#">Previous</a>
+                                                </li>
+                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Pages (Hidden by default) -->
+                <div class="page-content" id="dataPage" style="display: none;">
+                    <h1 class="h3 mb-4">Data Management</h1>
+                    <p class="text-muted">Data management page content...</p>
+                </div>
+                
+                <div class="page-content" id="reportsPage" style="display: none;">
+                    <h1 class="h3 mb-4">Analytics & Reports</h1>
+                    <p class="text-muted">Analytics page content...</p>
+                </div>
+                
+                <div class="page-content" id="usersPage" style="display: none;">
+                    <h1 class="h3 mb-4">User Management</h1>
+                    <p class="text-muted">User management page content...</p>
+                </div>
+                
+                <div class="page-content" id="settingsPage" style="display: none;">
+                    <h1 class="h3 mb-4">System Settings</h1>
+                    <p class="text-muted">Settings page content...</p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <span>&copy; <span id="currentYear"></span> AdminPanel. All rights reserved.</span>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <span class="text-muted">v1.0.0 • Last updated: <span id="lastUpdate">Today</span></span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+    
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="addForm">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" placeholder="Enter name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" placeholder="Enter email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Role</label>
+                                <select class="form-select" required>
+                                    <option value="">Select role</option>
+                                    <option value="admin">Administrator</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="viewer">Viewer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" rows="3" placeholder="Enter description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="spinner-border spinner-border-sm d-none"></span>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">System Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">Settings content goes here...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- App JavaScript -->
+    <script>
+        // ===== DOM ELEMENTS =====
+        const body = document.body;
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageContents = document.querySelectorAll('.page-content');
+        const tableBody = document.getElementById('tableBody');
+        const emptyState = document.getElementById('emptyState');
+        const skeletonLoader = document.getElementById('skeletonLoader');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const addForm = document.getElementById('addForm');
+        const currentYear = document.getElementById('currentYear');
+        const lastUpdate = document.getElementById('lastUpdate');
+
+        // ===== SAMPLE DATA =====
+        const sampleData = [
+            { 
+                id: 1, 
+                user: { name: "John Doe", email: "john@example.com" },
+                activity: "User login from Chrome",
+                date: "2024-03-15 09:30",
+                status: "active"
+            },
+            { 
+                id: 2, 
+                user: { name: "Jane Smith", email: "jane@example.com" },
+                activity: "Password reset request",
+                date: "2024-03-15 10:15",
+                status: "pending"
+            },
+            { 
+                id: 3, 
+                user: { name: "Robert Johnson", email: "robert@example.com" },
+                activity: "Profile updated",
+                date: "2024-03-15 11:20",
+                status: "active"
+            },
+            { 
+                id: 4, 
+                user: { name: "Emily Davis", email: "emily@example.com" },
+                activity: "New user registration",
+                date: "2024-03-15 14:45",
+                status: "active"
+            },
+            { 
+                id: 5, 
+                user: { name: "Michael Wilson", email: "michael@example.com" },
+                activity: "Failed login attempt",
+                date: "2024-03-15 16:30",
+                status: "inactive"
+            },
+            { 
+                id: 6, 
+                user: { name: "Sarah Brown", email: "sarah@example.com" },
+                activity: "Email notification sent",
+                date: "2024-03-15 18:15",
+                status: "active"
+            },
+            { 
+                id: 7, 
+                user: { name: "David Miller", email: "david@example.com" },
+                activity: "Account deactivated",
+                date: "2024-03-15 20:00",
+                status: "inactive"
+            },
+            { 
+                id: 8, 
+                user: { name: "Lisa Taylor", email: "lisa@example.com" },
+                activity: "System configuration changed",
+                date: "2024-03-15 21:30",
+                status: "pending"
+            }
+        ];
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year
+            currentYear.textContent = new Date().getFullYear();
+            
+            // Set last update date
+            const today = new Date();
+            lastUpdate.textContent = today.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            // Load initial data
+            loadTableData();
+            
+            // Set active page
+            setActivePage('dashboard');
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('adminTheme') || 'blue';
+            body.className = `theme-${savedTheme}`;
+            
+            // Initialize tooltips
+            initTooltips();
+        });
+
+        // ===== SIDEBAR TOGGLE =====
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+            
+            // Toggle icon
+            const icon = this.querySelector('i');
+            if (sidebar.classList.contains('show')) {
+                icon.className = 'bi bi-x-lg';
+            } else {
+                icon.className = 'bi bi-list';
+            }
+            
+            // Close sidebar when clicking outside on mobile
+            if (window.innerWidth < 992) {
+                document.addEventListener('click', closeSidebarOnClickOutside);
+            }
+        });
+
+        function closeSidebarOnClickOutside(e) {
+            if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('show');
+                sidebarToggle.querySelector('i').className = 'bi bi-list';
+                document.removeEventListener('click', closeSidebarOnClickOutside);
+            }
+        }
+
+        // ===== THEME SWITCHER =====
+        themeOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const theme = this.getAttribute('data-theme');
+                
+                // Apply theme
+                body.className = `theme-${theme}`;
+                
+                // Save to localStorage
+                localStorage.setItem('adminTheme', theme);
+                
+                // Show notification
+                showNotification(`Theme changed to ${theme}`, 'success');
+            });
+        });
+
+        // ===== PAGE NAVIGATION =====
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                setActivePage(page);
+                
+                // Close sidebar on mobile
+                if (window.innerWidth < 992) {
+                    sidebar.classList.remove('show');
+                    sidebarToggle.querySelector('i').className = 'bi bi-list';
+                }
+            });
+        });
+
+        function setActivePage(page) {
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === page) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Show selected page
+            pageContents.forEach(content => {
+                content.style.display = 'none';
+                if (content.id === `${page}Page`) {
+                    content.style.display = 'block';
+                }
+            });
+        }
+
+        // ===== TABLE DATA LOADING =====
+        function loadTableData(data = sampleData) {
+            // Show skeleton loader
+            tableBody.innerHTML = '';
+            skeletonLoader.classList.remove('d-none');
+            emptyState.classList.add('d-none');
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                skeletonLoader.classList.add('d-none');
+                
+                if (data.length === 0) {
+                    emptyState.classList.remove('d-none');
+                    return;
+                }
+                
+                // Render data
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="avatar avatar-sm">${item.user.name.charAt(0)}</div>
+                                <div>
+                                    <div class="fw-semibold">${item.user.name}</div>
+                                    <small class="text-muted">${item.user.email}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-medium">${item.activity}</div>
+                            <small class="text-muted">ID: #${item.id}</small>
+                        </td>
+                        <td>
+                            <div>${item.date}</div>
+                            <small class="text-muted">${getRelativeTime(item.date)}</small>
+                        </td>
+                        <td>
+                            <span class="status-badge ${item.status}">
+                                ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="View">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" title="Delete" data-id="${item.id}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Add delete button listeners
+                document.querySelectorAll('.btn-outline-danger').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        confirmDelete(id);
+                    });
+                });
+                
+                // Re-initialize tooltips
+                initTooltips();
+            }, 800);
+        }
+
+        function getRelativeTime(dateString) {
+            const date = new Date(dateString.replace(' ', 'T'));
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        // ===== REFRESH DATA =====
+        refreshBtn.addEventListener('click', function() {
+            // Show loading state
+            const originalHTML = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Refreshing...';
+            this.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Reload data
+                loadTableData();
+                
+                // Restore button
+                this.innerHTML = originalHTML;
+                this.disabled = false;
+                
+                // Show notification
+                showNotification('Data refreshed successfully', 'success');
+            }, 1500);
+        });
+
+        // ===== FORM SUBMISSION =====
+        addForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const spinner = submitBtn.querySelector('.spinner-border');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.classList.remove('d-none');
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Hide loading state
+                submitBtn.disabled = false;
+                spinner.classList.add('d-none');
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addModal'));
+                modal.hide();
+                
+                // Reset form
+                this.reset();
+                
+                // Show notification
+                showNotification('Record added successfully', 'success');
+                
+                // Reload table data
+                loadTableData();
+            }, 2000);
+        });
+
+        // ===== DELETE CONFIRMATION =====
+        function confirmDelete(id) {
+            if (confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+                // Show loading
+                showNotification('Deleting record...', 'info');
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Remove item from data
+                    const index = sampleData.findIndex(item => item.id == id);
+                    if (index !== -1) {
+                        sampleData.splice(index, 1);
+                    }
+                    
+                    // Reload table
+                    loadTableData();
+                    
+                    // Show success notification
+                    showNotification('Record deleted successfully', 'success');
+                }, 1000);
+            }
+        }
+
+        // ===== LOGOUT =====
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (confirm('Are you sure you want to logout?')) {
+                // Show loading
+                showNotification('Logging out...', 'info');
+                
+                // Simulate logout
+                setTimeout(() => {
+                    // Redirect to login page in real app
+                    // window.location.href = '/login';
+                    showNotification('Logged out successfully', 'success');
+                }, 1500);
+            }
+        });
+
+        // ===== NOTIFICATION SYSTEM =====
+        function showNotification(message, type = 'info') {
+            // Remove existing notification
+            const existing = document.querySelector('.app-notification');
+            if (existing) existing.remove();
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `app-notification alert alert-${type} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = `
+                top: 70px;
+                right: 20px;
+                z-index: 1090;
+                min-width: 300px;
+                max-width: 400px;
+                box-shadow: var(--bs-shadow-lg);
+                border: none;
+                border-radius: 0.5rem;
+            `;
+            
+            const icons = {
+                'success': 'bi-check-circle-fill',
+                'danger': 'bi-x-circle-fill',
+                'warning': 'bi-exclamation-triangle-fill',
+                'info': 'bi-info-circle-fill'
+            };
+            
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi ${icons[type] || 'bi-info-circle-fill'} me-2"></i>
+                    <div>${message}</div>
+                </div>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // ===== TOOLTIPS =====
+        function initTooltips() {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl, {
+                    trigger: 'hover'
+                });
+            });
+        }
+
+        // ===== RESPONSIVE UTILITIES =====
+        window.addEventListener('resize', function() {
+            // Auto-close sidebar on resize to desktop
+            if (window.innerWidth >= 992) {
+                sidebar.classList.remove('show');
+                if (sidebarToggle.querySelector('i')) {
+                    sidebarToggle.querySelector('i').className = 'bi bi-list';
+                }
+            }
+        });
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + B to toggle sidebar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault();
+                sidebarToggle.click();
+            }
+            
+            // Escape to close sidebar on mobile
+            if (e.key === 'Escape' && window.innerWidth < 992 && sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                sidebarToggle.querySelector('i').className = 'bi bi-list';
+            }
+            
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                const openModal = document.querySelector('.modal.show');
+                if (openModal) {
+                    const modal = bootstrap.Modal.getInstance(openModal);
+                    modal.hide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
