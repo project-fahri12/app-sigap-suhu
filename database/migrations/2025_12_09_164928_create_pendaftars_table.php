@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pendaftar', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('users_id');
-
+            $table->string('nis', 20)->unique()->after('kode_pendaftaran');
             $table->string('kode_pendaftaran')->unique();
             $table->string('nik', 20)->unique();
             $table->string('nama_lengkap');

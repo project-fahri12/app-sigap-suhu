@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGAP - Sistem Informasi Gerbang Pendaftaran</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* ========================================
+           SIGAP GLOBAL DYNAMIC VARIABLES
+           Semua komponen merujuk ke variable ini
+           ======================================== */
+        :root {
+            /* Warna Dasar (Default Blue) */
+            --p-color: #1f3c88;
+            --p-color-rgb: 31, 60, 136;
+            --s-color: #1abc9c;
+            --s-color-rgb: 26, 188, 156;
+            --grad: linear-gradient(135deg, var(--p-color) 0%, #0f172a 100%);
+            
+            --sigap-font: 'Plus Jakarta Sans', sans-serif;
+            --sigap-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        body {
+            font-family: var(--sigap-font);
+            background-color: #fcfdfe;
+            color: #334155;
+            overflow-x: hidden;
+        }
+
+        /* --- GLOBAL OVERRIDE BERBASIS VARIABLE --- */
+        h1, h2, h3, h4, h5, .fw-bold { color: #0f172a; }
+        .text-primary { color: var(--p-color) !important; }
+        .bg-primary { background-color: var(--p-color) !important; }
+        .btn-primary { 
+            background-color: var(--p-color); 
+            border-color: var(--p-color);
+            box-shadow: 0 8px 20px rgba(var(--p-color-rgb), 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--p-color);
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(var(--p-color-rgb), 0.3);
+        }
+        .btn-outline-primary { 
+            color: var(--p-color); 
+            border-color: var(--p-color); 
+        }
+        .btn-outline-primary:hover { 
+            background-color: var(--p-color); 
+            color: white; 
+        }
+
+        /* --- NAVBAR PROFESSIONAL --- */
+        .sigap-nav {
+            transition: var(--sigap-transition);
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(0px);
+        }
+        .sigap-nav.scrolled {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+            padding: 12px 0;
+        }
+
+        /* --- HERO & WAVES --- */
+        .sigap-hero {
+            background: var(--grad);
+            color: white;
+            padding-top: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-title { font-weight: 800; line-height: 1.2; }
+        .hero-shape {
+            position: absolute;
+            width: 400px; height: 400px;
+            background: var(--s-color);
+            filter: blur(100px);
+            opacity: 0.15;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .wave-container {
+            width: 100%;
+            line-height: 0;
+            background: transparent;
+        }
+        .wave-path { fill: #fcfdfe; }
+
+        /* --- ALUR PENDAFTARAN (STEPPER) --- */
+        .step-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: var(--sigap-transition);
+            height: 100%;
+        }
+        .step-card:hover {
+            border-color: var(--p-color);
+            transform: translateY(-10px);
+        }
+        .step-icon {
+            width: 60px; height: 60px;
+            background: rgba(var(--p-color-rgb), 0.1);
+            color: var(--p-color);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 20px;
+            transition: var(--sigap-transition);
+        }
+        .step-card:hover .step-icon {
+            background: var(--p-color);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* --- GELOMBANG PENDAFTARAN --- */
+        .gelombang-card {
+            border: none;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            transition: var(--sigap-transition);
+        }
+        .gelombang-card:hover { transform: scale(1.02); }
+        .gelombang-header {
+            background: rgba(var(--p-color-rgb), 0.03);
+            padding: 20px;
+            border-bottom: 1px dashed rgba(var(--p-color-rgb), 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gelombang-tag {
+            background: var(--p-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* --- UTILITY & SHAPES --- */
+        .blob-shape {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.05;
+        }
+        
+        .footer-sigap {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 80px 0 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top sigap-nav" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center fw-800" href="#">
+                <div class="p-2 bg-primary rounded-3 text-white me-2 shadow-sm">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+                <span class="text-primary" id="navBrand">SIGAP<span class="fw-light">PPDB</span></span>
+            </a>
+            
+            <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link px-3 active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#alur">Alur</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#gelombang">Gelombang</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#syarat">Informasi</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-light rounded-pill px-3 shadow-sm dropdown-toggle btn-sm" data-bs-toggle="dropdown">
+                            <i class="bi bi-palette-fill me-1 text-primary"></i> Tema
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2">
+                            <li><button class="dropdown-item rounded mb-1" onclick="updateTheme('blue')">🔵 Biru Nasional</button></li>
+                            <li><button class="dropdown-item rounded mb-1" onclick="updateTheme('green')">🟢 Hijau Sekolah</button></li>
+                            <li><button class="dropdown-item rounded mb-1" onclick="updateTheme('purple')">🟣 Ungu Prestasi</button></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary rounded-pill px-4 fw-bold">Login</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="sigap-hero">
+        <div class="hero-shape" style="top: -100px; right: -50px;"></div>
+        <div class="hero-shape" style="bottom: 50px; left: -100px; background: var(--p-color);"></div>
+        
+        <div class="container position-relative">
+            <div class="row align-items-center py-5">
+                <div class="col-lg-7 animate__animated animate__fadeInLeft">
+                    <span class="badge rounded-pill bg-white text-primary px-3 py-2 mb-3 fw-bold shadow-sm">RESMI PPDB 2025/2026</span>
+                    <h1 class="hero-title display-4 mb-4">Pendaftaran Siswa <br><span class="text-secondary">Mudah & Transparan</span></h1>
+                    <p class="lead opacity-75 mb-5">Sistem Informasi Gerbang Pendaftaran terintegrasi. Membantu orang tua dan calon siswa memantau seleksi secara akurat dan real-time.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-800">Daftar Sekarang <i class="bi bi-arrow-right ms-2"></i></button>
+                        <button class="btn btn-outline-light btn-lg rounded-pill px-4">Panduan Teknis</button>
+                    </div>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block text-center animate__animated animate__zoomIn">
+                    <img src="https://img.freepik.com/free-vector/modern-website-design-concept_1168-29.jpg" class="img-fluid rounded-5 shadow-lg" alt="Illustration">
+                </div>
+            </div>
+        </div>
+
+        <div class="wave-container mt-5">
+            <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg">
+                <path class="wave-path" d="M0,32L60,42.7C120,53,240,75,360,74.7C480,75,600,53,720,48C840,43,960,53,1080,58.7C1200,64,1320,64,1380,64L1440,64L1440,120L1380,120C1320,120,1200,120,1080,120C960,120,840,120,720,120C600,120,480,120,360,120C240,120,120,120,60,120L0,120Z"></path>
+            </svg>
+        </div>
+    </header>
+
+    <section class="container py-5 mt-4" id="alur">
+        <div class="text-center mb-5">
+            <h2 class="fw-800">Alur Pendaftaran</h2>
+            <p class="text-muted">Proses seleksi yang terstruktur untuk kenyamanan pendaftar.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="step-card">
+                    <div class="step-icon"><i class="bi bi-person-plus"></i></div>
+                    <h5 class="fw-bold">Buat Akun</h5>
+                    <p class="small text-muted mb-0">Registrasi menggunakan NIK valid dan email aktif.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="step-card">
+                    <div class="step-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                    <h5 class="fw-bold">Unggah Berkas</h5>
+                    <p class="small text-muted mb-0">Unggah berkas digital KK, Akta, dan Ijazah asli.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="step-card">
+                    <div class="step-icon"><i class="bi bi-patch-check"></i></div>
+                    <h5 class="fw-bold">Verifikasi</h5>
+                    <p class="small text-muted mb-0">Tim administrator melakukan validasi berkas fisik.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="step-card">
+                    <div class="step-icon"><i class="bi bi-megaphone"></i></div>
+                    <h5 class="fw-bold">Pengumuman</h5>
+                    <p class="small text-muted mb-0">Hasil seleksi dipublikasikan secara transparan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light" id="gelombang">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-md-6">
+                    <h2 class="fw-800">Gelombang Seleksi</h2>
+                    <p class="text-muted">Simpan jadwal penting pendaftaran sekolah.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button class="btn btn-primary rounded-pill px-4">Unduh Jadwal Lengkap</button>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="gelombang-card">
+                        <div class="gelombang-header">
+                            <span class="fw-bold text-primary">JALUR ZONASI</span>
+                            <span class="gelombang-tag bg-success">AKTIF</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="fw-800 mb-3">Gelombang I</h4>
+                            <div class="d-flex gap-2 mb-2 small text-muted">
+                                <i class="bi bi-calendar3"></i> 01 Mei - 15 Mei 2025
+                            </div>
+                            <div class="d-flex gap-2 small text-muted">
+                                <i class="bi bi-geo-alt"></i> Area Domisili Radius 5-10KM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="gelombang-card opacity-75">
+                        <div class="gelombang-header">
+                            <span class="fw-bold text-primary">JALUR PRESTASI</span>
+                            <span class="gelombang-tag bg-secondary">SOON</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="fw-800 mb-3">Gelombang II</h4>
+                            <div class="d-flex gap-2 mb-2 small text-muted">
+                                <i class="bi bi-calendar3"></i> 20 Mei - 30 Mei 2025
+                            </div>
+                            <div class="d-flex gap-2 small text-muted">
+                                <i class="bi bi-award"></i> Akademik & Non-Akademik
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="gelombang-card opacity-75">
+                        <div class="gelombang-header">
+                            <span class="fw-bold text-primary">JALUR MUTASI</span>
+                            <span class="gelombang-tag bg-secondary">SOON</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="fw-800 mb-3">Gelombang III</h4>
+                            <div class="d-flex gap-2 mb-2 small text-muted">
+                                <i class="bi bi-calendar3"></i> 01 Jun - 10 Jun 2025
+                            </div>
+                            <div class="d-flex gap-2 small text-muted">
+                                <i class="bi bi-building"></i> Perpindahan Orang Tua
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-5 my-5" id="syarat">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-5 bg-white rounded-5 shadow-sm position-relative">
+                    <div class="blob-shape" style="top:-20px; right:-20px; width:100px; height:100px; background:var(--p-color); border-radius:30% 70% 70% 30% / 30% 30% 70% 70%;"></div>
+                    <h2 class="fw-800 mb-4 text-primary">Cek Kuota Sekolah</h2>
+                    <p class="text-muted mb-4">Cek sisa pagu/kuota di sekolah tujuan Anda untuk mengatur strategi pendaftaran yang lebih baik.</p>
+                    <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
+                        <input type="text" class="form-control border-0 px-4" placeholder="Cari Nama Sekolah...">
+                        <button class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="accordion accordion-flush" id="accSyarat">
+                    <div class="accordion-item border-0 mb-3 shadow-sm rounded-4">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button rounded-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+                                <i class="bi bi-file-earmark-text me-2 text-primary"></i> Berkas Wajib Upload
+                            </button>
+                        </h2>
+                        <div id="c1" class="accordion-collapse collapse show">
+                            <div class="accordion-body small text-muted">
+                                Berkas wajib meliputi scan Kartu Keluarga asli, Akta Kelahiran, dan Ijazah atau Surat Keterangan Lulus (SKL).
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0 mb-3 shadow-sm rounded-4">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed rounded-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                                <i class="bi bi-shield-check me-2 text-primary"></i> Keamanan Data
+                            </button>
+                        </h2>
+                        <div id="c2" class="accordion-collapse collapse">
+                            <div class="accordion-body small text-muted">
+                                Seluruh data kependudukan terenkripsi dan hanya digunakan untuk kepentingan verifikasi seleksi pendaftaran.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-sigap">
+        <div class="container">
+            <div class="row g-4 pb-5">
+                <div class="col-lg-4 col-md-12 text-center text-lg-start">
+                    <h4 class="text-white fw-bold mb-3">SIGAP<span class="text-secondary">PPDB</span></h4>
+                    <p class="small opacity-75 lh-lg">Portal resmi Sistem Informasi Gerbang Pendaftaran. Mewujudkan pemerataan pendidikan dengan teknologi yang adil dan terbuka.</p>
+                </div>
+                <div class="col-lg-2 col-6 offset-lg-1">
+                    <h6 class="text-white fw-bold mb-3">Tautan</h6>
+                    <ul class="list-unstyled small opacity-75">
+                        <li class="mb-2"><a href="#" class="text-reset text-decoration-none">Alur Seleksi</a></li>
+                        <li class="mb-2"><a href="#" class="text-reset text-decoration-none">Data Pagu</a></li>
+                        <li class="mb-2"><a href="#" class="text-reset text-decoration-none">Hasil Akhir</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-6">
+                    <h6 class="text-white fw-bold mb-3">Bantuan</h6>
+                    <ul class="list-unstyled small opacity-75">
+                        <li class="mb-2"><a href="#" class="text-reset text-decoration-none">Call Center</a></li>
+                        <li class="mb-2"><a href="#" class="text-reset text-decoration-none">FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="text-reset text-decoration-none">Reset Password</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6 class="text-white fw-bold mb-3">Hubungi Kami</h6>
+                    <div class="small opacity-75">
+                        <p class="mb-2"><i class="bi bi-geo-alt me-2"></i> Gedung Pendidikan RI, Jakarta</p>
+                        <p class="mb-2"><i class="bi bi-telephone me-2"></i> (021) 1500-PPDB</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-4 border-top border-secondary text-center">
+                <p class="small opacity-50 mb-0">&copy; <span id="year"></span> SIGAP System Project. Built for Better Education.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        /* 1. Navbar Scroll Effect */
+        window.onscroll = function() {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        };
+
+        /* 2. Global Theme Engine */
+        function updateTheme(themeName) {
+            const root = document.documentElement;
+            const themes = {
+                blue: { p: '#1f3c88', prgb: '31, 60, 136', s: '#1abc9c' },
+                green: { p: '#065f46', prgb: '6, 95, 70', s: '#fbbf24' },
+                purple: { p: '#5b21b6', prgb: '91, 33, 182', s: '#f472b6' }
+            };
+
+            const config = themes[themeName];
+            
+            // Update CSS Variables
+            root.style.setProperty('--p-color', config.p);
+            root.style.setProperty('--p-color-rgb', config.prgb);
+            root.style.setProperty('--s-color', config.s);
+            root.style.setProperty('--grad', `linear-gradient(135deg, ${config.p} 0%, #0f172a 100%)`);
+            
+            // Re-apply Hero Gradient
+            document.querySelector('.sigap-hero').style.background = `linear-gradient(135deg, ${config.p} 0%, #0f172a 100%)`;
+        }
+
+        /* 3. Auto Year */
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
+</body>
+</html>

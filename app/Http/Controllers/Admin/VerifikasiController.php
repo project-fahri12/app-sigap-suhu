@@ -42,6 +42,7 @@ class VerifikasiController extends Controller
 
     public function update(Request $request)
     {
+
         $v = Verifikasi::where('pendaftar_id', $request->id)->first();
 
         if (! $v) {
@@ -50,7 +51,7 @@ class VerifikasiController extends Controller
 
         if (
             $request->filled('status_file') &&
-            $request->status_file !== 'pending' &&
+            ! in_array($request->status_file, ['pending', 'belum']) &&
             $v->verifikasi_pembayaran !== 'valid'
         ) {
             return response()->json([

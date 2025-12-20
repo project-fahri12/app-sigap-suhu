@@ -25,10 +25,16 @@ class GelombangController extends Controller
         $request->validate([
             'nama_gelombang' => 'required|string|max:255',
             'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id',
-            'status' => 'required|in:dibuka,ditutup',
+            'status' => 'required|in:buka,tutup',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after:tanggal_mulai',
         ]);
+
+        if ($request->status === 'buka') {
+            Gelombang::where('status', 'buka')->update([
+                'status' => 'tutup',
+            ]);
+        }
 
         Gelombang::create($request->all());
 
@@ -38,45 +44,59 @@ class GelombangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_gelombang' => 'required|string|max:255',
+            'nama_gelombang' => 'required|string|max:100',
             'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id',
-            'status' => 'required|in:dibuka,ditutup',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after:tanggal_mulai',
+            'status' => 'required|in:buka,tutup',
         ]);
 
         $gelombang = Gelombang::findOrFail($id);
+
+        // Jika diubah jadi buka → tutupkan yang lain
+        if ($request->status === 'buka') {
+            Gelombang::where('id', '!=', $id)
+                ->where('status', 'buka')
+                ->update(['status' => 'tutup']);
+        }
+
         $gelombang->update($request->all());
 
-        return redirect()->back()->with('success', 'Gelombang berhasil diperbarui');
+        return back()->with('success', 'Gelombang berhasil diperbarui');
     }
 
     // Fitur Update Status Instan via AJAX
     public function updateStatus(Request $request, $id)
     {
         try {
+            $request->validate([
+                'status' => 'required|in:buka,tutup',
+            ]);
+
             $gelombang = Gelombang::findOrFail($id);
 
-            // Validasi input
-            if (! in_array($request->status, ['buka', 'tutup'])) {
-                return response()->json(['success' => false, 'message' => 'Status tidak valid'], 400);
+            // Jika buka → tutup semua gelombang lain
+            if ($request->status === 'buka') {
+                Gelombang::where('status', 'buka')->update(['status' => 'tutup']);
             }
 
-            $gelombang->status = $request->status;
-            $gelombang->save();
+            $gelombang->update([
+                'status' => $request->status,
+            ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Gelombang '.$gelombang->nama_gelombang.' berhasil '.$request->status,
+                'message' => 'Status gelombang diperbarui',
+                'status' => $request->status,
             ]);
 
         } catch (\Exception $e) {
-            // Ini akan mengirimkan pesan error asli ke AJAX jika terjadi kegagalan
             return response()->json([
                 'success' => false,
-                'message' => 'Server Error: '.$e->getMessage(),
+                'message' => 'Gagal memperbarui status',
             ], 500);
         }
+
     }
 
     public function destroy($id)

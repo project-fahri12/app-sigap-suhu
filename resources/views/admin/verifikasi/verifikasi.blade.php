@@ -259,25 +259,87 @@
         </div>
     @endforeach
 
-    {{-- SCRIPT --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        $('.btn-save').click(function() {
-            let id = $(this).data('id');
+<script>
+$(document).ready(function () {
 
-            $.post("{{ route('admin.verifikasi.update') }}", {
-                _token: "{{ csrf_token() }}",
-                id: id,
-                status_pay: $('#status_pay_' + id).val(),
-                status_file: $('#status_file_' + id).val(),
-                catatan: $('#note_' + id).val()
-            }, function(res) {
-                Swal.fire('BERHASIL', res.message, 'success').then(() => location.reload());
-            }).fail(function() {
-                Swal.fire('ERROR', 'Gagal menyimpan data', 'error');
-            });
+    /* ==============================
+     * ENABLE / DISABLE STATUS BERKAS
+     * ============================== */
+    $(document).on('change', '[id^="status_pay_"]', function () {
+        let id = $(this).attr('id').replace('status_pay_', '');
+        let statusPay = $(this).val();
+
+        if (statusPay === 'valid') {
+            $('#status_file_' + id)
+                .prop('disabled', false);
+        } else {
+            $('#status_file_' + id)
+                .prop('disabled', true)
+                .val('pending');
+        }
+    });
+
+
+    /* ==============================
+     * SIMPAN VERIFIKASI
+     * ============================== */
+    $(document).on('click', '.btn-save', function () {
+        let id = $(this).data('id');
+
+        let statusPay  = $('#status_pay_' + id).val();
+        let statusFile = $('#status_file_' + id).val();
+        let catatan    = $('#note_' + id).val();
+
+        // DATA WAJIB
+        let data = {
+            _token: "{{ csrf_token() }}",
+            id: id,
+            status_pay: statusPay,
+            catatan: catatan
+        };
+
+        // 🔥 HANYA KIRIM STATUS BERKAS JIKA PEMBAYARAN VALID
+        if (statusPay === 'valid') {
+            data.status_file = statusFile;
+        }
+
+        $.ajax({
+            url: "{{ route('admin.verifikasi.update') }}",
+            type: "POST",
+            data: data,
+            success: function (res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'BERHASIL',
+                    text: res.message,
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function (xhr) {
+                let msg = 'Terjadi kesalahan';
+
+                if (xhr.status === 403) {
+                    msg = xhr.responseJSON?.message ?? 'Akses ditolak';
+                } else if (xhr.status === 404) {
+                    msg = 'Data tidak ditemukan';
+                } else if (xhr.status === 422) {
+                    msg = 'Data tidak valid';
+                }
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'DITOLAK',
+                    text: msg
+                });
+            }
         });
-    </script>
+    });
+
+});
+</script>
+
 @endsection

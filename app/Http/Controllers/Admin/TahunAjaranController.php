@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class TahunAjaranController extends Controller
@@ -19,27 +20,39 @@ class TahunAjaranController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tahun' => 'required|string|max:255',
             'status' => 'required|in:aktif,nonaktif',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after:tanggal_mulai',
         ]);
 
+        // Ambil tahun dari tanggal
+        $tahunMulai = Carbon::parse($request->tanggal_mulai)->year;
+        $tahunSelesai = Carbon::parse($request->tanggal_selesai)->year;
+
+        // Format tahun ajaran: 2024/2025
+        $tahunAjaran = $tahunMulai.'/'.$tahunSelesai;
+
+        // Jika status aktif, nonaktifkan yang lain
         if ($request->status === 'aktif') {
             TahunAjaran::where('status', 'aktif')->update([
                 'status' => 'nonaktif',
             ]);
         }
+        $exists = TahunAjaran::where('tahun', $tahunAjaran)->exists();
+
+        if ($exists) {
+            return back()->with('error', 'Tahun ajaran sudah ada');
+        }
 
         TahunAjaran::create([
             'id' => Str::uuid(),
-            'tahun' => $request->tahun,
+            'tahun' => $tahunAjaran,
             'status' => $request->status,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
         ]);
 
-        return redirect()->back()->with('success', 'Tahun ajaran berhasil ditambahkan');
+        return back()->with('success', 'Tahun ajaran berhasil ditambahkan');
     }
 
     public function destroy($id)
