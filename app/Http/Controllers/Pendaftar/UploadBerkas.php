@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreBerkasRequest;
+use App\Services\PPDB\BerkasService;
 use Illuminate\Support\Facades\Auth;
 
 class UploadBerkas extends Controller
@@ -36,56 +38,18 @@ class UploadBerkas extends Controller
         ));
     }
 
-   public function store(Request $request)
-{
-    $request->validate([
-        'file' => 'required|file|mimes:pdf|max:5120',
-        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
-
-    $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
-
-    /* ================= PDF ================= */
-    $pdfName = 'berkas_' . $pendaftar->id . '_' . time() . '.pdf';
-    $pdfPath = $request->file('file')->storeAs(
-        'berkas_pendaftar',
-        $pdfName,
-        'public'
-    );
-
-    /* ================= FOTO ================= */
-    $fotoName = 'foto_' . $pendaftar->id . '_' . time() . '.' .
-                $request->foto->extension();
-
-    $fotoPath = $request->foto->storeAs(
-        'foto_pendaftar',
-        $fotoName,
-        'public'
-    );
-
-    /* ================= SIMPAN DB ================= */
-    Berkas::create([
-        'id' => Str::uuid(),
-        'pendaftar_id' => $pendaftar->id,
-        'file_path' => $pdfPath,
-        'foto_path' => $fotoPath,
-        'keterangan' => 'Upload awal',
-    ]);
-
-    /* ================= VERIFIKASI ================= */
-    Verifikasi::updateOrCreate(
-        ['pendaftar_id' => $pendaftar->id],
-        [
-            'verifikasi_berkas' => 'pending',
-            'tanggal' => now(),
-        ]
-    );
-
-    return back()->with(
-        'success',
-        'Berkas & pas foto berhasil diupload. Menunggu verifikasi panitia.'
-    );
-}
+   public function store(StoreBerkasRequest $request, BerkasService $service) {
+    try{
+        //mencari user id di tabel pendaftar bersarakan login
+        $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
+        //memanggil servics berkas req untuk logika bisnis
+   $service->upload($pendaftar,$request->validated());
+        //mengembalikan succes jika berhasil
+        return back()->with('success', 'berkas berhasil diupload, Mengunggu verifikasi panita');
+    } catch(\DomainException $e) {
+        return back()->with('error', $e->getMessage());
+    }
+   }
 
 public function cetakBuktiPdf()
 {

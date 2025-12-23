@@ -2,47 +2,39 @@
 
 namespace App\Http\Controllers\Pendaftar;
 
-use App\Http\Controllers\Controller;
-use App\Models\Pembayaran;
 use App\Models\Pendaftar;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePembayaranRequest;
+use App\Services\PPDB\PembayaranService;
 
 class PembayaranController extends Controller
 {
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nominal' => 'required|numeric|min:0',
-            'tanggal_bayar' => 'required|date',
-            'bukti_transfer' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
-        ]);
+    // public function index()
+    // {
+    //     $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
 
-        $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
+    //     $pembayaran = $pendaftar->pembayaran()
+    //         ->latest()
+    //         ->first();
 
-        // SIMPAN FILE
-        $filePath = $request->file('bukti_transfer')
-            ->store('bukti-transfer', 'public');
+    //     return view('pendaftar.pembayaran.index', compact(
+    //         'pendaftar',
+    //         'pembayaran'
+    //     ));
+    // }
 
-        // SIMPAN PEMBAYARAN (DATA SAJA)
-        Pembayaran::create([
-            'pendaftar_id' => $pendaftar->id,
-            'nominal' => $request->nominal,
-            'tanggal_bayar' => $request->tanggal_bayar,
-            'bukti_transfer' => $filePath,
-        ]);
+    public function store(StorePembayaranRequest $request, PembayaranService $service) {
+        try {
+            $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
 
-        // BUAT / RESET VERIFIKASI
-        \App\Models\Verifikasi::updateOrCreate(
-            ['pendaftar_id' => $pendaftar->id],
-            [
-                'verifikasi_pembayaran' => 'pending',
-                'verifikasi_berkas' => 'belum',
-            ]
-        );
+            $service->submit($pendaftar,$request->validated());
 
-        return back()->with('success', 'Pembayaran berhasil dikirim. Menunggu verifikasi panitia.');
+            return back()->with('success', 'Pembayaran berhasil dikirim.');
+
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage()
+            );
+        }
     }
 }
-
-// jika sudah bayar maka tampilkan status dan alur, jika belum tampilkan pendaftaran
