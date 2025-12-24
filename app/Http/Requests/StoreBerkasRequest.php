@@ -15,7 +15,7 @@ class StoreBerkasRequest extends FormRequest
     {
         return [
             'file' => 'required|file|mimes:pdf|max:5120',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:5000',
         ];
     }
 

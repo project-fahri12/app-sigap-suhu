@@ -69,9 +69,8 @@ Route::prefix('petugas')->name('petugas.')->group(function () {
 // Pendaftar
 Route::middleware(['auth', 'auth.pendaftar'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
     Route::get('/dashboard', [DashboardPendaftarController::class, 'index'])->name('dashboard');
-    Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
     Route::resource('upload-berkas', UploadBerkas::class)->only(['index', 'store']);
     Route::get('/pendaftar/cetak-bukti-pdf', [UploadBerkas::class, 'cetakBuktiPdf'])->name('cetak-bukti-pdf');
     Route::get('identitas-santri', [IdentitasSantriController::class, 'index'])->name('identitas.santri');
-
 });
+

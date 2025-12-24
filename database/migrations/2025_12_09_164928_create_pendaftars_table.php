@@ -32,6 +32,7 @@ return new class extends Migration
             $table->uuid('tahun_ajaran_id');
             $table->uuid('sekolah_pilihan_id');
             $table->uuid('unit_id');
+            // $table->enum('status_santri', ['daftar', 'lolos_biaya_pendaftaran', 'berkas', 'daftar_ulang', '']);
 
             $table->timestamps();
 

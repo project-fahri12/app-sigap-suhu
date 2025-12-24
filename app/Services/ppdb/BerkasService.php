@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\PPDB;
+namespace App\Services\Ppdb;
 
 use App\Models\Berkas;
 use App\Models\Pendaftar;

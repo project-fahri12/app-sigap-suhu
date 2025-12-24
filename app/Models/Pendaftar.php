@@ -88,4 +88,60 @@ class Pendaftar extends Model
     {
         return $this->hasOne(Verifikasi::class);
     }
+
+    public function getRegistrationProgressAttribute()
+    {
+        $pembayaran = $this->pembayaran()->latest()->first();
+        $verifikasi = $this->verifikasi;
+
+        // Step 1: Profil
+        $step1Done = !empty($this->nama_lengkap);
+
+        // Step 2: Pembayaran
+        $vPembayaran = $verifikasi->verifikasi_pembayaran ?? 'belum';
+        $pStatus = $pembayaran->status ?? 'none';
+
+        $step2Status = 'active';
+        $step2Text = 'Belum Bayar';
+        if ($vPembayaran === 'valid') {
+            $step2Status = 'success';
+            $step2Text = 'Pembayaran Lunas';
+        } elseif ($vPembayaran === 'invalid') {
+            $step2Status = 'danger';
+            $step2Text = 'Pembayaran Ditolak';
+        } elseif ($pStatus === 'pending') {
+            $step2Status = 'warning';
+            $step2Text = 'Menunggu Pembayaran';
+        }
+
+        // Step 3: Berkas
+        $vBerkas = $verifikasi->verifikasi_berkas ?? 'belum';
+
+        if ($vPembayaran !== 'valid') {
+            $step3Status = 'locked';
+            $step3Text = 'Terkunci';
+        } else {
+            $step3Status = match ($vBerkas) {
+                'valid' => 'success',
+                'invalid' => 'danger',
+                'pending' => 'warning',
+                default => 'active'
+            };
+            $step3Text = match ($vBerkas) {
+                'valid' => 'Berkas Diterima',
+                'invalid' => 'Berkas Ditolak',
+                'pending' => 'Menunggu Verifikasi',
+                default => 'Silahkan Unggah Berkas'
+            };
+        }
+
+        return (object) [
+            'step1' => (object) ['class' => $step1Done ? 'step-success' : 'step-active', 'done' => $step1Done],
+            'step2' => (object) ['class' => 'step-' . $step2Status, 'text' => $step2Text, 'is_valid' => $vPembayaran === 'valid', 'is_invalid' => $vPembayaran === 'invalid', 'is_pending' => $pStatus === 'pending'],
+            'step3' => (object) ['class' => 'step-' . $step3Status, 'text' => $step3Text, 'status' => $vBerkas]
+        ];
+    }
+
+    
+    
 }

@@ -30,7 +30,7 @@ class UploadBerkas extends Controller
             ->first();
 
         $verifikasi = Verifikasi::where('pendaftar_id', $pendaftar->id)->first();
-        
+
         return view('pendaftar.uploadBerkas', compact(
             'pembayaran',
             'berkas',
@@ -38,34 +38,31 @@ class UploadBerkas extends Controller
         ));
     }
 
-   public function store(StoreBerkasRequest $request, BerkasService $service) {
-    try{
-        //mencari user id di tabel pendaftar bersarakan login
-        $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
-        //memanggil servics berkas req untuk logika bisnis
-   $service->upload($pendaftar,$request->validated());
-        //mengembalikan succes jika berhasil
-        return back()->with('success', 'berkas berhasil diupload, Mengunggu verifikasi panita');
-    } catch(\DomainException $e) {
-        return back()->with('error', $e->getMessage());
+    public function store(StoreBerkasRequest $request, BerkasService $service)
+    {
+        try {
+            $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
+            $service->upload($pendaftar, $request->validated());
+            return back()->with('success', 'berkas berhasil diupload, Mengunggu verifikasi panita');
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
-   }
 
-public function cetakBuktiPdf()
-{
-    $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
-    $verifikasi = Verifikasi::where('pendaftar_id', $pendaftar->id)->firstOrFail();
+    public function cetakBuktiPdf()
+    {
+        $pendaftar = Pendaftar::where('users_id', Auth::id())->firstOrFail();
+        $verifikasi = Verifikasi::where('pendaftar_id', $pendaftar->id)->firstOrFail();
 
-    $setting = SettingWeb::pluck('setting_value', 'setting_value')->toArray();
+        $setting = SettingWeb::pluck('setting_value', 'setting_value')->toArray();
 
-    $pdf = Pdf::loadView(
-        'pendaftar.bukti-pendaftaran-pdf',
-        compact('pendaftar', 'verifikasi', 'setting')
-    )->setPaper('A4', 'portrait');
+        $pdf = Pdf::loadView(
+            'pendaftar.bukti-pendaftaran-pdf',
+            compact('pendaftar', 'verifikasi', 'setting')
+        )->setPaper('A4', 'portrait');
 
-    return $pdf->stream(
-        'BUKTI_PENDAFTARAN_'.$pendaftar->kode_pendaftaran.'.pdf'
-    );
-}
-
+        return $pdf->stream(
+            'BUKTI_PENDAFTARAN_' . $pendaftar->kode_pendaftaran . '.pdf'
+        );
+    }
 }

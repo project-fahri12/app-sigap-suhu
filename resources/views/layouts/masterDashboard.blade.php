@@ -38,6 +38,9 @@
 <link href="{{ asset('assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css') }}"
       rel="stylesheet" type="text/css" />
 
+{{-- Sweetalrt --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Date Picker -->
 <link href="{{ asset('assets/plugins/datepicker/datepicker3.css') }}"
       rel="stylesheet" type="text/css" />
@@ -45,11 +48,13 @@
 <!-- Daterange picker -->
 <link href="{{ asset('assets/plugins/daterangepicker/daterangepicker-bs3.css') }}"
       rel="stylesheet" type="text/css" />
+      {{-- jqu --}}
 
 <!-- bootstrap wysihtml5 - text editor -->
 <link href="{{ asset('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}"
       rel="stylesheet" type="text/css" />
 
+      @include('components.notification')
       @stack('styles')
 
 
@@ -61,6 +66,8 @@
     <![endif]-->
   </head>
   <body class="skin-green fixed">
+
+        @include('components.loading')
     <div class="wrapper">
       
       @include('components.dashboard.navbar')
