@@ -9,6 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pendaftar', function (Blueprint $table) {
+            // Data Santri
             $table->uuid('id')->primary();
             $table->uuid('users_id');
             $table->string('kode_pendaftaran')->unique();

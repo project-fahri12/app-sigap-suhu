@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Dashbord Sigap</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
    <!-- Bootstrap 3.3.2 -->
 <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}"
       rel="stylesheet" type="text/css" />
@@ -100,8 +101,7 @@
         <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights reserved.
       </footer>
     </div><!-- ./wrapper -->
-
-    @stack('scripts')
+    
 
     <!-- jQuery 2.1.3 -->
 <script src="{{ asset('assets/plugins/jQuery/jQuery-2.1.3.min.js') }}"></script>
@@ -165,13 +165,7 @@
 <script src="{{ asset('assets/dist/js/app.min.js') }}"
         type="text/javascript"></script>
 
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"
-        type="text/javascript"></script>
-
-<!-- AdminLTE demo -->
-<script src="{{ asset('assets/dist/js/demo.js') }}"
-        type="text/javascript"></script>
+    @stack('scripts')
 
   </body>
 </html>

@@ -25,13 +25,19 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'status_aktif' => 'aktif',
             'email_verified_at' => now(),
+            
+            'id' => (string) Str::uuid(),
+            'username' => 'petugas fahri',
+            'email' => 'petugas@petugas.com',
+            'password' => Hash::make('12121212'),
+            'role' => 'petugas',
+            'status_aktif' => 'aktif',
+            'email_verified_at' => now(),
+
+
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Tahun Ajaran
-        |--------------------------------------------------------------------------
-        */
+       
         $tahunAjaran = TahunAjaran::create([
             'id' => Str::uuid(),
             'tahun' => '2025/2026',
@@ -40,11 +46,7 @@ class DatabaseSeeder extends Seeder
             'tanggal_selesai' => '2026-06-30',
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Gelombang Pendaftaran
-        |--------------------------------------------------------------------------
-        */
+       
         Gelombang::insert([
             [
                 'id' => Str::uuid(),
@@ -64,11 +66,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Sekolah Pilihan
-        |--------------------------------------------------------------------------
-        */
+        
         SekolahPilihan::insert([
             [
                 'id' => Str::uuid(),
@@ -82,11 +80,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        /*
-        |--------------------------------------------------------------------------
-        | Unit
-        |--------------------------------------------------------------------------
-        */
+       
         Unit::insert([
             [
                 'id' => Str::uuid(),
@@ -102,145 +96,142 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        /*
-|--------------------------------------------------------------------------
-| Setting Web (Sesuai UI Setting Site)
-|--------------------------------------------------------------------------
-*/
-        $settings = [
+     
+       $settings = [
+    [
+        'setting_key' => 'nama_sistem',
+        'setting_value' => 'SIGAP',
+    ],
+    [
+        'setting_key' => 'nama_lembaga',
+        'setting_value' => 'NAMA LEMBAGA',
+    ],
+    [
+        'setting_key' => 'versi_app',
+        'setting_value' => '1.0.0',
+    ],
+    [
+        'setting_key' => 'logo_lembaga',
+        'setting_value' => 'assets/logo-sigap-white.png',
+    ],
+    [
+        'setting_key' => 'icon',
+        'setting_value' => 'assets/favicon.ico',
+    ],
+    [
+        'setting_key' => 'maintenance_mode',
+        'setting_value' => 'false',
+    ],
 
-            // ===============================
-            // SETTING WEBSITE
-            // ===============================
+    
+    [
+        'setting_key' => 'status_ppdb',
+        'setting_value' => 'buka',
+    ],
+    [
+        'setting_key' => 'ppdb_auto_close',
+        'setting_value' => 'false',
+    ],
+    [
+        'setting_key' => 'biaya_pendaftaran',
+        'setting_value' => '150000',
+    ],
+    [
+        'setting_key' => 'menu_ppdb',
+        'setting_value' => json_encode([
             [
-                'setting_key' => 'app_name',
-                'setting_value' => 'SIGAP',
+                'type' => 'link',
+                'title' => 'Pendaftaran',
+                'icon' => 'fa-edit',
+                'url' => 'pendaftaran',
             ],
             [
-                'setting_key' => 'system_name',
-                'setting_value' => 'Sistem Informasi Grebang Pendaftaran',
-            ],
-            [
-                'setting_key' => 'logo_app',
-                'setting_value' => 'assets/logo-sigap.svg',
-            ],
-
-            // ===============================
-            // SETTING PPDB
-            // ===============================
-            [
-                'setting_key' => 'ppdb_academic_year',
-                'setting_value' => '2025/2026',
-            ],
-            [
-                'setting_key' => 'ppdb_status',
-                'setting_value' => 'buka',
-            ],
-            [
-                'setting_key' => 'ppdb_active_wave',
-                'setting_value' => 'Gelombang 1',
-            ],
-            [
-                'setting_key' => 'ppdb_period',
-                'setting_value' => '01 Januari 2025 - 28 Februari 2025',
-            ],
-            [
-                'setting_key' => 'menu_ppdb',
-                'setting_value' => json_encode([
-                    [
-                        'type' => 'link',
-                        'title' => 'Form Pendaftaran',
-                        'icon' => 'fa-edit',
-                        'url' => 'pendaftaran',
-                    ],
-                    [
-                        'type' => 'accordion',
-                        'title' => 'Informasi PPDB',
-                        'icon' => 'fa-info-circle',
-                        'content' => '
+                'type' => 'accordion',
+                'title' => 'Informasi PPDB',
+                'icon' => 'fa-info-circle',
+                'content' => '
                 <ul>
-                    <li>Tahun Ajaran: 2025 / 2026</li>
+                    <li>Tahun Ajaran: 2025/2026</li>
                     <li>Status PPDB: Dibuka</li>
                     <li>Gelombang Aktif: Gelombang 1</li>
                     <li>Periode: 01 Januari 2025 - 28 Februari 2025</li>
                 </ul>
             ',
-                    ],
-                    [
-                        'type' => 'accordion',
-                        'title' => 'Syarat Pendaftaran',
-                        'icon' => 'fa-list',
-                        'content' => '
-                <ul>
-                    <li>Mengisi formulir pendaftaran</li>
-                    <li>Upload pas foto</li>
-                    <li>Upload kartu keluarga</li>
-                    <li>Upload akta kelahiran</li>
-                </ul>
-            ',
-                    ],
-                    [
-                        'type' => 'accordion',
-                        'title' => 'Kontak Panitia',
-                        'icon' => 'fa-phone',
-                        'content' => '
-                <p>WhatsApp Panitia: 0812-3456-7890</p>
-            ',
-                    ],
-                ]),
             ],
+        ]),
+    ],
+    [
+        'setting_key' => 'tahun_ajaran',
+        'setting_value' => '2025/2026',
+    ],
+    [
+        'setting_key' => 'gelombang_aktif',
+        'setting_value' => 'Gelombang 1',
+    ],
 
-            // ===============================
-            // INFORMASI PONDOK PESANTREN
-            // ===============================
-            [
-                'setting_key' => 'pondok_name',
-                'setting_value' => 'Pondok Pesantren Al-Risalah',
-            ],
-            [
-                'setting_key' => 'pondok_leader',
-                'setting_value' => 'KH. Ahmad Fulan',
-            ],
-            [
-                'setting_key' => 'pondok_address',
-                'setting_value' => 'Jl. Pendidikan No. 123, Kabupaten Hikmah, Jawa Barat',
-            ],
-            [
-                'setting_key' => 'pondok_phone',
-                'setting_value' => '0812-3456-7890',
-            ],
-            [
-                'setting_key' => 'pondok_email',
-                'setting_value' => 'info@alrisalah.sch.id',
-            ],
-            [
-                'setting_key' => 'pondok_website',
-                'setting_value' => 'https://alrisalah.sch.id',
-            ],
+    [
+        'setting_key' => 'kontak_tlp',
+        'setting_value' => '0351xxxxxx',
+    ],
+    [
+        'setting_key' => 'kontak_whatsapp',
+        'setting_value' => '08123456789',
+    ],
+    [
+        'setting_key' => 'email',
+        'setting_value' => 'admin@pesantren.id',
+    ],
+    [
+        'setting_key' => 'alamat',
+        'setting_value' => 'Madiun, Jawa Timur',
+    ],
+    [
+        'setting_key' => 'lokasi_map',
+        'setting_value' => 'https://maps.google.com/...',
+    ],
+    [
+        'setting_key' => 'instagram',
+        'setting_value' => 'https://instagram.com/pesantren',
+    ],
+    [
+        'setting_key' => 'facebook',
+        'setting_value' => 'https://facebook.com/pesantren',
+    ],
+    [
+        'setting_key' => 'youtube',
+        'setting_value' => 'https://youtube.com/pesantren',
+    ],
+    [
+        'setting_key' => 'tiktok',
+        'setting_value' => 'https://tiktok.com/@pesantren',
+    ],
 
-            // ===============================
-            // KONTAK & MEDIA SOSIAL
-            // ===============================
-            [
-                'setting_key' => 'contact_whatsapp',
-                'setting_value' => '0812-3456-7890',
-            ],
-            [
-                'setting_key' => 'social_instagram',
-                'setting_value' => '@ponpesalrisalah',
-            ],
-            [
-                'setting_key' => 'social_facebook',
-                'setting_value' => 'Ponpes Al-Risalah',
-            ],
-        ];
+   
+    [
+        'setting_key' => 'merchant_id',
+        'setting_value' => 'dddddd',
+    ],
+    [
+        'setting_key' => 'client_key',
+        'setting_value' => 'ssssssad',
+    ],
+    [
+        'setting_key' => 'server_key',
+        'setting_value' => 'SB-Mid-server-XXXX',
+    ],
+    [
+        'setting_key' => 'alamat_lembaga',
+        'setting_value' => 'Jl. manggis no 121',
+    ],
+];
 
-        foreach ($settings as $setting) {
-            SettingWeb::updateOrCreate(
-                ['setting_key' => $setting['setting_key']],
-                ['setting_value' => $setting['setting_value']]
-            );
-        }
+foreach ($settings as $setting) {
+    SettingWeb::updateOrCreate(
+        ['setting_key' => $setting['setting_key']],
+        ['setting_value' => $setting['setting_value']]
+    );
+}
+
 
     }
 }

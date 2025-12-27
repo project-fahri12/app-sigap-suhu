@@ -8,31 +8,41 @@ use App\Models\Verifikasi;
 class VerifikasiService
 {
     public function getAll()
-    {
-        return [
-            'belum' => Pendaftar::with(['verifikasi', 'unit', 'berkas'])
-                ->whereDoesntHave('verifikasi')
-                ->orWhereHas('verifikasi', function ($q) {
-                    $q->where('verifikasi_pembayaran', 'pending')
-                      ->orWhere('verifikasi_berkas', 'pending');
-                })
-                ->get(),
+{
+    return [
 
-            'lolos' => Pendaftar::with(['verifikasi', 'unit', 'berkas'])
-                ->whereHas('verifikasi', function ($q) {
-                    $q->where('verifikasi_pembayaran', 'valid')
-                      ->where('verifikasi_berkas', 'valid');
-                })
-                ->get(),
+        // =====================
+        // BELUM (PENDING)
+        // =====================
+        'belum' => Pendaftar::with(['verifikasi', 'unit', 'berkas'])
+            ->whereHas('verifikasi', function ($q) {
+                $q->where('verifikasi_pembayaran', 'pending')
+                  ->orWhere('verifikasi_berkas', 'pending');
+            })
+            ->get(),
 
-            'ditolak' => Pendaftar::with(['verifikasi', 'unit', 'berkas'])
-                ->whereHas('verifikasi', function ($q) {
-                    $q->where('verifikasi_pembayaran', 'invalid')
-                      ->orWhere('verifikasi_berkas', 'invalid');
-                })
-                ->get(),
-        ];
-    }
+        // =====================
+        // LOLOS (SEMUA VALID)
+        // =====================
+        'lolos' => Pendaftar::with(['verifikasi', 'unit', 'berkas'])
+            ->whereHas('verifikasi', function ($q) {
+                $q->where('verifikasi_pembayaran', 'valid')
+                  ->where('verifikasi_berkas', 'valid');
+            })
+            ->get(),
+
+        // =====================
+        // DITOLAK (ADA INVALID)
+        // =====================
+        'ditolak' => Pendaftar::with(['verifikasi', 'unit', 'berkas'])
+            ->whereHas('verifikasi', function ($q) {
+                $q->where('verifikasi_pembayaran', 'invalid')
+                  ->orWhere('verifikasi_berkas', 'invalid');
+            })
+            ->get(),
+    ];
+}
+
 
     public function update(Verifikasi $verifikasi, array $data)
     {

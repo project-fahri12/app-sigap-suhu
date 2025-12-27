@@ -15,7 +15,6 @@ class LaporanController extends Controller
 {
     protected Request $request;
 
-    // ✅ INI WAJIB ADA
     public function __construct(Request $request)
     {
         $this->request = $request;

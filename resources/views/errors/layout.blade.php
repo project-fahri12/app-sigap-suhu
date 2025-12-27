@@ -60,24 +60,24 @@
             @yield('message')
         </p>
 
-        @if ($exception->getStatusCode() !== 503)
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-emerald-200">
-                    <i data-lucide="home" class="w-5 h-5 mr-2"></i>
-                    Kembali ke Beranda
-                </a>
-            </div>
-        @else
-            {{-- Opsional: Tampilkan pesan atau tombol refresh saat maintenance --}}
-            <div class="flex justify-center">
-                <button onclick="window.location.reload()"
-                    class="inline-flex items-center justify-center px-6 py-3 border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-semibold rounded-xl transition-all duration-200">
-                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 animate-spin-slow"></i>
-                    Coba Segarkan Halaman
-                </button>
-            </div>
-        @endif
+        @if (setting('maintenance_mode') === 'false')
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/"
+            class="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-emerald-200">
+            <i data-lucide="home" class="w-5 h-5 mr-2"></i>
+            Kembali ke Beranda
+        </a>
+    </div>
+@else
+    <div class="flex justify-center">
+        <button onclick="window.location.reload()"
+            class="inline-flex items-center justify-center px-6 py-3 border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-semibold rounded-xl transition-all duration-200">
+            <i data-lucide="refresh-cw" class="w-5 h-5 mr-2 animate-spin-slow"></i>
+            Coba Segarkan Halaman
+        </button>
+    </div>
+@endif
+
 
         <div
             class="mt-12 flex flex-col items-center justify-center space-y-2 opacity-60 hover:opacity-100 transition-opacity duration-300">

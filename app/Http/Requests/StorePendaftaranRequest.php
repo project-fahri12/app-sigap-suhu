@@ -53,6 +53,15 @@ class StorePendaftaranRequest extends FormRequest
             'status_ibu' => 'required|in:hidup,meninggal,tidak_diketahui',
             'alamat_orang_tua' => 'nullable|string',
 
+            // Kontak 
+            'email' => 'required|email|max:255|unique:orang_tua,email',
+            'no_wa_utama' => 'required|string|max:20',
+            'pemilik_no_utama' => 'required|in:ayah,ibu,wali,lainnya',
+
+            'no_wa_cadangan' => 'nullable|string|max:20',
+            'pemilik_no_cadangan' => 'nullable|in:ayah,ibu,wali,lainnya',
+
+
             // Data Wali
             'nama_wali' => 'nullable|string|max:255',
             'pekerjaan_wali' => 'nullable|string|max:255',

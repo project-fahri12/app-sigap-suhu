@@ -12,9 +12,29 @@ class OrangTua extends Model
     protected $table = 'orang_tua';
 
     protected $fillable = [
-        'pendaftar_id', 'nama_ayah', 'pekerjaan_ayah', 'no_hp_ayah', 'status_ayah',
-        'nama_ibu', 'pekerjaan_ibu', 'no_hp_ibu', 'status_ibu', 'alamat_orang_tua'
+        'pendaftar_id',
+
+        // Data Ayah
+        'nama_ayah',
+        'pekerjaan_ayah',
+        'status_ayah',
+
+        // Data Ibu
+        'nama_ibu',
+        'pekerjaan_ibu',
+        'status_ibu',
+
+        // Alamat
+        'alamat_orang_tua',
+
+        // Kontak
+        'email',
+        'no_wa_utama',
+        'pemilik_no_utama',
+        'no_wa_cadangan',
+        'pemilik_no_cadangan',
     ];
+
 
     public function pendaftar()
     {

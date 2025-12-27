@@ -21,7 +21,7 @@ class PendaftaranController extends Controller
 
     public function index()
     {
-        if (setting('ppdb_status') === 'tutup') {
+        if (setting('status_ppdb') === 'tutup') {
             return view('home.pendaftaran_closed');
         }
 

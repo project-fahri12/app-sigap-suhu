@@ -20,31 +20,31 @@ class LoginController extends Controller
         return view('auth.login-admin', compact('settings'));
     }
 
-    /**
-     * Proses login admin
-     */
     public function login(Request $request)
     {
-        // Validasi input
-        $credentials = $request->validate([
+        $kredensial = $request->validate([
             'email'    => 'required|email',
             'password' => 'required'
         ]);
 
-        // Attempt login
-        if (Auth::attempt($credentials)) {
-
+        if (Auth::attempt($kredensial)) {
+            
             $request->session()->regenerate();
+            
+            $pengguna = Auth::user();
 
-            // OPTIONAL: cek role admin (SANGAT DISARANKAN)
-            if (Auth::user()->role !== 'admin') {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'ANDA TIDAK MEMILIKI AKSES ADMIN'
-                ]);
+            if($pengguna->role === 'admin'){
+                return redirect()->route('admin.dashboard');
             }
 
-            return redirect()->route('admin.dashboard');
+            if ($pengguna->role === 'petugas') {
+                return redirect()->route('petugas.dashboard');
+            }
+
+            Auth::logout();
+            return back()->withErrors([
+                'email' => 'ROLE PENGGUNA TIDAK VALID'
+            ]);
         }
 
         return back()->withErrors([

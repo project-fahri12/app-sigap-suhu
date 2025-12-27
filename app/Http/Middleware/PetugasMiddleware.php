@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class PetugasMiddleware
@@ -15,9 +16,14 @@ class PetugasMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session('role') !== 'petugas') {
-        return redirect()->route('login');
-    }
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        if (Auth::user()->role !== 'petugas') {
+            abort(403, 'ANDA TIDAK MEMILIKI AKSES PETUGAS');
+        }
+
         return $next($request);
     }
 }

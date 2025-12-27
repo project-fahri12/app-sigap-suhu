@@ -14,7 +14,7 @@ class HomeController extends Controller
 
         // Decode menu accordion (JSON)
         $menus = json_decode($settings['menu_ppdb'] ?? '[]', true);
-
+        
         // Pastikan menus selalu array
         if (!is_array($menus)) {
             $menus = [];

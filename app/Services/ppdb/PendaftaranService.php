@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services\Ppdb;
 
 use App\Models\User;
@@ -21,6 +20,7 @@ class PendaftaranService
 
             $user = User::create([
                 'username' => $kodePendaftaran,
+                'email' => strtolower($data['email']),
                 'password' => Hash::make($passwordAwal),
                 'role' => 'pendaftar',
             ]);
@@ -79,17 +79,24 @@ class PendaftaranService
     protected function mapOrangTua(array $data): array
     {
         return [
-            'nama_ayah' => strtolower($data['nama_ayah']),
-            'pekerjaan_ayah' => strtolower($data['pekerjaan_ayah'] ?? ''),
-            'no_hp_ayah' => $data['no_hp_ayah'],
-            'status_ayah' => $data['status_ayah'],
-            'nama_ibu' => strtolower($data['nama_ibu']),
-            'pekerjaan_ibu' => strtolower($data['pekerjaan_ibu'] ?? ''),
-            'no_hp_ibu' => $data['no_hp_ibu'],
-            'status_ibu' => $data['status_ibu'],
+            'nama_ayah'        => strtolower($data['nama_ayah']),
+            'pekerjaan_ayah'  => strtolower($data['pekerjaan_ayah'] ?? ''),
+            'status_ayah'     => $data['status_ayah'],
+
+            'nama_ibu'        => strtolower($data['nama_ibu']),
+            'pekerjaan_ibu'   => strtolower($data['pekerjaan_ibu'] ?? ''),
+            'status_ibu'      => $data['status_ibu'],
+
             'alamat_orang_tua' => strtolower($data['alamat_orang_tua'] ?? $data['alamat_detail']),
+
+            'email'               => strtolower($data['email']),
+            'no_wa_utama'         => $data['no_wa_utama'],
+            'pemilik_no_utama'    => $data['pemilik_no_utama'],
+            'no_wa_cadangan'      => $data['no_wa_cadangan'] ?? null,
+            'pemilik_no_cadangan' => $data['pemilik_no_cadangan'] ?? null,
         ];
     }
+
 
     protected function mapWali(array $data): array
     {

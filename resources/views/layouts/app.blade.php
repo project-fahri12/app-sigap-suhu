@@ -184,11 +184,7 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="text-center text-muted py-3 border-top">
-        <small>
-            &copy; {{ date('Y') }} {{ setting('pondok_name') }}
-        </small>
-    </footer>
+    @include('components.footer')
 
     {{-- Bootstrap 5 JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -14,11 +14,9 @@ class DashboardController extends Controller
     {
         $totalPendaftar = Pendaftar::count();
 
-        $belumBayar = Pendaftar::whereDoesntHave('verifikasi')
-            ->orWhereHas('verifikasi', function ($q) {
-                $q->where('verifikasi_pembayaran', 'pending');
-            })
-            ->count();
+        $belumBayar = Pendaftar::with('verifikasi')->whereHas('verifikasi', function($q) {
+            $q->where('verifikasi_berkas', 'pending');
+        })->count();
 
         $pendaftarTerbaru = Pendaftar::with(['verifikasi', 'unit'])
             ->latest()

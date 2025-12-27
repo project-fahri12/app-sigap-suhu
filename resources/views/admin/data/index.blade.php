@@ -3,115 +3,133 @@
 @section('judul', 'Data Pendaftaran')
 @section('sub-judul', 'Manajemen Calon Santri')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap.min.css">
+<style>
+    /* --- UI STYLING (KONSISTEN) --- */
+    .box {
+        border-radius: 12px;
+        border-top: 3px solid #3c8dbc;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .box-success {
+        border-top-color: #00a65a;
+    }
+
+    .table-vcenter td {
+        vertical-align: middle !important;
+        padding: 12px 8px !important;
+    }
+
+    /* Info Box Modern */
+    .info-box {
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+        min-height: 90px;
+    }
+
+    .info-box-icon {
+        border-radius: 12px 0 0 12px;
+        height: 90px;
+        line-height: 90px;
+    }
+
+    /* Label Pill Status */
+    .label-pill {
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 10px;
+        text-transform: uppercase;
+        display: inline-block;
+        text-align: center;
+        color: white;
+    }
+
+    .bg-valid {
+        background-color: #00a65a !important;
+        box-shadow: 0 2px 4px rgba(0, 166, 90, 0.3);
+    }
+
+    .bg-pending {
+        background-color: #f39c12 !important;
+        box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
+    }
+
+    .bg-ditolak {
+        background-color: #dd4b39 !important;
+        box-shadow: 0 2px 4px rgba(221, 75, 57, 0.3);
+    }
+
+    .bg-none {
+        background-color: #d2d6de !important;
+        color: #444;
+    }
+
+    .bg-kode {
+        background-color: #00c0ef !important;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .btn-action {
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-weight: 600;
+    }
+
+    /* Skeleton Wave */
+    .skeleton-loading {
+        position: relative;
+        overflow: hidden !important;
+        background-color: #f2f2f2 !important;
+        min-height: 200px;
+    }
+
+    .skeleton-loading::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        100% {
+            transform: translateX(100%);
+        }
+    }
+
+    .is-loading>* {
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+
+    /* Datatable UI fix for AdminLTE */
+    .dataTables_wrapper .row {
+        margin: 0 !important;
+    }
+    .dataTables_filter {
+        padding: 10px 15px;
+        text-align: right;
+    }
+    .dataTables_length {
+        padding: 10px 15px;
+    }
+    .dataTables_info, .dataTables_paginate {
+        padding: 15px;
+    }
+</style>
+@endpush
+
 @section('content')
-    <style>
-        /* --- UI STYLING (KONSISTEN) --- */
-        .box {
-            border-radius: 12px;
-            border-top: 3px solid #3c8dbc;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border-left: none;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .box-success {
-            border-top-color: #00a65a;
-        }
-
-        .table-vcenter td {
-            vertical-align: middle !important;
-            padding: 12px 8px !important;
-        }
-
-        /* Info Box Modern */
-        .info-box {
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-            min-height: 90px;
-        }
-
-        .info-box-icon {
-            border-radius: 12px 0 0 12px;
-            height: 90px;
-            line-height: 90px;
-        }
-
-        /* Label Pill Status */
-        .label-pill {
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 10px;
-            text-transform: uppercase;
-            display: inline-block;
-            text-align: center;
-            color: white;
-        }
-
-        .bg-valid {
-            background-color: #00a65a !important;
-            box-shadow: 0 2px 4px rgba(0, 166, 90, 0.3);
-        }
-
-        .bg-pending {
-            background-color: #f39c12 !important;
-            box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
-        }
-
-        .bg-ditolak {
-            background-color: #dd4b39 !important;
-            box-shadow: 0 2px 4px rgba(221, 75, 57, 0.3);
-        }
-
-        .bg-none {
-            background-color: #d2d6de !important;
-            color: #444;
-        }
-
-        .bg-kode {
-            background-color: #00c0ef !important;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .btn-action {
-            border-radius: 6px;
-            transition: all 0.2s;
-            font-weight: 600;
-        }
-
-        /* Skeleton Wave */
-        .skeleton-loading {
-            position: relative;
-            overflow: hidden !important;
-            background-color: #f2f2f2 !important;
-            min-height: 200px;
-        }
-
-        .skeleton-loading::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            transform: translateX(-100%);
-            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        .is-loading>* {
-            opacity: 0 !important;
-            visibility: hidden !important;
-        }
-    </style>
-
     {{-- STATISTIK ATAS --}}
     <div class="row">
         <div class="col-md-3 col-sm-6">
@@ -158,16 +176,15 @@
             <div class="box-header with-border" style="padding: 15px;">
                 <h3 class="box-title" style="font-weight: 700;"><i class="fa fa-filter text-blue"></i> FILTER DATA</h3>
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                            class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 </div>
             </div>
             <div class="box-body" style="padding: 20px;">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>TAHUN AJARAN</label>
-                            <select name="tahun_ajaran" class="form-control select2-modern">
+                            <select name="tahun_ajaran" class="form-control">
                                 <option value="">SEMUA TAHUN</option>
                                 @foreach ($tahunAjaran as $ta)
                                     <option value="{{ $ta->id }}" @selected(request('tahun_ajaran') == $ta->id)>
@@ -177,7 +194,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>GELOMBANG</label>
                             <select name="gelombang" class="form-control">
@@ -190,7 +207,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>STATUS</label>
                             <select name="status" class="form-control">
@@ -201,26 +218,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>PENCARIAN CEPAT</label>
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control" value="{{ request('search') }}"
-                                    placeholder="Cari Nama, NIK, atau Kode...">
-                                <span class="input-group-btn">
-                                    <button type="submit" class="btn btn-primary btn-flat"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="box-footer bg-gray-light text-right">
-                <a href="{{ route('admin.data-pendaftar.index') }}" class="btn btn-default btn-action"><i
-                        class="fa fa-refresh"></i> RESET</a>
-                <button type="submit" class="btn btn-primary btn-action"><i class="fa fa-filter"></i> TERAPKAN
-                    FILTER</button>
+                <a href="{{ route('admin.data-pendaftar.index') }}" class="btn btn-default btn-action"><i class="fa fa-refresh"></i> RESET</a>
+                <button type="submit" class="btn btn-primary btn-action"><i class="fa fa-filter"></i> TERAPKAN FILTER</button>
             </div>
         </div>
     </form>
@@ -228,16 +230,12 @@
     {{-- DAFTAR TABEL --}}
     <div class="box box-success skeleton-loading is-loading">
         <div class="box-header with-border" style="padding: 15px;">
-            <h3 class="box-title" style="font-weight: 700;"><i class="fa fa-database text-green"></i> DAFTAR CALON SANTRI
-            </h3>
-            <div class="box-tools">
-                <button class="btn btn-default btn-sm"><i class="fa fa-download"></i> Export Excel</button>
-            </div>
+            <h3 class="box-title" style="font-weight: 700;"><i class="fa fa-database text-green"></i> DAFTAR CALON SANTRI</h3>
         </div>
 
         <div class="box-body no-padding">
             <div class="table-responsive">
-                <table class="table table-hover table-vcenter">
+                <table id="table-pendaftar" class="table table-hover table-vcenter" width="100%">
                     <thead class="bg-gray-light">
                         <tr>
                             <th width="40" class="text-center">#</th>
@@ -251,10 +249,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($pendaftar as $item)
+                        @foreach ($pendaftar as $item)
                             <tr>
-                                <td class="text-center text-muted">{{ $loop->iteration + $pendaftar->firstItem() - 1 }}
-                                </td>
+                                <td class="text-center text-muted">{{ $loop->iteration }}</td>
                                 <td><span class="label-pill bg-kode">{{ $item->kode_pendaftaran }}</span></td>
                                 <td><b style="color: #333;">{{ strtoupper($item->nama_lengkap) }}</b></td>
                                 <td class="text-muted">{{ $item->nik }}</td>
@@ -268,6 +265,8 @@
                                         <span class="label-pill bg-valid">VALID</span>
                                     @elseif($v->verifikasi_berkas === 'invalid' || $v->verifikasi_pembayaran === 'invalid')
                                         <span class="label-pill bg-ditolak">DITOLAK</span>
+                                    @elseif($v->verifikasi_berkas === 'belum')
+                                        <span class="label-pill bg-none">BELUM</span>
                                     @else
                                         <span class="label-pill bg-pending">MENUNGGU</span>
                                     @endif
@@ -283,40 +282,46 @@
                                     </div>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center" style="padding: 50px;">
-                                    <i class="fa fa-search fa-3x text-gray"></i>
-                                    <p class="text-muted">Data pendaftar tidak ditemukan</p>
-                                </td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <div class="box-footer clearfix" style="border-top: 1px solid #f4f4f4;">
-            <div class="pull-left text-muted" style="padding-top: 10px;">
-                Menampilkan {{ $pendaftar->firstItem() ?? 0 }} sd {{ $pendaftar->lastItem() ?? 0 }} dari
-                {{ $pendaftar->total() }} data
-            </div>
-            <div class="pull-right">
-                {{ $pendaftar->appends(request()->input())->links('pagination::bootstrap-4') }}
-            </div>
-        </div>
     </div>
+@endsection
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@push('scripts')
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
-            // --- UI HANDLER ---
+            // 1. Inisialisasi DataTable
+            if ($.fn.DataTable.isDataTable('#table-pendaftar')) {
+                $('#table-pendaftar').DataTable().destroy();
+            }
+
+            var table = $('#table-pendaftar').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
+                },
+                "pageLength": 25,
+                "order": [[0, "asc"]],
+                "columnDefs": [
+                    { "orderable": false, "targets": [7] }
+                ],
+                "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                       "<'row'<'col-sm-12'tr>>" +
+                       "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            });
+
+            // 2. UI Handler (Skeleton)
             setTimeout(() => {
                 $('.skeleton-loading').removeClass('skeleton-loading is-loading');
             }, 600);
 
-            // --- TOAST NOTIFICATION ---
+            // 3. Toast Notification
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -333,4 +338,4 @@
             @endif
         });
     </script>
-@endsection
+@endpush

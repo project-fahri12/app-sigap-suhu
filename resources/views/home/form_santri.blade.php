@@ -3,8 +3,8 @@
 @section('content')
     <div class="ppdb-container text-start">
 
-        <h4 class="text-center text-success mb-3">PPDB | Madrasah Muallimin Muallimat 6 Tahun</h4>
-        <h5 class="text-center mb-4">Bahrul 'Ulum Tambakberas Jombang</h5>
+        <h4 class="text-center text-success mb-3">{{ setting('nama_sistem', 'SIGAP') }} | {{ setting('nama_lembaga', 'Informasi Grebang Pendaftaran') }}</h4>
+        <h6 class="text-center mb-4">{{ setting('alamat_lembaga', 'belum setting') }}</h6>
 
         {{-- Alert Persiapan Berkas --}}
         <div class="alert alert-success d-flex align-items-start" role="alert">
@@ -21,28 +21,40 @@
         </div>
 
         <h5 class="mb-3">Isi formulir pendaftaran di bawah ini:</h5>
+<ul class="nav nav-tabs border-0 d-flex gap-2" id="pendaftaranTabs" role="tablist">
 
-        <ul class="nav nav-tabs border-0 flex-row " id="pendaftaranTabs" role="tablist">
+    {{-- Tab 1: Data Calon Peserta --}}
+    <li class="nav-item flex-fill" role="presentation">
+        <button
+            class="nav-link bg-success active w-100 h-100 border text-center"
+            id="peserta-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#peserta-pane"
+            type="button"
+            role="tab"
+            aria-controls="peserta-pane"
+            aria-selected="true">
+            Data Calon Peserta
+        </button>
+    </li>
 
-            {{-- Tab 1: Data Calon Peserta --}}
-            <li class="nav-item mx-2" role="presentation ">
-                {{-- 'w-100' agar tombol penuh di mobile, 'rounded' untuk estetika saat terpisah --}}
-                <button class="nav-link active w-100 h-100 border text-start text-sm-center" id="peserta-tab"
-                    data-bs-toggle="tab" data-bs-target="#peserta-pane" type="button" role="tab"
-                    aria-controls="peserta-pane" aria-selected="true">
-                    <i class="fa fa-user me-2"></i> Data Calon Peserta
-                </button>
-            </li>
+    {{-- Tab 2: Data Orang Tua / Wali --}}
+    <li class="nav-item flex-fill" role="presentation">
+        <button
+            class="nav-link bg-success w-100 h-100 border text-center"
+            id="ortu-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#ortu-pane"
+            type="button"
+            role="tab"
+            aria-controls="ortu-pane"
+            aria-selected="false">
+            Data Orang Tua / Wali
+        </button>
+    </li>
 
-            {{-- Tab 2: Data Orang Tua / Wali --}}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link w-100 h-100 border text-start text-sm-center" id="ortu-tab" data-bs-toggle="tab"
-                    data-bs-target="#ortu-pane" type="button" role="tab" aria-controls="ortu-pane"
-                    aria-selected="false">
-                    <i class="fa fa-users me-2"></i> Data Orang Tua / Wali
-                </button>
-            </li>
-        </ul>
+</ul>
+
 
         {{-- FORMULIR UTAMA --}}
         <form method="POST" action="{{ route('pendaftaran.store') }}">
@@ -371,17 +383,6 @@
                                     @enderror
                                 </div>
 
-                                {{-- 3. No HP Ayah (orang_tua.no_hp_ayah) --}}
-                                <div class="col-md-6 mb-3">
-                                    <label for="no_hp_ayah" class="form-label">No. HP Ayah</label>
-                                    <input type="tel" class="form-control @error('no_hp_ayah') is-invalid @enderror"
-                                        id="no_hp_ayah" name="no_hp_ayah" placeholder="08xxxxxxxxx (Aktif WA Disarankan)"
-                                        value="{{ old('no_hp_ayah') }}">
-                                    @error('no_hp_ayah')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                                 {{-- 4. Status Ayah (orang_tua.status_ayah) --}}
                                 <div class="col-md-6 mb-3">
                                     <label for="status_ayah" class="form-label">Status Ayah <span
@@ -432,17 +433,6 @@
                                     @enderror
                                 </div>
 
-                                {{-- 7. No HP Ibu (orang_tua.no_hp_ibu) --}}
-                                <div class="col-md-6 mb-3">
-                                    <label for="no_hp_ibu" class="form-label">No. HP Ibu</label>
-                                    <input type="tel" class="form-control @error('no_hp_ibu') is-invalid @enderror"
-                                        id="no_hp_ibu" name="no_hp_ibu" placeholder="08xxxxxxxxx (Aktif WA Disarankan)"
-                                        value="{{ old('no_hp_ibu') }}">
-                                    @error('no_hp_ibu')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                                 {{-- 8. Status Ibu (orang_tua.status_ibu) --}}
                                 <div class="col-md-6 mb-3">
                                     <label for="status_ibu" class="form-label">Status Ibu <span
@@ -477,6 +467,111 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- ================= INFO KONTAK ORANG TUA ================= --}}
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h6 class="m-0">
+                                <i class="fa fa-phone me-1"></i> Informasi Kontak Utama (Wajib)
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                {{-- Email --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">
+                                        Email Aktif <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email" placeholder="email@contoh.com"
+                                        value="{{ old('email') }}" required>
+                                    <div class="form-text">
+                                        Digunakan untuk informasi & kode pendaftaran
+                                    </div>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- WhatsApp Utama --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="no_wa_utama" class="form-label">
+                                        Nomor WhatsApp Utama <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="tel" class="form-control @error('no_wa_utama') is-invalid @enderror"
+                                        id="no_wa_utama" name="no_wa_utama" placeholder="08xxxxxxxxxx"
+                                        value="{{ old('no_wa_utama') }}" required>
+                                    @error('no_wa_utama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Pemilik WA Utama --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="pemilik_no_utama" class="form-label">
+                                        Pemilik Nomor WhatsApp <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select @error('pemilik_no_utama') is-invalid @enderror"
+                                        id="pemilik_no_utama" name="pemilik_no_utama" required>
+                                        <option value="">-- Pilih Pemilik --</option>
+                                        <option value="ayah" {{ old('pemilik_no_utama') == 'ayah' ? 'selected' : '' }}>Ayah
+                                        </option>
+                                        <option value="ibu" {{ old('pemilik_no_utama') == 'ibu' ? 'selected' : '' }}>Ibu
+                                        </option>
+                                        <option value="wali" {{ old('pemilik_no_utama') == 'wali' ? 'selected' : '' }}>Wali
+                                        </option>
+                                        <option value="lainnya" {{ old('pemilik_no_utama') == 'lainnya' ? 'selected' : '' }}>
+                                            Lainnya</option>
+                                    </select>
+                                    @error('pemilik_no_utama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- WhatsApp Cadangan --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="no_wa_cadangan" class="form-label">
+                                        Nomor WhatsApp Cadangan
+                                    </label>
+                                    <input type="tel"
+                                        class="form-control @error('no_wa_cadangan') is-invalid @enderror"
+                                        id="no_wa_cadangan" name="no_wa_cadangan" placeholder="08xxxxxxxxxx"
+                                        value="{{ old('no_wa_cadangan') }}">
+                                    <div class="form-text">
+                                        Opsional (backup komunikasi)
+                                    </div>
+                                    @error('no_wa_cadangan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                {{-- Pemilik WA Cadangan --}}
+                                <div class="col-md-6 mb-3">
+                                    <label for="pemilik_no_cadangan" class="form-label">
+                                        Pemilik Nomor Cadangan
+                                    </label>
+                                    <select class="form-select @error('pemilik_no_cadangan') is-invalid @enderror"
+                                        id="pemilik_no_cadangan" name="pemilik_no_cadangan">
+                                        <option value="">-- Pilih Pemilik --</option>
+                                        <option value="ayah" {{ old('pemilik_no_cadangan') == 'ayah' ? 'selected' : '' }}>Ayah
+                                        </option>
+                                        <option value="ibu" {{ old('pemilik_no_cadangan') == 'ibu' ? 'selected' : '' }}>Ibu
+                                        </option>
+                                        <option value="wali" {{ old('pemilik_no_cadangan') == 'wali' ? 'selected' : '' }}>Wali
+                                        </option>
+                                        <option value="lainnya" {{ old('pemilik_no_cadangan') == 'lainnya' ? 'selected' : '' }}>
+                                            Lainnya</option>
+                                    </select>
+                                    @error('pemilik_no_cadangan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="card shadow-sm">
                         <div class="card-header bg-warning text-dark">

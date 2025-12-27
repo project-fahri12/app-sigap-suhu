@@ -1,52 +1,51 @@
 @extends('layouts.app')
 
-@section('judul', $settings['app_name'] ?? 'SIGAP PPDB')
+@section('judul', setting('nama_sistem', 'SIGAP'))
 
 @section('content')
 
     <div class="text-center mb-4">
 
-        {{-- LOGO --}}
-        <img src="{{ asset($settings['logo_app'] ?? 'assets/logo-sigap.svg') }}" class="img-fluid mb-3" style="max-height:90px"
-            onerror="this.src='{{ asset('assets/logo-sigap.svg') }}'">
-
-        {{-- JUDUL --}}
+        {{-- NAMA SISTEM & LEMBAGA --}}
         <h5 class="fw-bold mb-1">
-            {{ $settings['app_name'] ?? 'SIGAP PPDB' }}
-            @if (!empty($settings['pondok_name']))
+            {{ setting('nama_sistem', 'SIGAP PPDB') }}
+            @if (setting('nama_lembaga'))
                 <span class="text-muted fw-normal">
-                    | {{ $settings['pondok_name'] }}
+                    | {{ setting('nama_lembaga') }}
                 </span>
             @endif
         </h5>
 
-        {{-- SUB JUDUL --}}
+        {{-- TAHUN AJARAN --}}
         <small class="text-muted d-block mb-1">
-            {{ $settings['system_name'] ?? 'Penerimaan Peserta Didik Baru' }}
+            Tahun Ajaran {{ setting('tahun_ajaran', '-') }}
         </small>
 
-        {{-- TAHUN AJARAN --}}
-        @if (!empty($settings['ppdb_academic_year']))
-            <div class="fw-semibold fs-6">
-                TAHUN AJARAN {{ $settings['ppdb_academic_year'] }}
+        {{-- GELOMBANG AKTIF --}}
+        @if (! empty(setting('gelombang_aktif')))
+            <div class="fw-semibold fs-6 text-success">
+                PPDB {{ setting('status_ppdb') }} — {{ setting('gelombang_aktif', 'tidak ada gelombang aktif') }}
             </div>
         @endif
 
     </div>
 
+    @php
+        $menus = json_decode(setting('menu_ppdb', '[]'), true);
+    @endphp
 
     @if (!empty($menus))
         <div class="ppdb-menu-list">
 
             @foreach ($menus as $i => $menu)
-                {{-- ========== LINK ========== --}}
+                {{-- LINK --}}
                 @if (($menu['type'] ?? 'link') === 'link')
                     <a href="{{ url($menu['url'] ?? '#') }}" class="ppdb-menu-item">
                         <i class="fa {{ $menu['icon'] ?? 'fa-link' }}"></i>
                         <span>{{ $menu['title'] ?? 'Menu' }}</span>
                     </a>
 
-                    {{-- ========== MODAL ========== --}}
+                    {{-- MODAL / ACCORDION --}}
                 @else
                     <a href="javascript:void(0)" class="ppdb-menu-item" data-bs-toggle="modal"
                         data-bs-target="#menuModal{{ $i }}">
@@ -79,7 +78,7 @@
 
         </div>
     @else
-        <p class="text-center text-muted">Menu belum dikonfigurasi</p>
+        <p class="text-center text-muted">Menu PPDB belum dikonfigurasi</p>
     @endif
 
 @endsection

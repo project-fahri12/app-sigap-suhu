@@ -82,7 +82,7 @@
     <div class="row">
         @php
             $cards = [
-                ['icon' => 'calendar-check-o', 'bg' => 'bg-green', 'title' => 'Tahun Ajaran', 'val' => setting('ppdb_academic_year') ?? '-', 'desc' => 'Gelombang: ' . (setting('ppdb_active_wave') ?? '1')],
+                ['icon' => 'calendar-check-o', 'bg' => 'bg-green', 'title' => 'Tahun Ajaran', 'val' => setting('tahun_ajaran') ?? '-', 'desc' =>  (setting('gelombang_aktif') ?? '1')],
                 ['icon' => 'users', 'bg' => 'bg-aqua', 'title' => 'Total Pendaftar', 'val' => number_format($totalPendaftar), 'desc' => 'Pendaftar Terdaftar'],
                 ['icon' => 'hourglass-half', 'bg' => 'bg-yellow', 'title' => 'Menunggu Validasi', 'val' => $belumBayar, 'desc' => 'Perlu Tindakan Admin'],
                 ['icon' => 'credit-card', 'bg' => 'bg-red', 'title' => 'Belum Bayar', 'val' => $statusPembayaran['belum'], 'desc' => 'Tagihan Aktif'],
@@ -110,10 +110,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="skeleton-loading is-loading" style="border-radius:10px; margin-bottom: 20px;">
-                @if (setting('ppdb_status') === 'buka')
+                @if (setting('status_ppdb') === 'buka')
                     <div class="alert alert-success alert-dismissible" style="border-radius: 10px; margin-bottom:0;">
                         <h4><i class="icon fa fa-check"></i> PPDB Sedang Berjalan!</h4>
-                        Sistem pendaftaran online saat ini sedang <strong>DIREKTORI TERBUKA</strong> untuk periode {{ setting('ppdb_period') }}.
+                        Sistem pendaftaran online saat ini sedang <strong>DIREKTORI TERBUKA</strong> untuk periode {{ setting('tahun_ajaran') }}.
                     </div>
                 @else
                     <div class="alert alert-danger alert-dismissible" style="border-radius: 10px; margin-bottom:0;">
@@ -169,7 +169,7 @@
                                     <th style="width: 50px" class="text-center">NO</th>
                                     <th>BIODATA PENDAFTAR</th>
                                     <th>UNIT TUJUAN</th>
-                                    <th>STATUS VERIFIKASI</th>
+                                    <th>VERIFIKASI BERKAS</th>
                                     <th class="text-center">WAKTU DAFTAR</th>
                                 </tr>
                             </thead>
@@ -183,7 +183,7 @@
                                         </td>
                                         <td><span class="label label-info">{{ $row->unit->nama_unit ?? '-' }}</span></td>
                                         <td>
-                                            <span class="badge-status bg-blue">Verified</span>
+                                            <span class="badge-status bg-blue">{{ $row->verifikasi->verifikasi_berkas }}</span>
                                         </td>
                                         <td class="text-center">{{ $row->created_at->diffForHumans() }}</td>
                                     </tr>
